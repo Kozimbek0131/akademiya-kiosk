@@ -1,15 +1,41 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* --- KIOSK HIMOYASI (Qulflash) --- */
 body {
-  @apply bg-slate-100 text-slate-800;
-  font-family: 'Inter', system-ui, sans-serif; /* Jiddiy shrift */
+  /* Matnlarni ko'k qilib belgilashni to'xtatadi */
   user-select: none;
-  touch-action: pan-x pan-y;
-  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  
+  /* Mobilda/Sensorda uzoq bosganda chiqadigan menyuni o'chiradi */
+  -webkit-touch-callout: none;
+  
+  /* Ekranni barmoq bilan yaqinlashtirishni (zoom) taqiqlaydi */
+  touch-action: pan-y; 
+  
+  /* Ortiqcha scroll (aylanish) chiqib qolmasligi uchun */
+  overflow: hidden; 
 }
 
-/* Scrollbarni yashirish (Kioskda xunuk ko'rinmasligi uchun) */
-::-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
+img, video {
+  /* Rasm va videolarni barmoq bilan sudrab ketishni to'xtatadi */
+  -webkit-user-drag: none;
+  pointer-events: none; 
+}
+
+/* --- MAXSUS SCROLLBAR (Menyu uchun chiroyli o'tkazgich) --- */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
 }

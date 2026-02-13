@@ -1,81 +1,57 @@
-import React, { useState, useEffect } from 'react';
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import Sidebar from './components/Sidebar';
+import React, { useEffect } from 'react';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
-import Employees from './pages/Employees';
-import Documents from './pages/Documents';
-import Transport from './pages/Transport';
-import Wifi from './pages/Wifi';
-import Achievements from './pages/Achievements';
-// To'g'ri import qilingan
-import Map from './pages/Map';
-import Screensaver from './pages/Screensaver';
 
-const App = () => {
-  // Screensaver holati (Boshida true = yonuq bo'ladi)
-  const [isIdle, setIsIdle] = useState(true);
-  const location = useLocation();
+function App() {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // Har qanday harakat bo'lganda Screensaverni o'chirish
-  const handleUserActivity = () => {
-    setIsIdle(false);
-  };
-
-  // Harakatsizlikni kuzatish (Vaqtni o'zingiz sozlashingiz mumkin, hozir 60 sekund)
   useEffect(() => {
-    let timeout;
+    let timeoutId;
+
+    // --- 1. KUTISH REJIMI (SCREENSAVER MANTIQI) ---
     const resetTimer = () => {
-      clearTimeout(timeout);
-      // Agar 60 sekund (60000 ms) harakat bo'lmasa, Screensaver yonadi
-      timeout = setTimeout(() => setIsIdle(true), 60000); 
+      clearTimeout(timeoutId);
+      // Agar 1 daqiqa (60000 ms) hech kim ekranni bosmasa, Home'ga qaytadi
+      timeoutId = setTimeout(() => {
+        if (location.pathname !== '/') {
+          navigate('/'); 
+        }
+      }, 60000); 
     };
 
-    // Hodisalarni tinglash
+    // --- 2. SICHQONCHA O'NG TUGMASINI QULFLASH ---
+    const disableContextMenu = (e) => e.preventDefault();
+    window.addEventListener('contextmenu', disableContextMenu);
+
+    // Ekranga tegilganda yoki sichqoncha qimirlaganda taymerni nollash
     window.addEventListener('mousemove', resetTimer);
     window.addEventListener('touchstart', resetTimer);
     window.addEventListener('click', resetTimer);
-    window.addEventListener('keydown', resetTimer);
 
-    resetTimer(); // Boshlanishida ishga tushirish
+    resetTimer(); // Dastur yonganda taymerni ishga tushirish
 
+    // Tozalash (xotira to'lib ketmasligi uchun)
     return () => {
-      clearTimeout(timeout);
+      clearTimeout(timeoutId);
+      window.removeEventListener('contextmenu', disableContextMenu);
       window.removeEventListener('mousemove', resetTimer);
       window.removeEventListener('touchstart', resetTimer);
       window.removeEventListener('click', resetTimer);
-      window.removeEventListener('keydown', resetTimer);
     };
-  }, []);
+  }, [navigate, location.pathname]);
 
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden" onClick={handleUserActivity} onTouchStart={handleUserActivity}>
-      
-      {/* Agar harakatsiz bo'lsa (isIdle = true), SCREENSAVER chiqadi */}
-      {isIdle && (
-        <Screensaver onInteract={() => setIsIdle(false)} />
-      )}
-
-      {/* Agar Asosiy menyuda bo'lmasak, chap menyuni ko'rsatamiz */}
-      {location.pathname !== '/' && !isIdle && <Sidebar />}
-
-      <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/employees" element={<Employees />} />
-          <Route path="/documents" element={<Documents />} />
-          <Route path="/transport" element={<Transport />} />
-          <Route path="/wifi" element={<Wifi />} />
-          <Route path="/achievements" element={<Achievements />} />
-          
-          {/* --- MANA SHU YER TUZATILDI --- */}
-          {/* Oldin <MapPage /> edi, hozir <Map /> qildim */}
-          <Route path="/map" element={<Map />} />
-          
-        </Routes>
-      </div>
+    <div className="w-full h-screen bg-slate-900 overflow-hidden">
+      <Routes>
+        {/* Asosiy sahifa */}
+        <Route path="/" element={<Home />} />
+        
+        {/* Kelajakda boshqa sahifalarni (Employees, Map va h.k) shu yerga qo'shamiz */}
+        {/* <Route path="/employees" element={<Employees />} /> */}
+      </Routes>
     </div>
   );
-};
+}
 
 export default App;

@@ -11,8 +11,8 @@ const Employees = () => {
   const staff = [
     {
       id: 1,
-      name: "Abduvakhidov Kozimbek", // O'zingizni nomingiz :)
-      role: "IT Departament Boshlig'i",
+      name: "G'iyosiv Bilolbek ", // O'zingizni nomingiz :)
+      role: "AKT Bo'lim Boshlig'i",
       phone: "+998 90 123 45 67",
       email: "info@academy.uz",
       img: "https://via.placeholder.com/150", // Rasm o'rniga vaqtincha
@@ -20,8 +20,8 @@ const Employees = () => {
     },
     {
       id: 2,
-      name: "Rahbar Familiyasi",
-      role: "Akademiya Direktori",
+      name: "Kolenko Yevgeniy Vyacheslavovich",
+      role: "Akademiya boshlig'ining birinchi o'rinbosari",
       phone: "+998 71 200 00 00",
       email: "director@academy.uz",
       img: "https://via.placeholder.com/150",

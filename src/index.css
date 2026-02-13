@@ -1,30 +1,21 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/* --- KIOSK HIMOYASI (Qulflash) --- */
+/* --- KIOSK HIMOYASI --- */
 body {
-  /* Matnlarni ko'k qilib belgilashni to'xtatadi */
   user-select: none;
   -webkit-user-select: none;
-  
-  /* Mobilda/Sensorda uzoq bosganda chiqadigan menyuni o'chiradi */
   -webkit-touch-callout: none;
-  
-  /* Ekranni barmoq bilan yaqinlashtirishni (zoom) taqiqlaydi */
   touch-action: pan-y; 
-  
-  /* Ortiqcha scroll (aylanish) chiqib qolmasligi uchun */
   overflow: hidden; 
+  background-color: #0f172a; /* Agar tailwind yuklanmasa ham qora fon tursin */
 }
 
 img, video {
-  /* Rasm va videolarni barmoq bilan sudrab ketishni to'xtatadi */
   -webkit-user-drag: none;
   pointer-events: none; 
 }
 
-/* --- MAXSUS SCROLLBAR (Menyu uchun chiroyli o'tkazgich) --- */
+/* --- SCROLLBAR --- */
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;
 }
@@ -36,7 +27,3 @@ img, video {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
 }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.4);
-}
-/* Dizayn tuzatildi v2 */

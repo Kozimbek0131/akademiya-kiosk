@@ -1,175 +1,108 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import HeaderClock from '../components/HeaderClock'; // <-- 1. SOAT IMPORT QILINDI
-import { FaArrowLeft, FaSearch, FaPhoneAlt, FaMapMarkerAlt, FaUserTie, FaBuilding, FaUniversity, FaChevronDown, FaChevronUp } from 'react-icons/fa';
-
-// ... (employeesData bazasi o'zgarishsiz qoladi, uni tegmang) ...
-// Agar oldingi kodni saqlagan bo'lsangiz, data o'sha yerda tursin. 
-// Men joyni tejash uchun datani qisqartirib yozaman, siz o'zingizdagi to'liq datani qoldiring.
-
-const employeesData = [
-  // RAHBARIYAT
-  { id: 1, name: "Rustamov Anvar Ilhomovich", role: "role_boss", type: "rahbariyat", department: "dept_leadership", room: "201", phone: "71 200-01-01" },
-  { id: 2, name: "Karimov Sherzod Olimovich", role: "role_deputy", type: "rahbariyat", department: "dept_leadership", room: "202", phone: "71 200-01-02" },
-  // ... qolganlar ...
-  { id: 3, name: "Ismoilov Botir Sobirovich", role: "role_head", type: "kafedra", department: "dept_criminal", room: "305", phone: "1234" },
-  { id: 4, name: "Aliyeva Nargiza Rustamovna", role: "role_teacher", type: "kafedra", department: "dept_criminal", room: "306", phone: "1235" },
-  { id: 5, name: "Tursunov Davronbek", role: "role_docent", type: "kafedra", department: "dept_civil", room: "310", phone: "1240" },
-  { id: 6, name: "Qodirov Sardor", role: "role_section_head", type: "bolim", department: "dept_hr", room: "101", phone: "1100" },
-  { id: 7, name: "Azimova Laylo", role: "role_accountant", type: "bolim", department: "dept_accounting", room: "102", phone: "1102" },
-  { id: 8, name: "Rahimov Ulug'bek", role: "role_ict_spec", type: "bolim", department: "dept_ict", room: "105", phone: "1105" },
-];
+import { FaArrowLeft, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
 
 const Employees = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState("rahbariyat");
-  const [openDepartment, setOpenDepartment] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
 
-  const categories = [
-    { id: 'rahbariyat', label: t('tab_leadership'), icon: <FaUniversity /> },
-    { id: 'kafedra', label: t('tab_kafedra'), icon: <FaUserTie /> },
-    { id: 'bolim', label: t('tab_department'), icon: <FaBuilding /> },
+  // Xodimlar ro'yxati (Keyinchalik haqiqiy ma'lumotlarga o'zgartirasiz)
+  const staff = [
+    {
+      id: 1,
+      name: "Abduvakhidov Kozimbek", // O'zingizni nomingiz :)
+      role: "IT Departament Boshlig'i",
+      phone: "+998 90 123 45 67",
+      email: "info@academy.uz",
+      img: "https://via.placeholder.com/150", // Rasm o'rniga vaqtincha
+      color: "border-blue-500"
+    },
+    {
+      id: 2,
+      name: "Rahbar Familiyasi",
+      role: "Akademiya Direktori",
+      phone: "+998 71 200 00 00",
+      email: "director@academy.uz",
+      img: "https://via.placeholder.com/150",
+      color: "border-green-500"
+    },
+    {
+      id: 3,
+      name: "O'rinbosar Ismi",
+      role: "Direktor O'rinbosari",
+      phone: "+998 71 200 00 01",
+      email: "deputy@academy.uz",
+      img: "https://via.placeholder.com/150",
+      color: "border-amber-500"
+    },
+    // Yana qo'shishingiz mumkin...
   ];
 
-  const filteredData = employeesData.filter(item => {
-    const translatedRole = t(item.role).toLowerCase();
-    const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          translatedRole.includes(searchTerm.toLowerCase());
-    const matchesTab = activeTab === 'all' ? true : item.type === activeTab;
-    return matchesSearch && matchesTab;
-  });
-
-  const uniqueDepartments = [...new Set(filteredData.map(item => item.department))];
-
-  const toggleDepartment = (deptKey) => {
-      setOpenDepartment(openDepartment === deptKey ? null : deptKey);
-  };
-
   return (
-    <div className="h-screen flex flex-col bg-slate-50 font-sans select-none animate-page">
+    <div className="h-screen flex flex-col font-sans relative overflow-hidden">
       
-      {/* 2. HEADER QISMI YANGILANDI */}
-      <div className="bg-gradient-to-r from-blue-950 to-blue-900 px-6 pt-6 pb-6 shadow-xl flex items-center justify-between relative z-20">
+      {/* ORQA FON (Video) */}
+      <div className="absolute inset-0 z-0">
+        <video src="/bg.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm"></div>
+      </div>
+
+      {/* CONTENT */}
+      <div className="relative z-10 flex flex-col h-full p-8">
         
-        {/* CHAP TOMON: Tugma va Sarlavha */}
-        <div className="flex items-center gap-4">
+        {/* Tepa qism: Sarlavha va Orqaga tugmasi */}
+        <div className="flex items-center justify-between mb-8">
           <button 
-            onClick={() => navigate('/')} 
-            className="bg-white/10 backdrop-blur-md p-3 rounded-xl text-white active:scale-95 transition-all border border-white/20 hover:bg-white/20"
+            onClick={() => navigate('/')}
+            className="flex items-center gap-3 bg-white/10 border border-white/20 text-white px-6 py-3 rounded-2xl hover:bg-white/20 active:scale-95 transition-all text-xl font-bold uppercase"
           >
-            <FaArrowLeft className="text-xl" />
+            <FaArrowLeft /> {t('back_btn')}
           </button>
-          <div>
-            <h1 className="text-2xl font-black text-white uppercase tracking-wider font-serif">
-              {t('emp_title')}
-            </h1>
-            <div className="h-1 w-20 bg-amber-500 mt-2 rounded-full"></div>
+          
+          <h1 className="text-4xl font-black text-white uppercase tracking-wider drop-shadow-lg text-right">
+            {t('menu_employees')}
+          </h1>
+        </div>
+
+        {/* Xodimlar ro'yxati (Grid) */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar pr-4">
+          <div className="grid grid-cols-3 gap-6 pb-20">
+            {staff.map((person) => (
+              <div 
+                key={person.id}
+                className={`bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-6 flex flex-col items-center gap-4 hover:bg-white/10 transition-all group hover:-translate-y-2 hover:shadow-2xl`}
+              >
+                {/* Rasm */}
+                <div className={`w-32 h-32 rounded-full border-4 ${person.color} p-1 bg-white/10`}>
+                  <img 
+                    src={person.img} 
+                    alt={person.name} 
+                    className="w-full h-full rounded-full object-cover"
+                  />
+                </div>
+
+                {/* Ism va Lavozim */}
+                <div className="text-center">
+                  <h3 className="text-xl font-bold text-white mb-1">{person.name}</h3>
+                  <p className="text-blue-300 font-medium uppercase text-sm tracking-wide">{person.role}</p>
+                </div>
+
+                {/* Aloqa */}
+                <div className="w-full border-t border-white/10 pt-4 mt-2 flex flex-col gap-2">
+                  <div className="flex items-center gap-3 text-gray-300 text-sm bg-black/20 p-2 rounded-xl">
+                    <FaPhoneAlt className="text-green-400" /> {person.phone}
+                  </div>
+                  <div className="flex items-center gap-3 text-gray-300 text-sm bg-black/20 p-2 rounded-xl">
+                    <FaEnvelope className="text-amber-400" /> {person.email}
+                  </div>
+                </div>
+
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* O'NG TOMON: Soat */}
-        <div>
-          <HeaderClock />
-        </div>
-
-      </div>
-
-      {/* TABLAR */}
-      <div className="bg-white px-4 pt-4 shadow-sm z-10">
-        <div className="flex gap-4 justify-center border-b border-gray-200">
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => { setActiveTab(cat.id); setOpenDepartment(null); }}
-              className={`pb-4 px-4 flex items-center gap-2 font-bold text-lg transition-all relative ${
-                activeTab === cat.id 
-                  ? "text-blue-900" 
-                  : "text-gray-400 hover:text-gray-600"
-              }`}
-            >
-              {cat.icon}
-              {cat.label}
-              {activeTab === cat.id && (
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-amber-500 rounded-t-full transition-all"></div>
-              )}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ASOSIY QISM */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar bg-slate-100">
-         <div className="bg-white p-3 rounded-xl shadow-sm border border-gray-200 flex items-center gap-3 mb-4 sticky top-0 z-20">
-            <FaSearch className="text-gray-400" />
-            <input 
-              type="text" 
-              placeholder={t('search_placeholder')}
-              className="w-full outline-none text-gray-700"
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-         </div>
-
-        {uniqueDepartments.length > 0 ? (
-            uniqueDepartments.map((deptKey) => (
-            <div key={deptKey} className="rounded-xl overflow-hidden shadow-md transition-all duration-300">
-                <button 
-                onClick={() => toggleDepartment(deptKey)}
-                className={`w-full flex items-center justify-between p-5 text-left transition-all ${
-                    openDepartment === deptKey ? "bg-blue-900 text-white" : "bg-white text-blue-900 hover:bg-blue-50"
-                }`}
-                >
-                <div className="flex items-center gap-4">
-                    <FaBuilding size={20}/>
-                    <h2 className="text-lg font-bold uppercase tracking-wide">{t(deptKey)}</h2>
-                </div>
-                <div className={openDepartment === deptKey ? "text-amber-500" : "text-gray-300"}>
-                    {openDepartment === deptKey ? <FaChevronUp size={18}/> : <FaChevronDown size={18}/>}
-                </div>
-                </button>
-
-                {openDepartment === deptKey && (
-                <div className="bg-white border-x border-b border-gray-200 p-4 space-y-4">
-                    {filteredData
-                    .filter(person => person.department === deptKey)
-                    .map(person => (
-                        <div key={person.id} className="group bg-white p-4 rounded-lg border border-gray-100 hover:border-blue-200 shadow-sm flex items-center gap-5 relative overflow-hidden">
-                          <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-amber-400 to-amber-600"></div>
-                          
-                          <div className="w-14 h-14 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 border border-slate-200 shadow-inner">
-                              <FaUserTie className="text-2xl" />
-                          </div>
-
-                          <div className="flex-1">
-                              <p className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-0.5">
-                                  {t(person.role)}
-                              </p>
-                              <h3 className="text-xl font-bold text-blue-950 leading-tight">{person.name}</h3>
-                          </div>
-
-                          <div className="flex flex-col items-end gap-2">
-                              <div className="flex items-center gap-2 text-gray-600 bg-gray-50 px-3 py-1 rounded border border-gray-100 text-sm font-semibold">
-                                <FaMapMarkerAlt className="text-red-500"/> 
-                                <span>{t('room')} {person.room}</span>
-                              </div>
-                              <div className="flex items-center gap-2 text-blue-800 bg-blue-50 px-3 py-1 rounded border border-blue-100 text-sm font-bold">
-                                <FaPhoneAlt size={12}/> 
-                                <span>{person.phone}</span>
-                              </div>
-                          </div>
-                        </div>
-                    ))}
-                </div>
-                )}
-            </div>
-            ))
-        ) : (
-            <div className="text-center text-gray-400 mt-10">
-                <p>{t('not_found')}</p>
-            </div>
-        )}
       </div>
     </div>
   );

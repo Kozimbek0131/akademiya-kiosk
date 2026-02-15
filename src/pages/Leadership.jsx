@@ -7,11 +7,11 @@ const Leadership = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
 
-  // RAHBARIYAT MA'LUMOTLARI (Siz yuborgan real ma'lumotlar asosida)
+  // RAHBARIYAT MA'LUMOTLARI (Samadov S.I. boshchiligida)
   const leaders = [
     {
       id: 1,
-      name: "Samadov Salom I.",
+      name: "Samadov Salom Ismatovich",
       rank: "3-darajali davlat adliya maslahatchisi",
       position: "Akademiya Boshlig'i",
       phone: "+998 71 202-04-96",
@@ -88,7 +88,7 @@ const Leadership = () => {
         
         {/* 1. AKADEMIYA BOSHLIG'I (KATTA KARTA) */}
         {leaders.filter(l => l.isChief).map(chief => (
-          <div key={chief.id} className="w-full max-w-4xl bg-gradient-to-r from-slate-800 to-slate-900 border-2 border-yellow-500/50 rounded-[3rem] p-8 flex items-center gap-10 shadow-[0_0_50px_rgba(234,179,8,0.2)] mb-12 transform hover:scale-105 transition-transform duration-500 relative overflow-hidden group">
+          <div key={chief.id} className="w-full max-w-5xl bg-gradient-to-r from-slate-800 to-slate-900 border-2 border-yellow-500/50 rounded-[3rem] p-8 flex items-center gap-10 shadow-[0_0_50px_rgba(234,179,8,0.2)] mb-12 transform hover:scale-105 transition-transform duration-500 relative overflow-hidden group">
             
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
 
@@ -135,7 +135,7 @@ const Leadership = () => {
 
               <span className="text-blue-400 font-bold uppercase text-xs tracking-widest mb-1">{deputy.rank}</span>
               <h3 className="text-2xl font-bold text-white mb-2">{deputy.name}</h3>
-              <p className="text-gray-400 text-sm mb-4 h-10">{deputy.position}</p>
+              <p className="text-gray-400 text-sm mb-4 h-10 leading-tight">{deputy.position}</p>
 
               <div className="w-full bg-black/20 rounded-xl p-3 flex flex-col gap-2">
                  <div className="flex items-center justify-center gap-2 text-gray-300 text-sm">

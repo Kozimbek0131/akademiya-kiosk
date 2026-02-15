@@ -43,7 +43,7 @@ const Home = () => {
       id: 'achievements', 
       icon: <FaTrophy />, 
       label: t('menu_achievements') || "YUTUQLAR", 
-      path: 'https://proacademy.uz', // 🌐 DIQQAT: Bu endi tashqi saytga link
+      path: 'https://proacademy.uz', // 🌐 SAYTGA LINK
       desc: "proacademy.uz saytiga o'tish" 
     },
     { 
@@ -133,12 +133,12 @@ const Home = () => {
         
         {/* 1. O'zbekiston Respublikasi (Oltin rangda) */}
         <h2 className="text-xs md:text-sm font-bold text-amber-500 uppercase tracking-[0.2em] mb-1 drop-shadow-md">
-          {t('country_name') || "O'ZBEKISTON RESPUBLIKASI"}
+           O'ZBEKISTON RESPUBLIKASI
         </h2>
 
         {/* 2. Akademiya Nomi (Oq rangda, Katta) */}
         <h1 className="text-xl md:text-3xl font-black text-white uppercase tracking-widest mb-1 px-4 leading-tight drop-shadow-lg max-w-4xl">
-          {t('app_name') || "HUQUQNI MUHOFAZA QILISH AKADEMIYASI"}
+           HUQUQNI MUHOFAZA QILISH AKADEMIYASI
         </h1>
 
         {/* 3. Chiziqcha */}

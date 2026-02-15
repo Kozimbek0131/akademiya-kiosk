@@ -14,34 +14,61 @@ const Employees = () => {
 
   // 📂 BO'LIMLAR RO'YXATI (Kategoriyalar)
   const departmentsList = [
-    { id: 'rahbariyat', name: "Rahbariyat", icon: <FaUniversity /> },
-    { id: 'til_kafedra', name: "Til o'rgatish kafedrasi", icon: <FaChalkboardTeacher /> },
-    { id: 'it_dept', name: "Axborot texnologiyalari", icon: <FaLaptopCode /> },
-    { id: 'tergov', name: "Tergov faoliyati", icon: <FaBalanceScale /> },
-    { id: 'devonxona', name: "Devonxona va Arxiv", icon: <FaLayerGroup /> },
+    { id: 'rahbariyat', name: "Rahbariyat (5-qavat)", icon: <FaUniversity /> },
+    { id: 'xalqaro', name: "Xalqaro hamkorlik (4-qavat)", icon: <FaLayerGroup /> },
+    { id: 'til_kafedra', name: "Til o'rgatish kafedrasi (4-qavat)", icon: <FaChalkboardTeacher /> },
+    { id: 'sud', name: "Sud nazorati (3-qavat)", icon: <FaIdBadge /> },
+    { id: 'it_dept', name: "Axborot texnologiyalari (3-qavat)", icon: <FaLaptopCode /> },
+    { id: 'korrupsiya', name: "Korrupsiyaga qarshi kurash (2-qavat)", icon: <FaBalanceScale /> },
+    { id: 'tergov', name: "Tergov faoliyati (2-qavat)", icon: <FaBalanceScale /> },
+    { id: 'akt', name: "Anti-korrupsiya tizimi (AKT) (1-qavat)", icon: <FaBalanceScale /> },
+    { id: 'kiber', name: "Kiberxavfsizlik (1-qavat)", icon: <FaLaptopCode /> },
+    { id: 'devonxona', name: "Devonxona va Arxiv (0-qavat)", icon: <FaLayerGroup /> },
   ];
 
   // 👥 XODIMLAR BAZASI (Namuna)
   const employeesData = [
-    // RAHBARIYAT
-    { id: 1, name: "Akademiya Boshlig'i", position: "General-mayor", deptId: "rahbariyat", dept: "Rahbariyat", room: "401", tel: "40-00", floor: "4" },
-    { id: 2, name: "O'quv ishlari prorektori", position: "Prorektor", deptId: "rahbariyat", dept: "Rahbariyat", room: "402", tel: "40-02", floor: "4" },
+    // RAHBARIYAT (5-qavat)
+    { id: 1, name: "Коленко Евгений Вячеславович", position: "Boshliqning birinchi o'rinbosari", deptId: "rahbariyat", dept: "Rahbariyat", room: "501", tel: "50-01", floor: "5" },
+    { id: 2, name: "Туранонов Дурбек Лермонович", position: "Boshliq o'rinbosari", deptId: "rahbariyat", dept: "Rahbariyat", room: "502", tel: "50-02", floor: "5" },
 
-    // TIL O'RGATISH KAFEDRASI (Siz so'ragan misol)
-    { id: 3, name: "Karimov Anvar", position: "Kafedra boshlig'i", deptId: "til_kafedra", dept: "Til o'rgatish kafedrasi", room: "305", tel: "30-10", floor: "3" },
-    { id: 4, name: "Ivanova Elena", position: "Rus tili o'qituvchisi", deptId: "til_kafedra", dept: "Til o'rgatish kafedrasi", room: "306", tel: "30-12", floor: "3" },
-    { id: 5, name: "Smith John", position: "Ingliz tili o'qituvchisi", deptId: "til_kafedra", dept: "Til o'rgatish kafedrasi", room: "306", tel: "30-13", floor: "3" },
+    // XALQARo HAMKORLIK (4-qavat)
+    { id: 3, name: "Акбутаев Аброр Абдурахманович", position: "Bo'lim boshlig'i", deptId: "xalqaro", dept: "Xalqaro hamkorlik", room: "401", tel: "40-01", floor: "4" },
+    { id: 4, name: "Турдиев Бобир Собирович", position: "Katta prokuror", deptId: "xalqaro", dept: "Xalqaro hamkorlik", room: "402", tel: "40-02", floor: "4" },
+    { id: 5, name: "Хамидуллина Диана Салаватовна", position: "Ish yuritish inspektori", deptId: "xalqaro", dept: "Xalqaro hamkorlik", room: "403", tel: "40-03", floor: "4" },
 
-    // IT BO'LIMI
-    { id: 6, name: "Abdullayev Jamshid", position: "Bo'lim boshlig'i", deptId: "it_dept", dept: "Axborot texnologiyalari", room: "310", tel: "31-00", floor: "3" },
-    { id: 7, name: "Server xonasi", position: "Adminlar", deptId: "it_dept", dept: "Axborot texnologiyalari", room: "312", tel: "31-05", floor: "3" },
+    // TIL O'RGATISH KAFEDRASI (4-qavat)
+    { id: 6, name: "Мирзокулова Хурсаной Нематжоновна", position: "Katta o'qituvchi", deptId: "til_kafedra", dept: "Til o'rgatish kafedrasi", room: "411", tel: "41-01", floor: "4" },
+    { id: 7, name: "Юлдашев Хуршид Нозим ўғли", position: "O'qituvchi (dotset)", deptId: "til_kafedra", dept: "Til o'rgatish kafedrasi", room: "412", tel: "41-02", floor: "4" },
+    { id: 8, name: "Нишонов Илхомджон Дилмуродович", position: "O'qituvchi", deptId: "til_kafedra", dept: "Til o'rgatish kafedrasi", room: "413", tel: "41-03", floor: "4" },
 
-    // TERGOV
-    { id: 8, name: "Tergov kafedrasi", position: "Kafedra mudiri", deptId: "tergov", dept: "Tergov faoliyati", room: "205", tel: "20-50", floor: "2" },
+    // SUD NAZORATI (3-qavat)
+    { id: 9, name: "Қандаҳорова Дилноза Сатторовна", position: "Katta o'qituvchi", deptId: "sud", dept: "Sud nazorati", room: "301", tel: "30-01", floor: "3" },
+    { id: 10, name: "Мирмахмудов Зоҳиджон Ирисматович", position: "O'qituvchi", deptId: "sud", dept: "Sud nazorati", room: "302", tel: "30-02", floor: "3" },
 
-    // DEVONXONA (Podval va 1-qavat)
-    { id: 9, name: "Devonxona", position: "Qabul bo'limi", deptId: "devonxona", dept: "Devonxona", room: "101", tel: "10-00", floor: "1" },
-    { id: 10, name: "Arxiv", position: "Arxiv mudiri", deptId: "devonxona", dept: "Arxiv", room: "P-04", tel: "00-15", floor: "0" },
+    // AXBOROT TEXNOLOGIYALARI (3-qavat)
+    { id: 11, name: "Абдураимов Элмурод Абдугаппарович", position: "Bo'lim boshlig'i", deptId: "it_dept", dept: "Axborot texnologiyalari", room: "310", tel: "31-00", floor: "3" },
+    { id: 12, name: "Хайдаров Мирали Акмалович", position: "IT mutaxassisi", deptId: "it_dept", dept: "Axborot texnologiyalari", room: "312", tel: "31-05", floor: "3" },
+
+    // KORRUPSIYAGA QARSHI KURASH (2-qavat)
+    { id: 13, name: "Турсунбеков Худайберди", position: "Ilmiy-ta'lim markazi boshlig'i", deptId: "korrupsiya", dept: "Korrupsiyaga qarshi kurash", room: "201", tel: "20-01", floor: "2" },
+    { id: 14, name: "Сафаров Темур Уктамович", position: "Katta prokuror", deptId: "korrupsiya", dept: "Korrupsiyaga qarshi kurash", room: "202", tel: "20-02", floor: "2" },
+
+    // TERGOV FAOLIYATI (2-qavat)
+    { id: 15, name: "Usmonov Azizbek Xurshidbek o'g'li", position: "Talaba / Tergovchi", deptId: "tergov", dept: "Tergov faoliyati", room: "205", tel: "20-50", floor: "2" },
+    { id: 16, name: "Oripov Mirshoxidbek Murodjon o'g'li", position: "Talaba / Tergovchi", deptId: "tergov", dept: "Tergov faoliyati", room: "206", tel: "20-51", floor: "2" },
+
+    // ANTI-KORRUPSIYAGA QARSHI TIZIMI (AKT) (1-qavat)
+    { id: 17, name: "Эшбуриев Сухроб Бахром ўғли", position: "Bo'lim boshlig'i", deptId: "akt", dept: "Anti-korrupsiya tizimi", room: "101", tel: "10-01", floor: "1" },
+    { id: 18, name: "Ҳамраев Ойбек Аваз ўғли", position: "Katta mutaxassis", deptId: "akt", dept: "Anti-korrupsiya tizimi", room: "102", tel: "10-02", floor: "1" },
+
+    // KIBERXAVFSIZLIK (1-qavat)
+    { id: 19, name: "Ғиёсов Билолбек Жумазода", position: "Bo'lim boshlig'i", deptId: "kiber", dept: "Kiberxavfsizlik", room: "111", tel: "11-01", floor: "1" },
+    { id: 20, name: "Рахматов Хожиакбар Шовкат ўғли", position: "Prokuror", deptId: "kiber", dept: "Kiberxavfsizlik", room: "112", tel: "11-02", floor: "1" },
+
+    // DEVONXONA VA ARXIV (0-qavat)
+    { id: 21, name: "Бегжанов Азиз Бахритдинович", position: "Qabul bo'limi boshlig'i", deptId: "devonxona", dept: "Devonxona", room: "001", tel: "00-01", floor: "0" },
+    { id: 22, name: "Мамадалиев Бахтиёр Зокирович", position: "Arxiv mudiri", deptId: "devonxona", dept: "Arxiv", room: "P-04", tel: "00-15", floor: "0" },
   ];
 
   // 🔍 FILTRLASH MANTIG'I
@@ -164,7 +191,7 @@ const Employees = () => {
               departmentsList.map(dept => (
                 <button
                   key={dept.id}
-                  onClick={() => setActiveFilter(dept.deptId || dept.id)} // ID mosligini tekshirish
+                  onClick={() => setActiveFilter(dept.id)}
                   className={`w-full p-4 rounded-xl text-left transition-all border border-transparent group ${
                     activeFilter === dept.id 
                       ? 'bg-amber-500 text-black shadow-lg scale-[1.02]' 

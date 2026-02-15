@@ -1,13 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { FaUsers, FaFileAlt, FaMapMarkedAlt, FaWifi, FaNewspaper, FaUniversity } from 'react-icons/fa';
+import { FaUsers, FaTrophy, FaFileAlt, FaBus, FaWifi, FaMapMarkedAlt } from 'react-icons/fa';
 
 const Home = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
 
-  // Kiosk uchun barcha bo'limlar ro'yxati
+  // Fayllar tuzilmasiga mos 6 ta bo'lim:
   const menuItems = [
     { 
       id: 1, 
@@ -18,38 +18,38 @@ const Home = () => {
     },
     { 
       id: 2, 
-      label: "XARITA", 
-      icon: <FaMapMarkedAlt className="text-6xl mb-4 text-green-400" />, 
-      path: '/map',
-      color: 'border-green-500 hover:bg-green-500/20 shadow-green-500/20'
+      label: "YUTUQLAR", // Achievements.jsx
+      icon: <FaTrophy className="text-6xl mb-4 text-yellow-400" />, 
+      path: '/achievements',
+      color: 'border-yellow-500 hover:bg-yellow-500/20 shadow-yellow-500/20'
     },
     { 
       id: 3, 
       label: "HUJJATLAR", 
-      icon: <FaFileAlt className="text-6xl mb-4 text-amber-400" />, 
+      icon: <FaFileAlt className="text-6xl mb-4 text-gray-300" />, 
       path: '/documents', 
-      color: 'border-amber-500 hover:bg-amber-500/20 shadow-amber-500/20'
+      color: 'border-gray-500 hover:bg-gray-500/20 shadow-gray-500/20'
     },
     { 
       id: 4, 
-      label: "YANGILIKLAR", 
-      icon: <FaNewspaper className="text-6xl mb-4 text-cyan-400" />, 
-      path: '/news', // Keyinchalik qo'shamiz
-      color: 'border-cyan-500 hover:bg-cyan-500/20 shadow-cyan-500/20'
+      label: "TRANSPORT", 
+      icon: <FaBus className="text-6xl mb-4 text-red-400" />, 
+      path: '/transport', 
+      color: 'border-red-500 hover:bg-red-500/20 shadow-red-500/20'
     },
     { 
       id: 5, 
-      label: "TUZILMA", 
-      icon: <FaUniversity className="text-6xl mb-4 text-rose-400" />, 
-      path: '/structure', // Keyinchalik qo'shamiz
-      color: 'border-rose-500 hover:bg-rose-500/20 shadow-rose-500/20'
-    },
-    { 
-      id: 6, 
-      label: "WI-FI MEHMON", 
+      label: "WI-FI", 
       icon: <FaWifi className="text-6xl mb-4 text-purple-400" />, 
       path: '/wifi',
       color: 'border-purple-500 hover:bg-purple-500/20 shadow-purple-500/20'
+    },
+    { 
+      id: 6, 
+      label: "XARITA", // Map.jsx (Yangi qo'shilgan)
+      icon: <FaMapMarkedAlt className="text-6xl mb-4 text-green-400" />, 
+      path: '/map',
+      color: 'border-green-500 hover:bg-green-500/20 shadow-green-500/20'
     },
   ];
 
@@ -61,8 +61,8 @@ const Home = () => {
 
       <div className="relative z-10 w-full max-w-7xl px-6 flex flex-col h-[90vh]">
         
-        {/* Sarlavha Qismi */}
-        <div className="text-center mb-10 flex-none">
+        {/* Sarlavha Qismi (To'g'rilandi) */}
+        <div className="text-center mb-8 flex-none">
           <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-wider drop-shadow-2xl mb-4 leading-tight">
             HUQUQNI MUHOFAZA QILISH AKADEMIYASI
           </h1>
@@ -72,13 +72,13 @@ const Home = () => {
           </p>
         </div>
 
-        {/* Katta Menyu Tugmalari (Grid) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 flex-1 content-center pb-10">
+        {/* 6 ta Katta Menyu Tugmalari (Grid) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 flex-1 content-center pb-4">
           {menuItems.map((item) => (
             <button
               key={item.id}
               onClick={() => navigate(item.path)}
-              className={`group relative h-full min-h-[200px] bg-white/5 backdrop-blur-xl border-2 ${item.color} rounded-3xl flex flex-col items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(0,0,0,0.3)] hover:shadow-[0_0_50px_rgba(255,255,255,0.15)]`}
+              className={`group relative h-full min-h-[180px] bg-white/5 backdrop-blur-xl border-2 ${item.color} rounded-3xl flex flex-col items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(0,0,0,0.3)] hover:shadow-[0_0_50px_rgba(255,255,255,0.15)]`}
             >
               <div className="transition-transform duration-300 group-hover:-translate-y-2 scale-110">
                 {item.icon}

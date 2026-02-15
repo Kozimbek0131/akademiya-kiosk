@@ -7,7 +7,7 @@ const Leadership = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
 
-  // RAHBARIYAT MA'LUMOTLARI (Samadov S.I. boshchiligida)
+  // RAHBARIYAT MA'LUMOTLARI (To'g'rilangan variant)
   const leaders = [
     {
       id: 1,
@@ -92,16 +92,12 @@ const Leadership = () => {
             
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
 
-            {/* Rasm */}
+            {/* Rasm qismi */}
             <div className="w-64 h-64 rounded-full border-4 border-yellow-500 overflow-hidden shadow-2xl flex-shrink-0 bg-slate-700 flex items-center justify-center">
-               {chief.image ? (
-                 <img src={chief.image} alt={chief.name} className="w-full h-full object-cover" />
-               ) : (
-                 <FaUserTie className="text-8xl text-gray-400" />
-               )}
+               <FaUserTie className="text-8xl text-gray-400" />
             </div>
 
-            {/* Ma'lumot */}
+            {/* Ma'lumot qismi */}
             <div className="flex-1">
                <div className="flex items-center gap-3 mb-2">
                  <FaStar className="text-yellow-400 text-2xl" />
@@ -138,7 +134,7 @@ const Leadership = () => {
               <p className="text-gray-400 text-sm mb-4 h-10 leading-tight">{deputy.position}</p>
 
               <div className="w-full bg-black/20 rounded-xl p-3 flex flex-col gap-2">
-                 <div className="flex items-center justify-center gap-2 text-gray-300 text-sm">
+                 <div className="flex items-center justify-center gap-2 text-gray-300 text-sm font-mono">
                     <FaPhoneAlt className="text-green-500" /> {deputy.phone}
                  </div>
               </div>

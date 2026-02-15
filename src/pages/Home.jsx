@@ -23,7 +23,7 @@ const Home = () => {
   });
   const formattedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-  // 🔘 MENYU TUGMALARI
+  // 🔘 MENYU TUGMALARI (Barcha ma'lumotlar saqlandi)
   const menuItems = [
     { 
       id: 'employees', 
@@ -43,7 +43,7 @@ const Home = () => {
       id: 'achievements', 
       icon: <FaTrophy />, 
       label: t('menu_achievements') || "YUTUQLAR", 
-      path: 'https://proacademy.uz', // 🌐 SAYTGA LINK
+      path: 'https://proacademy.uz', 
       desc: "proacademy.uz saytiga o'tish" 
     },
     { 
@@ -92,10 +92,9 @@ const Home = () => {
   };
 
   return (
-    // Responsive: h-screen o'rniga min-h-screen va overflow-y-auto qo'shildi
     <div className="min-h-screen flex flex-col bg-[#0f172a] relative overflow-x-hidden select-none font-sans text-white">
       
-      {/* FON */}
+      {/* FON - Fixed qilingan, scroll paytida joyida turadi */}
       <div className="fixed inset-0 bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#0f172a] z-0"></div>
       
       {/* STATUS BAR */}
@@ -119,7 +118,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* 🏛️ HEADER (iPhone 12 Pro uchun o'lchamlar moslashtirildi) */}
+      {/* 🏛️ HEADER */}
       <div className="relative z-10 flex flex-col items-center justify-center pt-6 pb-4 text-center shrink-0 px-4">
         <img 
           src="/logo.png" 
@@ -127,7 +126,7 @@ const Home = () => {
           className="h-20 md:h-32 w-auto object-contain mb-3 drop-shadow-2xl filter brightness-110"
         />
         
-        <h2 className="text-[10px] md:text-sm font-bold text-amber-500 uppercase tracking-[0.2em] mb-1">
+        <h2 className="text-[10px] md:text-sm font-bold text-amber-500 uppercase tracking-[0.2em] mb-1 drop-shadow-md">
            O'ZBEKISTON RESPUBLIKASI
         </h2>
 
@@ -142,14 +141,14 @@ const Home = () => {
         </p>
       </div>
 
-      {/* ASOSIY MENYU (Grid va Scroll mobil uchun to'g'rilandi) */}
-      <div className="relative z-10 flex-1 px-4 pb-8 overflow-y-auto">
-        <div className="grid grid-cols-2 gap-3 md:gap-4 w-full max-w-2xl mx-auto mt-4">
+      {/* ASOSIY MENYU */}
+      <div className="relative z-10 flex-1 px-4 pb-12 overflow-y-auto">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 w-full max-w-5xl mx-auto mt-4 pb-10">
           {menuItems.map((item, index) => (
             <button
               key={item.id}
               onClick={() => handleNavigation(item.path)}
-              className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 border border-white/10 hover:border-blue-500/50 transition-all duration-300 flex flex-col items-center justify-center text-center p-4 active:scale-95 shadow-lg min-h-[110px] md:min-h-[150px]"
+              className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 border border-white/10 hover:border-blue-500/50 transition-all duration-300 flex flex-col items-center justify-center text-center p-4 active:scale-95 shadow-lg min-h-[110px] md:min-h-[160px]"
             >
               <div className="text-3xl md:text-5xl text-blue-100 mb-2 group-hover:scale-110 group-hover:text-blue-400 transition-transform duration-300">
                 {item.icon}
@@ -169,7 +168,6 @@ const Home = () => {
       <div className="relative z-20 text-center py-2 bg-black/40 text-white/20 text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] shrink-0">
         © 2026 Akademiya Axborot Texnologiyalari Markazi
       </div>
-
     </div>
   );
 };

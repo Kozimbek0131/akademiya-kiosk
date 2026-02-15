@@ -24,7 +24,7 @@ const Home = () => {
 
   const formattedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-  // 🔘 ASOSIY MENYU TUGMALARI (8 ta)
+  // 🔘 ASOSIY MENYU TUGMALARI
   const menuItems = [
     { 
       id: 'employees', 
@@ -36,7 +36,7 @@ const Home = () => {
     { 
       id: 'leadership', 
       icon: <FaStar />, 
-      label: "RAHBARIYAT", // Tarjima: t('menu_leadership') 
+      label: "RAHBARIYAT", 
       path: '/leadership', 
       color: 'from-purple-600 to-purple-800' 
     },
@@ -78,7 +78,7 @@ const Home = () => {
     { 
       id: 'faq', 
       icon: <FaQuestionCircle />, 
-      label: "MA'LUMOT", // Tarjima: t('menu_faq')
+      label: "MA'LUMOT", 
       path: '/faq', 
       color: 'from-cyan-600 to-cyan-800' 
     },
@@ -89,7 +89,7 @@ const Home = () => {
       
       {/* Orqa fon */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 z-0"></div>
-      <div className="absolute inset-0 opacity-10 bg-[url('https://upload.wikimedia.org/wikipedia/commons/e/e4/Emblem_of_Uzbekistan.svg')] bg-center bg-no-repeat bg-contain animate-pulse z-0"></div>
+      <div className="absolute inset-0 opacity-5 bg-[url('https://upload.wikimedia.org/wikipedia/commons/e/e4/Emblem_of_Uzbekistan.svg')] bg-center bg-no-repeat bg-contain animate-pulse z-0"></div>
 
       {/* 🟢 TEPADAGI STATUS BAR */}
       <div className="relative z-20 bg-black/40 backdrop-blur-md border-b border-white/10 px-8 py-4 flex items-center justify-between">
@@ -131,34 +131,41 @@ const Home = () => {
         </div>
       </div>
 
-      {/* ASOSIY SARLAVHA */}
-      <div className="relative z-10 flex flex-col items-center justify-center pt-8 pb-4 text-center">
-        <h1 className="text-4xl font-black text-white uppercase tracking-widest drop-shadow-lg mb-2">
+      {/* 🏛️ ASOSIY LOGO VA SARLAVHA */}
+      <div className="relative z-10 flex flex-col items-center justify-center pt-6 pb-2 text-center">
+        
+        {/* LOGO SHU YERGA QO'YILDI 👇 */}
+        <img 
+          src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Emblem_of_Uzbekistan.svg" 
+          alt="Akademiya Logosi" 
+          className="w-32 h-32 md:w-40 md:h-40 mb-4 drop-shadow-[0_0_25px_rgba(255,255,255,0.3)] filter brightness-110 animate-fade-in-up"
+        />
+
+        <h1 className="text-3xl md:text-5xl font-black text-white uppercase tracking-widest drop-shadow-lg mb-2">
           {t('app_name')}
         </h1>
-        <p className="text-blue-400 text-lg font-bold tracking-[0.5em] uppercase border-b-2 border-blue-500/50 pb-2">
+        <p className="text-blue-400 text-lg md:text-xl font-bold tracking-[0.5em] uppercase border-b-2 border-blue-500/50 pb-2">
           {t('subtitle')}
         </p>
       </div>
 
-      {/* MENYU TUGMALARI (GRID - 4 ustun) */}
-      <div className="relative z-10 flex-1 px-12 pb-12 pt-4">
-        <div className="grid grid-cols-4 gap-6 h-full max-w-[1600px] mx-auto">
+      {/* MENYU TUGMALARI */}
+      <div className="relative z-10 flex-1 px-8 pb-8 pt-2">
+        <div className="grid grid-cols-4 gap-6 h-full max-w-[1600px] mx-auto items-center">
           {menuItems.map((item, index) => (
             <button
               key={item.id}
               onClick={() => navigate(item.path)}
-              className={`group relative overflow-hidden rounded-3xl bg-gradient-to-br ${item.color} shadow-2xl border border-white/10 hover:scale-[1.02] active:scale-95 transition-all duration-300 flex flex-col items-center justify-center gap-4`}
+              className={`h-[85%] group relative overflow-hidden rounded-3xl bg-gradient-to-br ${item.color} shadow-2xl border border-white/10 hover:scale-[1.02] active:scale-95 transition-all duration-300 flex flex-col items-center justify-center gap-3`}
               style={{ animation: `fadeInUp 0.5s ease-out ${index * 0.1}s backwards` }}
             >
-              {/* Yaltiroq effekt */}
               <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-20 transition-opacity"></div>
               
               <div className="text-5xl md:text-6xl text-white drop-shadow-md group-hover:scale-110 transition-transform duration-300">
                 {item.icon}
               </div>
               
-              <span className="text-xl md:text-2xl font-black text-white uppercase tracking-wider text-center px-2 leading-tight">
+              <span className="text-lg md:text-xl font-black text-white uppercase tracking-wider text-center px-2 leading-tight">
                 {item.label}
               </span>
             </button>

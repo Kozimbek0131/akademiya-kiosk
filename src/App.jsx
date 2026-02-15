@@ -3,8 +3,9 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { useLanguage } from './context/LanguageContext';
 import Home from './pages/Home';
 import Employees from './pages/Employees';
-import Map from './pages/Map'; 
-import Transport from './pages/Transport'; // <-- 1. YANGI IMPORT
+import Map from './pages/Map';
+import Transport from './pages/Transport';
+import Documents from './pages/Documents'; // <-- 1. YANGI IMPORT
 
 function App() {
   const navigate = useNavigate();
@@ -47,9 +48,8 @@ function App() {
   return (
     <div className="w-full h-screen bg-slate-900 overflow-hidden relative">
       
-      {/* SCREENSAVER (Video o'rniga Rasm/Gerb) */}
+      {/* SCREENSAVER */}
       <div className={`fixed inset-0 z-[100] bg-slate-950 transition-opacity duration-1000 flex flex-col items-center justify-center ${isIdle ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
-         {/* Orqa fon bezagi */}
          <div className="absolute inset-0 bg-[url('https://upload.wikimedia.org/wikipedia/commons/e/e4/Emblem_of_Uzbekistan.svg')] bg-center bg-no-repeat opacity-10 blur-3xl scale-150 animate-pulse"></div>
          
          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Emblem_of_Uzbekistan.svg" alt="Logo" className="w-60 h-60 mb-10 drop-shadow-2xl relative z-10" />
@@ -62,7 +62,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/employees" element={<Employees />} />
         <Route path="/map" element={<Map />} />
-        <Route path="/transport" element={<Transport />} /> {/* <-- 2. YANGI YO'L (ROUTE) */}
+        <Route path="/transport" element={<Transport />} />
+        <Route path="/documents" element={<Documents />} /> {/* <-- 2. YANGI YO'L */}
       </Routes>
     </div>
   );

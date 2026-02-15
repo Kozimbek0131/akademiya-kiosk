@@ -1,4 +1,4 @@
-// v3.0: Qidiruv tizimi va xatolar tuzatildi
+// v4.0: Qidiruv ro'yxati va dizayn muammosi hal qilindi
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
@@ -10,49 +10,47 @@ const Transport = () => {
   const [destination, setDestination] = useState('');
   const [mapSrc, setMapSrc] = useState(null);
   
-  // Qidiruv uchun yangi o'zgaruvchilar
-  const [suggestions, setSuggestions] = useState([]); // Topilgan manzillar ro'yxati
-  const [isSearching, setIsSearching] = useState(false); // Qidiryaptimi?
+  const [suggestions, setSuggestions] = useState([]); 
+  const [isSearching, setIsSearching] = useState(false);
 
-  // 📍 AKADEMIYA LOKATSIYASI (Yunusobod, Rixsiliy 9)
+  // 📍 AKADEMIYA LOKATSIYASI
   const akademiyaLat = "41.374751";
   const akademiyaLong = "69.272917";
 
   const defaultMapUrl = `https://yandex.uz/map-widget/v1/?ll=${akademiyaLong}%2C${akademiyaLat}&z=17&pt=${akademiyaLong}%2C${akademiyaLat},pm2rdm`;
 
-  // ⌨️ Harf yozganda ishlaydigan funksiya (Autocomplete)
+  // ⌨️ Harf yozganda ishlaydigan funksiya
   useEffect(() => {
     const fetchSuggestions = async () => {
-      if (destination.length < 3) {
+      // 2 ta harfdan kam bo'lsa qidirmasin
+      if (destination.length < 2) {
         setSuggestions([]);
         return;
       }
 
       setIsSearching(true);
       try {
-        // OpenStreetMap bepul qidiruv xizmati (faqat O'zbekiston hududida)
+        // Cheklovlarni olib tashladik, endi erkinroq qidiradi
         const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(destination)}&addressdetails=1&limit=5&countrycodes=uz&viewbox=69.1,41.4,69.4,41.2&bounded=1`
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(destination)}&addressdetails=1&limit=5&countrycodes=uz`
         );
         const data = await response.json();
         setSuggestions(data);
       } catch (error) {
-        console.error("Manzil topishda xatolik:", error);
+        console.error("Xatolik:", error);
       } finally {
         setIsSearching(false);
       }
     };
 
-    // Har bir harf yozganda serverga so'rov yubormaslik uchun 500ms kutamiz
-    const timeoutId = setTimeout(fetchSuggestions, 500);
+    const timeoutId = setTimeout(fetchSuggestions, 300); // 0.3 sekund kutib keyin qidiradi
     return () => clearTimeout(timeoutId);
   }, [destination]);
 
-  // 🔎 Ro'yxatdan birini tanlaganda
   const handleSelectSuggestion = (placeName) => {
-    setDestination(placeName); // Inputga yozib qo'yamiz
-    setSuggestions([]); // Ro'yxatni yopamiz
-    updateMapRoute(placeName); // Xaritada yo'l chizamiz
+    setDestination(placeName);
+    setSuggestions([]);
+    updateMapRoute(placeName);
   };
 
   const handleSearch = (e) => {
@@ -64,13 +62,10 @@ const Transport = () => {
   };
 
   const updateMapRoute = (place) => {
-    // rtext = A~B (Akademiya ~ Manzil)
-    // rtt = mt (Mass Transit - Jamoat transporti)
     const routeUrl = `https://yandex.uz/map-widget/v1/?rtext=${akademiyaLat},${akademiyaLong}~${encodeURIComponent(place)}&rtt=mt&z=12`;
     setMapSrc(routeUrl);
   };
 
-  // Inputni tozalash
   const clearSearch = () => {
     setDestination('');
     setSuggestions([]);
@@ -98,11 +93,11 @@ const Transport = () => {
         </h1>
       </div>
 
-      {/* ASOSIY QISM */}
-      <div className="relative z-10 flex-1 p-6 flex flex-col md:flex-row gap-6 overflow-hidden">
+      {/* ASOSIY QISM - BU YERDAN "overflow-hidden" OLIB TASHLANDI */}
+      <div className="relative z-10 flex-1 p-6 flex flex-col md:flex-row gap-6">
         
-        {/* 1. CHAP TOMON - QIDIRUV VA TUGMALAR */}
-        <div className="flex-1 flex flex-col gap-6 max-w-md relative z-50">
+        {/* 1. CHAP TOMON */}
+        <div className="flex-1 flex flex-col gap-6 max-w-md relative z-[50]">
           
           {/* Qidiruv Paneli */}
           <div className="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-3xl shadow-xl relative">
@@ -113,7 +108,7 @@ const Transport = () => {
                 placeholder="Joy nomini yozing..." 
                 value={destination}
                 onChange={(e) => setDestination(e.target.value)}
-                className="w-full bg-slate-900/80 text-white border-2 border-blue-500/50 rounded-2xl py-4 pl-12 pr-12 text-xl focus:outline-none focus:border-blue-400 focus:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all placeholder-gray-500"
+                className="w-full bg-slate-900/90 text-white border-2 border-blue-500/50 rounded-2xl py-4 pl-12 pr-12 text-xl focus:outline-none focus:border-blue-400 transition-all placeholder-gray-500"
               />
               <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
               
@@ -121,25 +116,28 @@ const Transport = () => {
                 <button 
                   type="button" 
                   onClick={clearSearch}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white p-2"
                 >
                   <FaTimes />
                 </button>
               )}
             </form>
 
-            {/* 🔽 MANZILLAR RO'YXATI (Suggestions) */}
+            {/* 🔽 MANZILLAR RO'YXATI - ENDI DOIM KO'RINADI */}
             {suggestions.length > 0 && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-slate-800 border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-[100]">
+              <div className="absolute top-full left-0 right-0 mt-2 bg-slate-800 border border-white/20 rounded-2xl shadow-2xl z-[100] max-h-60 overflow-y-auto">
                 {suggestions.map((item, index) => (
                   <button
                     key={index}
                     onClick={() => handleSelectSuggestion(item.display_name.split(',')[0])} 
-                    className="w-full text-left px-5 py-4 text-white hover:bg-blue-600 transition-colors border-b border-white/5 last:border-0 flex items-center gap-3"
+                    className="w-full text-left px-5 py-4 text-white hover:bg-blue-600 transition-colors border-b border-white/10 last:border-0 flex items-center gap-3"
                   >
                     <FaMapMarkerAlt className="text-red-400 flex-shrink-0" />
-                    <span className="truncate text-sm md:text-base font-medium">
-                      {item.display_name.replace(", Toshkent, Oʻzbekiston", "")}
+                    <span className="truncate text-sm md:text-base font-medium block w-full">
+                      {item.display_name.split(',')[0]} 
+                      <span className="text-xs text-gray-400 block mt-1 truncate">
+                        {item.display_name.replace(item.display_name.split(',')[0], '').replace(/^, /, '')}
+                      </span>
                     </span>
                   </button>
                 ))}
@@ -147,13 +145,13 @@ const Transport = () => {
             )}
              
             {isSearching && (
-               <div className="absolute top-full left-0 right-0 mt-2 p-2 text-center text-white/50 text-sm">
-                 Qidirilmoqda...
+               <div className="absolute top-full left-0 right-0 mt-2 p-3 bg-black/50 backdrop-blur rounded-xl text-center text-white text-sm z-[100]">
+                 🔍 Qidirilmoqda...
                </div>
             )}
           </div>
 
-          {/* Tezkor Tugmalar (Mashhur joylar) */}
+          {/* Tezkor Tugmalar */}
           <div className="bg-slate-800/50 border border-white/10 p-6 rounded-3xl flex-1 flex flex-col overflow-hidden">
             <h3 className="text-gray-400 font-bold uppercase tracking-widest mb-4 text-sm pl-2">Tezkor yo'nalishlar</h3>
             <div className="grid grid-cols-1 gap-3 overflow-y-auto pr-2 custom-scrollbar">
@@ -191,8 +189,8 @@ const Transport = () => {
           </div>
         </div>
 
-        {/* 2. O'NG TOMON - INTERAKTIV XARITA */}
-        <div className="flex-[2] bg-white rounded-3xl overflow-hidden shadow-2xl border-4 border-slate-700 relative z-0">
+        {/* 2. O'NG TOMON - XARITA */}
+        <div className="flex-[2] bg-white rounded-3xl overflow-hidden shadow-2xl border-4 border-slate-700 relative z-0 h-full">
            <iframe 
              src={mapSrc || defaultMapUrl}
              width="100%" 
@@ -205,7 +203,7 @@ const Transport = () => {
 
            {!mapSrc && (
              <div className="absolute bottom-6 left-6 right-6 bg-black/80 backdrop-blur-md text-white p-4 rounded-xl text-center border border-white/20 animate-pulse">
-               Menga qayerga borishingizni ayting, men eng qulay <b>Avtobus</b> yoki <b>Metro</b> yo'lini ko'rsataman!
+               Manzilni yozing yoki pastdagi tugmalardan birini tanlang
              </div>
            )}
         </div>

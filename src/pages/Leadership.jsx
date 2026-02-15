@@ -7,7 +7,6 @@ const Leadership = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
 
-  // RAHBARIYAT MA'LUMOTLARI (To'g'rilangan variant)
   const leaders = [
     {
       id: 1,
@@ -64,7 +63,7 @@ const Leadership = () => {
   return (
     <div className="h-screen flex flex-col bg-slate-900 relative overflow-hidden select-none text-white">
       
-      {/* Orqa fon (Gerb bilan) */}
+      {/* Orqa fon */}
       <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-blue-950 to-slate-900"></div>
       <div className="absolute inset-0 opacity-5 bg-[url('https://upload.wikimedia.org/wikipedia/commons/e/e4/Emblem_of_Uzbekistan.svg')] bg-center bg-no-repeat bg-contain"></div>
 
@@ -84,58 +83,70 @@ const Leadership = () => {
       </div>
 
       {/* ASOSIY QISM */}
-      <div className="relative z-10 flex-1 p-10 overflow-y-auto custom-scrollbar flex flex-col items-center">
+      <div className="relative z-10 flex-1 p-8 overflow-y-auto custom-scrollbar flex flex-col items-center">
         
-        {/* 1. AKADEMIYA BOSHLIG'I (KATTA KARTA) */}
+        {/* 1. AKADEMIYA BOSHLIG'I - O'lchovlar to'g'rilandi */}
         {leaders.filter(l => l.isChief).map(chief => (
-          <div key={chief.id} className="w-full max-w-5xl bg-gradient-to-r from-slate-800 to-slate-900 border-2 border-yellow-500/50 rounded-[3rem] p-8 flex items-center gap-10 shadow-[0_0_50px_rgba(234,179,8,0.2)] mb-12 transform hover:scale-105 transition-transform duration-500 relative overflow-hidden group">
+          <div key={chief.id} className="w-full max-w-6xl bg-gradient-to-r from-slate-800 to-slate-900 border-2 border-yellow-500/50 rounded-[3rem] p-10 flex items-center gap-12 shadow-[0_0_60px_rgba(234,179,8,0.15)] mb-10 relative overflow-hidden group min-h-fit">
             
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
 
-            {/* Rasm qismi */}
-            <div className="w-64 h-64 rounded-full border-4 border-yellow-500 overflow-hidden shadow-2xl flex-shrink-0 bg-slate-700 flex items-center justify-center">
-               <FaUserTie className="text-8xl text-gray-400" />
+            {/* Rasm qismi - o'lcham adaptiv qilindi */}
+            <div className="w-72 h-72 rounded-3xl border-4 border-yellow-500/30 overflow-hidden shadow-2xl flex-shrink-0 bg-slate-700 flex items-center justify-center">
+               <FaUserTie className="text-9xl text-gray-500" />
             </div>
 
-            {/* Ma'lumot qismi */}
+            {/* Ma'lumot qismi - shriftlar kioskga moslandi */}
             <div className="flex-1">
-               <div className="flex items-center gap-3 mb-2">
-                 <FaStar className="text-yellow-400 text-2xl" />
-                 <span className="text-yellow-400 font-bold uppercase tracking-widest text-lg">{chief.rank}</span>
+               <div className="flex items-center gap-3 mb-4">
+                 <FaStar className="text-yellow-400 text-3xl" />
+                 <span className="text-yellow-500 font-black uppercase tracking-[0.2em] text-xl">
+                   {chief.rank}
+                 </span>
                </div>
-               <h2 className="text-5xl font-black text-white mb-2 leading-tight">{chief.name}</h2>
-               <p className="text-2xl text-gray-300 font-medium mb-6 border-b border-white/10 pb-4">{chief.position}</p>
+               <h2 className="text-6xl font-black text-white mb-4 leading-tight">
+                 {chief.name}
+               </h2>
+               <p className="text-3xl text-blue-400 font-bold mb-8 border-b border-white/10 pb-6 uppercase tracking-wide">
+                 {chief.position}
+               </p>
                
-               <div className="grid grid-cols-2 gap-4">
-                 <div className="flex items-center gap-3 text-gray-300">
-                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-green-400"><FaPhoneAlt /></div>
-                    <span className="font-mono text-lg">{chief.phone}</span>
+               <div className="flex gap-10">
+                 <div className="flex items-center gap-4 text-gray-300">
+                    <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-green-400 text-2xl border border-white/10"><FaPhoneAlt /></div>
+                    <span className="font-mono text-2xl font-bold">{chief.phone}</span>
                  </div>
-                 <div className="flex items-center gap-3 text-gray-300">
-                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-blue-400"><FaEnvelope /></div>
-                    <span className="font-mono text-lg">{chief.email}</span>
+                 <div className="flex items-center gap-4 text-gray-300">
+                    <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-blue-400 text-2xl border border-white/10"><FaEnvelope /></div>
+                    <span className="font-mono text-2xl font-bold">{chief.email}</span>
                  </div>
                </div>
             </div>
           </div>
         ))}
 
-        {/* 2. O'RINBOSARLAR (GRID) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-8 w-full max-w-6xl">
+        {/* 2. O'RINBOSARLAR - To'liq ro'yxat */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl">
           {leaders.filter(l => !l.isChief).map(deputy => (
-            <div key={deputy.id} className="bg-slate-800/50 backdrop-blur border border-white/10 rounded-3xl p-6 flex flex-col items-center text-center hover:bg-slate-800 transition-all hover:border-blue-500/50 group">
+            <div key={deputy.id} className="bg-slate-800/40 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8 flex flex-col items-center text-center hover:bg-slate-800/60 transition-all hover:border-blue-500/50 group shadow-xl">
               
-              <div className="w-40 h-40 rounded-full border-2 border-blue-500/30 overflow-hidden mb-4 bg-slate-700 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                 <FaUserTie className="text-6xl text-gray-400" />
+              <div className="w-44 h-44 rounded-full border-4 border-blue-500/20 overflow-hidden mb-6 bg-slate-700 flex items-center justify-center shadow-inner group-hover:scale-105 transition-transform">
+                 <FaUserTie className="text-7xl text-gray-500" />
               </div>
 
-              <span className="text-blue-400 font-bold uppercase text-xs tracking-widest mb-1">{deputy.rank}</span>
-              <h3 className="text-2xl font-bold text-white mb-2">{deputy.name}</h3>
-              <p className="text-gray-400 text-sm mb-4 h-10 leading-tight">{deputy.position}</p>
+              <span className="text-blue-400 font-black uppercase text-sm tracking-widest mb-2 italic">
+                {deputy.rank}
+              </span>
+              <h3 className="text-3xl font-bold text-white mb-3">
+                {deputy.name}
+              </h3>
+              <p className="text-gray-400 text-xl mb-6 h-14 font-medium leading-tight">
+                {deputy.position}
+              </p>
 
-              <div className="w-full bg-black/20 rounded-xl p-3 flex flex-col gap-2">
-                 <div className="flex items-center justify-center gap-2 text-gray-300 text-sm font-mono">
-                    <FaPhoneAlt className="text-green-500" /> {deputy.phone}
+              <div className="w-full bg-black/30 rounded-2xl p-4 border border-white/5">
+                 <div className="flex items-center justify-center gap-3 text-green-400 text-2xl font-black font-mono">
+                    <FaPhoneAlt className="text-lg" /> {deputy.phone}
                  </div>
               </div>
             </div>

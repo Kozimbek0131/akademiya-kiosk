@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { useLanguage } from './context/LanguageContext';
+
+// SAHIFALAR (IMPORTS)
 import Home from './pages/Home';
 import Employees from './pages/Employees';
 import Map from './pages/Map';
 import Transport from './pages/Transport';
-import Documents from './pages/Documents'; // <-- 1. YANGI IMPORT
+import Documents from './pages/Documents';
+import Achievements from './pages/Achievements'; // <-- 1. BU YERGA QO'SHILDI
 
 function App() {
   const navigate = useNavigate();
@@ -19,7 +22,7 @@ function App() {
     const resetTimer = () => {
       setIsIdle(false);
       clearTimeout(timeoutId);
-      // 3 daqiqa (180000ms) harakatsizlikdan keyin
+      // 3 daqiqa harakatsizlikdan keyin
       timeoutId = setTimeout(() => {
         setIsIdle(true);
         if (location.pathname !== '/') {
@@ -58,12 +61,14 @@ function App() {
          </h1>
       </div>
 
+      {/* YO'NALISHLAR (ROUTES) */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/employees" element={<Employees />} />
         <Route path="/map" element={<Map />} />
         <Route path="/transport" element={<Transport />} />
-        <Route path="/documents" element={<Documents />} /> {/* <-- 2. YANGI YO'L */}
+        <Route path="/documents" element={<Documents />} />
+        <Route path="/achievements" element={<Achievements />} /> {/* <-- 2. BU YERGA QO'SHILDI */}
       </Routes>
     </div>
   );

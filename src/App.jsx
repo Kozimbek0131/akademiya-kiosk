@@ -8,7 +8,8 @@ import Employees from './pages/Employees';
 import Map from './pages/Map';
 import Transport from './pages/Transport';
 import Documents from './pages/Documents';
-import Achievements from './pages/Achievements'; // <-- 1. BU YERGA QO'SHILDI
+import Achievements from './pages/Achievements';
+import Wifi from './pages/Wifi'; // <-- 1. WI-FI IMPORT QILINDI
 
 function App() {
   const navigate = useNavigate();
@@ -68,7 +69,8 @@ function App() {
         <Route path="/map" element={<Map />} />
         <Route path="/transport" element={<Transport />} />
         <Route path="/documents" element={<Documents />} />
-        <Route path="/achievements" element={<Achievements />} /> {/* <-- 2. BU YERGA QO'SHILDI */}
+        <Route path="/achievements" element={<Achievements />} />
+        <Route path="/wifi" element={<Wifi />} /> {/* <-- 2. WI-FI YO'LI QO'SHILDI */}
       </Routes>
     </div>
   );

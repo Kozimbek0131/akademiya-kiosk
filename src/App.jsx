@@ -3,7 +3,8 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { useLanguage } from './context/LanguageContext';
 import Home from './pages/Home';
 import Employees from './pages/Employees';
-import Map from './pages/Map'; // <-- YANGI SAHIFA
+import Map from './pages/Map'; 
+import Transport from './pages/Transport'; // <-- 1. YANGI IMPORT
 
 function App() {
   const navigate = useNavigate();
@@ -60,7 +61,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/employees" element={<Employees />} />
-        <Route path="/map" element={<Map />} /> {/* <-- Xarita yo'li */}
+        <Route path="/map" element={<Map />} />
+        <Route path="/transport" element={<Transport />} /> {/* <-- 2. YANGI YO'L (ROUTE) */}
       </Routes>
     </div>
   );

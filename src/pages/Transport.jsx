@@ -1,3 +1,4 @@
+// v3.0: Qidiruv tizimi va xatolar tuzatildi
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
@@ -19,7 +20,7 @@ const Transport = () => {
 
   const defaultMapUrl = `https://yandex.uz/map-widget/v1/?ll=${akademiyaLong}%2C${akademiyaLat}&z=17&pt=${akademiyaLong}%2C${akademiyaLat},pm2rdm`;
 
-  // ⌨️ Harf yozganda ishlaydigan funksiya
+  // ⌨️ Harf yozganda ishlaydigan funksiya (Autocomplete)
   useEffect(() => {
     const fetchSuggestions = async () => {
       if (destination.length < 3) {
@@ -42,7 +43,7 @@ const Transport = () => {
       }
     };
 
-    // Har bir harf yozganda serverga so'rov yubormaslik uchun 500ms kutamiz (Debounce)
+    // Har bir harf yozganda serverga so'rov yubormaslik uchun 500ms kutamiz
     const timeoutId = setTimeout(fetchSuggestions, 500);
     return () => clearTimeout(timeoutId);
   }, [destination]);
@@ -63,6 +64,8 @@ const Transport = () => {
   };
 
   const updateMapRoute = (place) => {
+    // rtext = A~B (Akademiya ~ Manzil)
+    // rtt = mt (Mass Transit - Jamoat transporti)
     const routeUrl = `https://yandex.uz/map-widget/v1/?rtext=${akademiyaLat},${akademiyaLong}~${encodeURIComponent(place)}&rtt=mt&z=12`;
     setMapSrc(routeUrl);
   };
@@ -110,4 +113,106 @@ const Transport = () => {
                 placeholder="Joy nomini yozing..." 
                 value={destination}
                 onChange={(e) => setDestination(e.target.value)}
-                className="w-full bg-slate-900/80 text-white border-2 border-blue-500/50 rounded-2xl
+                className="w-full bg-slate-900/80 text-white border-2 border-blue-500/50 rounded-2xl py-4 pl-12 pr-12 text-xl focus:outline-none focus:border-blue-400 focus:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all placeholder-gray-500"
+              />
+              <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
+              
+              {destination && (
+                <button 
+                  type="button" 
+                  onClick={clearSearch}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                >
+                  <FaTimes />
+                </button>
+              )}
+            </form>
+
+            {/* 🔽 MANZILLAR RO'YXATI (Suggestions) */}
+            {suggestions.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-slate-800 border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-[100]">
+                {suggestions.map((item, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleSelectSuggestion(item.display_name.split(',')[0])} 
+                    className="w-full text-left px-5 py-4 text-white hover:bg-blue-600 transition-colors border-b border-white/5 last:border-0 flex items-center gap-3"
+                  >
+                    <FaMapMarkerAlt className="text-red-400 flex-shrink-0" />
+                    <span className="truncate text-sm md:text-base font-medium">
+                      {item.display_name.replace(", Toshkent, Oʻzbekiston", "")}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+             
+            {isSearching && (
+               <div className="absolute top-full left-0 right-0 mt-2 p-2 text-center text-white/50 text-sm">
+                 Qidirilmoqda...
+               </div>
+            )}
+          </div>
+
+          {/* Tezkor Tugmalar (Mashhur joylar) */}
+          <div className="bg-slate-800/50 border border-white/10 p-6 rounded-3xl flex-1 flex flex-col overflow-hidden">
+            <h3 className="text-gray-400 font-bold uppercase tracking-widest mb-4 text-sm pl-2">Tezkor yo'nalishlar</h3>
+            <div className="grid grid-cols-1 gap-3 overflow-y-auto pr-2 custom-scrollbar">
+              
+              <button onClick={() => updateMapRoute("Toshkent Xalqaro Aeroporti")} className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl hover:bg-blue-600 hover:text-white text-gray-200 transition-all border border-white/5 group text-left">
+                <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center group-hover:bg-white/20 text-blue-400 group-hover:text-white">
+                  <FaPlane className="text-xl" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-lg">Aeroport</h4>
+                  <p className="text-xs opacity-60">Xalqaro terminal</p>
+                </div>
+              </button>
+
+              <button onClick={() => updateMapRoute("Toshkent Janubiy Vokzali")} className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl hover:bg-green-600 hover:text-white text-gray-200 transition-all border border-white/5 group text-left">
+                <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center group-hover:bg-white/20 text-green-400 group-hover:text-white">
+                  <FaTrain className="text-xl" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-lg">Janubiy Vokzal</h4>
+                  <p className="text-xs opacity-60">Poyezd qatnovlari</p>
+                </div>
+              </button>
+
+              <button onClick={() => updateMapRoute("Chorsu Bozori")} className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl hover:bg-amber-600 hover:text-white text-gray-200 transition-all border border-white/5 group text-left">
+                <div className="w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center group-hover:bg-white/20 text-amber-400 group-hover:text-white">
+                  <FaLandmark className="text-xl" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-lg">Chorsu Bozori</h4>
+                  <p className="text-xs opacity-60">Eski shahar</p>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* 2. O'NG TOMON - INTERAKTIV XARITA */}
+        <div className="flex-[2] bg-white rounded-3xl overflow-hidden shadow-2xl border-4 border-slate-700 relative z-0">
+           <iframe 
+             src={mapSrc || defaultMapUrl}
+             width="100%" 
+             height="100%" 
+             frameBorder="0"
+             title="Yandex Maps"
+             allowFullScreen
+             className="w-full h-full"
+           ></iframe>
+
+           {!mapSrc && (
+             <div className="absolute bottom-6 left-6 right-6 bg-black/80 backdrop-blur-md text-white p-4 rounded-xl text-center border border-white/20 animate-pulse">
+               Menga qayerga borishingizni ayting, men eng qulay <b>Avtobus</b> yoki <b>Metro</b> yo'lini ko'rsataman!
+             </div>
+           )}
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+export default Transport;

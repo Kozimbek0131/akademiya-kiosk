@@ -7,52 +7,62 @@ const Leadership = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
 
-  // RAHBARIYAT MA'LUMOTLARI (Namuna)
+  // RAHBARIYAT MA'LUMOTLARI (Siz yuborgan real ma'lumotlar asosida)
   const leaders = [
     {
       id: 1,
-      name: "G'afurov Rustam R.",
-      rank: "General-mayor",
+      name: "Samadov Salom I.",
+      rank: "3-darajali davlat adliya maslahatchisi",
       position: "Akademiya Boshlig'i",
-      phone: "+998 71 200-00-01",
-      email: "rektor@akademiya.uz",
-      image: "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png", // Rasm bo'lmasa placeholder
-      isChief: true // Bu Boshliq (eng tepada turadi)
+      phone: "+998 71 202-04-96",
+      email: "info@proacademy.uz",
+      image: null, 
+      isChief: true 
     },
     {
       id: 2,
-      name: "Aliyev Sardor M.",
-      rank: "Polkovnik",
-      position: "O'quv ishlari bo'yicha o'rinbosar",
-      phone: "+998 71 200-00-02",
-      email: "edu@akademiya.uz",
+      name: "Коленко Евгений Вячеславович",
+      rank: "Adliya katta maslahatchisi",
+      position: "Akademiya boshlig‘ining birinchi o‘rinbosari",
+      phone: "+998 71 202-04-96",
+      email: "info@proacademy.uz",
       image: null,
       isChief: false
     },
     {
       id: 3,
-      name: "Karimov Jamshid B.",
+      name: "Турахонов Дурбек Лермонович",
       rank: "Polkovnik",
-      position: "Ilmiy ishlar bo'yicha o'rinbosar",
-      phone: "+998 71 200-00-03",
-      email: "science@akademiya.uz",
+      position: "Akademiya boshlig‘i o‘rinbosari",
+      phone: "+998 71 202-04-96",
+      email: "info@proacademy.uz",
       image: null,
       isChief: false
     },
     {
       id: 4,
-      name: "Ismoilov Botir S.",
-      rank: "Podpolkovnik",
-      position: "Moliya va xo'jalik ishlari bo'yicha o'rinbosar",
-      phone: "+998 71 200-00-04",
-      email: "fin@akademiya.uz",
+      name: "Одинаев Адҳам Саъдуллоевич",
+      rank: "Polkovnik",
+      position: "Akademiya boshlig‘i o‘rinbosari",
+      phone: "+998 71 202-04-96",
+      email: "info@proacademy.uz",
+      image: null,
+      isChief: false
+    },
+    {
+      id: 5,
+      name: "Нигмаджанов Уйгун Учкунович",
+      rank: "Polkovnik",
+      position: "Akademiya boshlig‘i o‘rinbosari",
+      phone: "+998 71 202-04-96",
+      email: "info@proacademy.uz",
       image: null,
       isChief: false
     }
   ];
 
   return (
-    <div className="h-screen flex flex-col bg-slate-900 relative overflow-hidden select-none">
+    <div className="h-screen flex flex-col bg-slate-900 relative overflow-hidden select-none text-white">
       
       {/* Orqa fon (Gerb bilan) */}
       <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-blue-950 to-slate-900"></div>
@@ -80,12 +90,11 @@ const Leadership = () => {
         {leaders.filter(l => l.isChief).map(chief => (
           <div key={chief.id} className="w-full max-w-4xl bg-gradient-to-r from-slate-800 to-slate-900 border-2 border-yellow-500/50 rounded-[3rem] p-8 flex items-center gap-10 shadow-[0_0_50px_rgba(234,179,8,0.2)] mb-12 transform hover:scale-105 transition-transform duration-500 relative overflow-hidden group">
             
-            {/* Yaltiroq effekt */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
 
             {/* Rasm */}
             <div className="w-64 h-64 rounded-full border-4 border-yellow-500 overflow-hidden shadow-2xl flex-shrink-0 bg-slate-700 flex items-center justify-center">
-               {chief.image && chief.image.includes('http') ? (
+               {chief.image ? (
                  <img src={chief.image} alt={chief.name} className="w-full h-full object-cover" />
                ) : (
                  <FaUserTie className="text-8xl text-gray-400" />
@@ -116,7 +125,7 @@ const Leadership = () => {
         ))}
 
         {/* 2. O'RINBOSARLAR (GRID) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 w-full max-w-7xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-8 w-full max-w-6xl">
           {leaders.filter(l => !l.isChief).map(deputy => (
             <div key={deputy.id} className="bg-slate-800/50 backdrop-blur border border-white/10 rounded-3xl p-6 flex flex-col items-center text-center hover:bg-slate-800 transition-all hover:border-blue-500/50 group">
               
@@ -133,7 +142,6 @@ const Leadership = () => {
                     <FaPhoneAlt className="text-green-500" /> {deputy.phone}
                  </div>
               </div>
-
             </div>
           ))}
         </div>

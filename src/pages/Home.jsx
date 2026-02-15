@@ -89,7 +89,8 @@ const Home = () => {
       
       {/* Orqa fon */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 z-0"></div>
-      <div className="absolute inset-0 opacity-5 bg-[url('https://upload.wikimedia.org/wikipedia/commons/e/e4/Emblem_of_Uzbekistan.svg')] bg-center bg-no-repeat bg-contain animate-pulse z-0"></div>
+      {/* Orqa fondagi xira logo ham endi mahalliy fayldan olinadi */}
+      <div className="absolute inset-0 opacity-5 bg-[url('/logo.png')] bg-center bg-no-repeat bg-contain animate-pulse z-0"></div>
 
       {/* 🟢 TEPADAGI STATUS BAR */}
       <div className="relative z-20 bg-black/40 backdrop-blur-md border-b border-white/10 px-8 py-4 flex items-center justify-between">
@@ -134,11 +135,11 @@ const Home = () => {
       {/* 🏛️ ASOSIY LOGO VA SARLAVHA */}
       <div className="relative z-10 flex flex-col items-center justify-center pt-6 pb-2 text-center">
         
-        {/* LOGO SHU YERGA QO'YILDI 👇 */}
+        {/* 👇 ENG MUHIM O'ZGARISH SHU YERDA: */}
         <img 
-          src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Emblem_of_Uzbekistan.svg" 
+          src="/logo.png"   // <-- Biz 'public' papkasiga qo'ygan fayl
           alt="Akademiya Logosi" 
-          className="w-32 h-32 md:w-40 md:h-40 mb-4 drop-shadow-[0_0_25px_rgba(255,255,255,0.3)] filter brightness-110 animate-fade-in-up"
+          className="w-32 h-32 md:w-40 md:h-40 mb-4 drop-shadow-[0_0_25px_rgba(255,255,255,0.3)] filter brightness-110 animate-fade-in-up object-contain"
         />
 
         <h1 className="text-3xl md:text-5xl font-black text-white uppercase tracking-widest drop-shadow-lg mb-2">

@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { FaArrowLeft, FaSearch, FaUserTie, FaPhoneAlt, FaBuilding, FaLayerGroup, FaIdBadge, FaUniversity, FaChalkboardTeacher, FaBalanceScale, FaLaptopCode } from 'react-icons/fa';
+import { 
+  FaArrowLeft, FaSearch, FaUserTie, FaPhoneAlt, 
+  FaBuilding, FaLayerGroup, FaIdBadge, FaUniversity, 
+  FaChalkboardTeacher, FaBalanceScale, FaLaptopCode, 
+  FaShieldAlt, FaHandshake 
+} from 'react-icons/fa';
 
 const Employees = () => {
   const navigate = useNavigate();
@@ -14,66 +19,62 @@ const Employees = () => {
 
   // 📂 BO'LIMLAR RO'YXATI (Kategoriyalar)
   const departmentsList = [
-    { id: 'rahbariyat', name: "Rahbariyat (5-qavat)", icon: <FaUniversity /> },
-    { id: 'xalqaro', name: "Xalqaro hamkorlik (4-qavat)", icon: <FaLayerGroup /> },
-    { id: 'til_kafedra', name: "Til o'rgatish kafedrasi (4-qavat)", icon: <FaChalkboardTeacher /> },
-    { id: 'sud', name: "Sud nazorati (3-qavat)", icon: <FaIdBadge /> },
-    { id: 'it_dept', name: "Axborot texnologiyalari (3-qavat)", icon: <FaLaptopCode /> },
-    { id: 'korrupsiya', name: "Korrupsiyaga qarshi kurash (2-qavat)", icon: <FaBalanceScale /> },
-    { id: 'tergov', name: "Tergov faoliyati (2-qavat)", icon: <FaBalanceScale /> },
-    { id: 'akt', name: "Anti-korrupsiya tizimi (AKT) (1-qavat)", icon: <FaBalanceScale /> },
-    { id: 'kiber', name: "Kiberxavfsizlik (1-qavat)", icon: <FaLaptopCode /> },
-    { id: 'devonxona', name: "Devonxona va Arxiv (0-qavat)", icon: <FaLayerGroup /> },
+    { id: 'rahbariyat', name: "Akademiya rahbariyati", icon: <FaUniversity /> },
+    { id: 'kadrlar', name: "Kadrlar va Tashkiliy-nazorat", icon: <FaIdBadge /> },
+    { id: 'xalqaro', name: "Xalqaro hamkorlik", icon: <FaHandshake /> },
+    { id: 'tillar', name: "Тил ўргатиш кафедраси", icon: <FaChalkboardTeacher /> },
+    { id: 'sud', name: "Sud faoliyati", icon: <FaBalanceScale /> },
+    { id: 'korrupsiya', name: "Antikorrupsiya markazi", icon: <FaShieldAlt /> },
+    { id: 'it_dept', name: "AKT va axborot xavfsizligi", icon: <FaLaptopCode /> },
   ];
 
-  // 👥 XODIMLAR BAZASI (Namuna)
+  // 👥 XODIMLAR BAZASI (1-5 qavatlar to'liq kiritildi)
   const employeesData = [
-    // RAHBARIYAT (5-qavat)
-    { id: 1, name: "Коленко Евгений Вячеславович", position: "Boshliqning birinchi o'rinbosari", deptId: "rahbariyat", dept: "Rahbariyat", room: "501", tel: "50-01", floor: "5" },
-    { id: 2, name: "Туранонов Дурбек Лермонович", position: "Boshliq o'rinbosari", deptId: "rahbariyat", dept: "Rahbariyat", room: "502", tel: "50-02", floor: "5" },
+    // 5-QAVAT: RAHBARIYAT VA KADRLAR
+    { id: 1, name: "Коленко Евгений Вячеславович", position: "Академия бошлиғининг биринчи ўринбосари", deptId: "rahbariyat", dept: "Rahbariyat", room: "501", tel: "50-01", floor: "5" },
+    { id: 2, name: "Турахонов Дурбек Лермонович", position: "Академия бошлиғи ўринбосари", deptId: "rahbariyat", dept: "Rahbariyat", room: "502", tel: "50-02", floor: "5" },
+    { id: 3, name: "Одинаев Адҳам Саъдуллоевич", position: "Академия бошлиғи ўринбосари", deptId: "rahbariyat", dept: "Rahbariyat", room: "503", tel: "50-03", floor: "5" },
+    { id: 4, name: "Нигмаджанов Уйгун Учкунович", position: "Академия бошлиғи ўринбосари", deptId: "rahbariyat", dept: "Rahbariyat", room: "504", tel: "50-04", floor: "5" },
+    { id: 5, name: "Хабилжонов Шероз Хабилжон ўғли", position: "Академия бошлиғи ёрдамчиcи", deptId: "rahbariyat", dept: "Rahbariyat", room: "500", tel: "50-00", floor: "5" },
+    { id: 6, name: "Аҳмадқулов Диёрбек Жасуржон ўғли", position: "Котиб-иш юритувчи", deptId: "rahbariyat", dept: "Rahbariyat", room: "505", tel: "50-05", floor: "5" },
+    { id: 7, name: "Маматов Достон Халил ўғли", position: "Котиб-иш юритувчи", deptId: "rahbariyat", dept: "Rahbariyat", room: "506", tel: "50-06", floor: "5" },
+    { id: 8, name: "Сулаймонов Зокир Шокир ўғли", position: "Котиб-иш юритувчи", deptId: "rahbariyat", dept: "Rahbariyat", room: "507", tel: "50-07", floor: "5" },
+    { id: 9, name: "Усмонов Алишер Ботиржон ўғли", position: "Котиб-иш юритувчи", deptId: "rahbariyat", dept: "Rahbariyat", room: "508", tel: "50-08", floor: "5" },
+    { id: 10, name: "Холматов Мухтор Мухамедович", position: "Кадрлар бўлими бошлиғи", deptId: "kadrlar", dept: "Kadrlar бўлими", room: "510", tel: "51-10", floor: "5" },
+    { id: 11, name: "Гафуров Рустам Бахтиярович", position: "Кадрлар бўлими катта прокурори", deptId: "kadrlar", dept: "Kadrlar бўлими", room: "511", tel: "51-11", floor: "5" },
+    { id: 12, name: "Ҳамидов Азизбек Олимжонович", position: "Ташкилий-назорат бўлими бошлиғи", deptId: "kadrlar", dept: "Ташкилий-назорат", room: "515", tel: "51-15", floor: "5" },
+    { id: 13, name: "Шарипов Зафар Умурзакович", position: "Ташкилий-назорат бўлими катта прокурори", deptId: "kadrlar", dept: "Ташкилий-назорат", room: "516", tel: "51-16", floor: "5" },
 
-    // XALQARo HAMKORLIK (4-qavat)
-    { id: 3, name: "Акбутаев Аброр Абдурахманович", position: "Bo'lim boshlig'i", deptId: "xalqaro", dept: "Xalqaro hamkorlik", room: "401", tel: "40-01", floor: "4" },
-    { id: 4, name: "Турдиев Бобир Собирович", position: "Katta prokuror", deptId: "xalqaro", dept: "Xalqaro hamkorlik", room: "402", tel: "40-02", floor: "4" },
-    { id: 5, name: "Хамидуллина Диана Салаватовна", position: "Ish yuritish inspektori", deptId: "xalqaro", dept: "Xalqaro hamkorlik", room: "403", tel: "40-03", floor: "4" },
+    // 4-QAVAT: XALQARO VA TILLAR
+    { id: 14, name: "Акбутаев Аброр Абдурахманович", position: "Халқаро ҳамкорлик бўлими бошлиғи", deptId: "xalqaro", dept: "Xalqaro ҳамкорлик", room: "401", tel: "40-01", floor: "4" },
+    { id: 15, name: "Турдиев Бобир Собирович", position: "Халқаро ҳамкорлик бўлими катта прокурори", deptId: "xalqaro", dept: "Xalqaro ҳамкорлик", room: "402", tel: "40-02", floor: "4" },
+    { id: 16, name: "Мирзокуlova Хурсаной Нематжоновна", position: "Тил ўргатиш кафедраси катта ўқитувчи", deptId: "tillar", dept: "Тил ўргатиш кафедраси", room: "410", tel: "41-10", floor: "4" },
+    { id: 17, name: "Нишонов Илхомджон Дилмуродович", position: "Тил ўргатиш кафедраси ўқитувчиси", deptId: "tillar", dept: "Тил ўргатиш кафедраси", room: "412", tel: "41-12", floor: "4" },
 
-    // TIL O'RGATISH KAFEDRASI (4-qavat)
-    { id: 6, name: "Мирзокулова Хурсаной Нематжоновна", position: "Katta o'qituvchi", deptId: "til_kafedra", dept: "Til o'rgatish kafedrasi", room: "411", tel: "41-01", floor: "4" },
-    { id: 7, name: "Юлдашев Хуршид Нозим ўғли", position: "O'qituvchi (dotset)", deptId: "til_kafedra", dept: "Til o'rgatish kafedrasi", room: "412", tel: "41-02", floor: "4" },
-    { id: 8, name: "Нишонов Илхомджон Дилмуродович", position: "O'qituvchi", deptId: "til_kafedra", dept: "Til o'rgatish kafedrasi", room: "413", tel: "41-03", floor: "4" },
+    // 3-QAVAT: SUDLARDA PROKUROR VAKOLATI
+    { id: 18, name: "Қандаҳорова Дилноза Сатторовна", position: "Кафедра катта ўқитувчиси", deptId: "sud", dept: "Sud faoliyati", room: "301", tel: "30-01", floor: "3" },
+    { id: 19, name: "Мирмахмудов Зоҳиджон Ирисматович", position: "Кафедра ўқитувчиси", deptId: "sud", dept: "Sud faoliyati", room: "302", tel: "30-02", floor: "3" },
+    { id: 20, name: "Дусманов Санджар Абдужалолович", position: "Кафедра доценti", deptId: "sud", dept: "Sud faoliyati", room: "303", tel: "30-03", floor: "3" },
+    { id: 21, name: "Ярашев Бахромбек Рустамович", position: "Кафедра катта ўқитувчиси", deptId: "sud", dept: "Sud faoliyati", room: "306", tel: "30-06", floor: "3" },
 
-    // SUD NAZORATI (3-qavat)
-    { id: 9, name: "Қандаҳорова Дилноза Сатторовна", position: "Katta o'qituvchi", deptId: "sud", dept: "Sud nazorati", room: "301", tel: "30-01", floor: "3" },
-    { id: 10, name: "Мирмахмудов Зоҳиджон Ирисматович", position: "O'qituvchi", deptId: "sud", dept: "Sud nazorati", room: "302", tel: "30-02", floor: "3" },
+    // 2-QAVAT: KORRUPSIYAGA QARSHI KURASHISH
+    { id: 22, name: "Турсунбеков Худайберди", position: "Коррупцияга қарши курашиш маркази бошлиғи", deptId: "korrupsiya", dept: "Antikorrupsiya", room: "201", tel: "20-01", floor: "2" },
+    { id: 23, name: "Сафаров Темур Уктамович", position: "Марказ катта прокурори", deptId: "korrupsiya", dept: "Antikorrupsiya", room: "202", tel: "20-02", floor: "2" },
+    { id: 24, name: "Борсиева Замират Хасанбековна", position: "Марказ прокурори", deptId: "korrupsiya", dept: "Antikorrupsiya", room: "203", tel: "20-03", floor: "2" },
+    { id: 25, name: "Сайфулов Рустам Амирович", position: "Марказ катта прокурори", deptId: "korrupsiya", dept: "Antikorrupsiya", room: "204", tel: "20-04", floor: "2" },
+    { id: 26, name: "Аҳмадов Алимардон Ахмадович", position: "Марказ прокурори", deptId: "korrupsiya", dept: "Antikorrupsiya", room: "205", tel: "20-05", floor: "2" },
+    { id: 27, name: "Яздонов Ихтиёр Бахтиёрович", position: "Иш юритиш бўйича инспектор", deptId: "korrupsiya", dept: "Antikorrupsiya", room: "206", tel: "20-06", floor: "2" },
 
-    // AXBOROT TEXNOLOGIYALARI (3-qavat)
-    { id: 11, name: "Абдураимов Элмурод Абдугаппарович", position: "Bo'lim boshlig'i", deptId: "it_dept", dept: "Axborot texnologiyalari", room: "310", tel: "31-00", floor: "3" },
-    { id: 12, name: "Хайдаров Мирали Акмалович", position: "IT mutaxassisi", deptId: "it_dept", dept: "Axborot texnologiyalari", room: "312", tel: "31-05", floor: "3" },
-
-    // KORRUPSIYAGA QARSHI KURASH (2-qavat)
-    { id: 13, name: "Турсунбеков Худайберди", position: "Ilmiy-ta'lim markazi boshlig'i", deptId: "korrupsiya", dept: "Korrupsiyaga qarshi kurash", room: "201", tel: "20-01", floor: "2" },
-    { id: 14, name: "Сафаров Темур Уктамович", position: "Katta prokuror", deptId: "korrupsiya", dept: "Korrupsiyaga qarshi kurash", room: "202", tel: "20-02", floor: "2" },
-
-    // TERGOV FAOLIYATI (2-qavat)
-    { id: 15, name: "Usmonov Azizbek Xurshidbek o'g'li", position: "Talaba / Tergovchi", deptId: "tergov", dept: "Tergov faoliyati", room: "205", tel: "20-50", floor: "2" },
-    { id: 16, name: "Oripov Mirshoxidbek Murodjon o'g'li", position: "Talaba / Tergovchi", deptId: "tergov", dept: "Tergov faoliyati", room: "206", tel: "20-51", floor: "2" },
-
-    // ANTI-KORRUPSIYAGA QARSHI TIZIMI (AKT) (1-qavat)
-    { id: 17, name: "Эшбуриев Сухроб Бахром ўғли", position: "Bo'lim boshlig'i", deptId: "akt", dept: "Anti-korrupsiya tizimi", room: "101", tel: "10-01", floor: "1" },
-    { id: 18, name: "Ҳамраев Ойбек Аваз ўғли", position: "Katta mutaxassis", deptId: "akt", dept: "Anti-korrupsiya tizimi", room: "102", tel: "10-02", floor: "1" },
-
-    // KIBERXAVFSIZLIK (1-qavat)
-    { id: 19, name: "Ғиёсов Билолбек Жумазода", position: "Bo'lim boshlig'i", deptId: "kiber", dept: "Kiberxavfsizlik", room: "111", tel: "11-01", floor: "1" },
-    { id: 20, name: "Рахматов Хожиакбар Шовкат ўғли", position: "Prokuror", deptId: "kiber", dept: "Kiberxavfsizlik", room: "112", tel: "11-02", floor: "1" },
-
-    // DEVONXONA VA ARXIV (0-qavat)
-    { id: 21, name: "Бегжанов Азиз Бахритдинович", position: "Qabul bo'limi boshlig'i", deptId: "devonxona", dept: "Devonxona", room: "001", tel: "00-01", floor: "0" },
-    { id: 22, name: "Мамадалиев Бахтиёр Зокирович", position: "Arxiv mudiri", deptId: "devonxona", dept: "Arxiv", room: "P-04", tel: "00-15", floor: "0" },
+    // 1-QAVAT: AKT VA AXBOROT XAVFSIZLIGI
+    { id: 28, name: "Ғиёсов Билолбек Жумазода", position: "АКТ ва ахборот хавфсизлиги бўлими бошлиғи", deptId: "it_dept", dept: "AKT бўлими", room: "101", tel: "10-01", floor: "1" },
+    { id: 29, name: "Рахматов Хожиакбар Шовкат ўғли", position: "Бўлим прокурори", deptId: "it_dept", dept: "AKT бўлими", room: "102", tel: "10-02", floor: "1" },
+    { id: 30, name: "Ғоффоров Сухроб Бегали ўғли", position: "Бўлим прокурори", deptId: "it_dept", dept: "AKT бўлими", room: "103", tel: "10-03", floor: "1" },
+    { id: 31, name: "Алимов Жахонгир Холмамат ўғли", position: "Бўлим катта прокурори", deptId: "it_dept", dept: "AKT бўлими", room: "104", tel: "10-04", floor: "1" },
+    { id: 32, name: "Нуралиев Беҳзод Музаффарович", position: "Бўлим техниги", deptId: "it_dept", dept: "AKT бўлими", room: "105", tel: "10-05", floor: "1" },
   ];
 
   // 🔍 FILTRLASH MANTIG'I
   const filteredEmployees = employeesData.filter(emp => {
-    // 1. Agar qidiruv yozilgan bo'lsa, faqat qidiruv bo'yicha top (kategoriyani unut)
     if (searchTerm) {
       return (
         emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -82,27 +83,14 @@ const Employees = () => {
         emp.room.includes(searchTerm)
       );
     }
-
-    // 2. Agar "Hamma xodimlar" tanlangan bo'lsa
     if (activeFilter === 'all') return true;
-
-    // 3. Agar "Qavat" bo'yicha filtrlanayotgan bo'lsa
-    if (filterType === 'floor') {
-      return emp.floor === activeFilter;
-    }
-
-    // 4. Agar "Bo'lim" bo'yicha filtrlanayotgan bo'lsa
-    if (filterType === 'dept') {
-      return emp.deptId === activeFilter;
-    }
-
+    if (filterType === 'floor') return emp.floor === activeFilter;
+    if (filterType === 'dept') return emp.deptId === activeFilter;
     return true;
   });
 
   return (
-    <div className="h-screen flex flex-col bg-slate-900 relative overflow-hidden select-none">
-      
-      {/* Orqa fon */}
+    <div className="h-screen flex flex-col bg-slate-900 relative overflow-hidden select-none text-white">
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
 
       {/* HEADER */}
@@ -114,7 +102,6 @@ const Employees = () => {
           <FaArrowLeft /> {t('back_btn') || "ORQAGA"}
         </button>
         
-        {/* KATTA QIDIRUV */}
         <div className="flex-1 mx-8 relative max-w-2xl">
           <FaSearch className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 text-2xl" />
           <input 
@@ -136,8 +123,6 @@ const Employees = () => {
         
         {/* 1. CHAP TOMON - FILTRLASH MENYUSI */}
         <div className="w-80 flex flex-col bg-slate-800/50 backdrop-blur-md border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
-          
-          {/* TEPADAGI TAB (O'TKAZGICH) */}
           <div className="flex p-2 bg-black/20 m-2 rounded-2xl">
             <button 
               onClick={() => { setFilterType('floor'); setActiveFilter('all'); }}
@@ -153,10 +138,7 @@ const Employees = () => {
             </button>
           </div>
 
-          {/* RO'YXAT (Scroll bo'ladi) */}
           <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-2">
-            
-            {/* "HAMMASINI KO'RSATISH" TUGMASI */}
             <button 
               onClick={() => setActiveFilter('all')}
               className={`w-full p-4 rounded-xl text-left font-bold transition-all border border-transparent flex items-center gap-3 ${activeFilter === 'all' ? 'bg-white/10 border-white/20 text-white' : 'text-gray-400 hover:bg-white/5'}`}
@@ -165,9 +147,8 @@ const Employees = () => {
               Barcha xodimlar
             </button>
 
-            {/* AGAR "QAVAT" TANLANGAN BO'LSA */}
-            {filterType === 'floor' && (
-              ['5', '4', '3', '2', '1', '0'].map(floor => (
+            {filterType === 'floor' ? (
+              ['5', '4', '3', '2', '1'].map(floor => (
                 <button
                   key={floor}
                   onClick={() => setActiveFilter(floor)}
@@ -178,21 +159,18 @@ const Employees = () => {
                   }`}
                 >
                   <div className="flex items-center gap-4">
-                    <span className="text-2xl font-black opacity-50">{floor === '0' ? 'P' : floor}</span>
-                    <span className="font-bold uppercase text-sm">{floor === '0' ? 'Podval' : `${floor}-Qavat`}</span>
+                    <span className="text-2xl font-black opacity-50">{floor}</span>
+                    <span className="font-bold uppercase text-sm">{floor}-Qavat</span>
                   </div>
                   <FaBuilding className={`opacity-0 group-hover:opacity-50 ${activeFilter === floor ? 'opacity-100' : ''}`} />
                 </button>
               ))
-            )}
-
-            {/* AGAR "BO'LIM" TANLANGAN BO'LSA */}
-            {filterType === 'dept' && (
+            ) : (
               departmentsList.map(dept => (
                 <button
                   key={dept.id}
                   onClick={() => setActiveFilter(dept.id)}
-                  className={`w-full p-4 rounded-xl text-left transition-all border border-transparent group ${
+                  className={`w-full p-4 rounded-xl flex items-center gap-3 transition-all border border-transparent group ${
                     activeFilter === dept.id 
                       ? 'bg-amber-500 text-black shadow-lg scale-[1.02]' 
                       : 'bg-white/5 text-gray-300 hover:bg-white/10'
@@ -205,29 +183,19 @@ const Employees = () => {
                 </button>
               ))
             )}
-
           </div>
         </div>
 
         {/* 2. O'NG TOMON - NATIJALAR KARTOCHKASI */}
         <div className="flex-1 bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-6 overflow-y-auto custom-scrollbar">
-          
-          {/* Sarlavha */}
           <h2 className="text-xl text-white font-bold mb-6 border-b border-white/10 pb-4 flex items-center gap-3">
-             {searchTerm ? (
-               <>🔍 Qidiruv natijalari</>
-             ) : (
-               filterType === 'floor' 
-                 ? (activeFilter === 'all' ? "Barcha qavatlar" : (activeFilter === '0' ? "Podval xodimlari" : `${activeFilter}-qavat xodimlari`))
-                 : (activeFilter === 'all' ? "Barcha bo'limlar" : departmentsList.find(d => d.id === activeFilter)?.name || "Bo'lim xodimlari")
-             )}
+             {searchTerm ? <>🔍 Qidiruv natijalari</> : (activeFilter === 'all' ? "Barcha xodimlar" : `${activeFilter}-qavat xodimlari`)}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
             {filteredEmployees.length > 0 ? (
               filteredEmployees.map((emp) => (
                 <div key={emp.id} className="bg-slate-800/80 p-5 rounded-2xl border border-white/5 hover:border-blue-500/50 hover:bg-slate-700 transition-all group relative overflow-hidden animate-fade-in">
-                  
                   <div className="flex items-start gap-4 relative z-10">
                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-2xl shadow-lg shrink-0">
                       <FaUserTie />
@@ -235,22 +203,15 @@ const Employees = () => {
                     <div>
                       <h3 className="text-lg font-bold text-white leading-tight mb-1">{emp.name}</h3>
                       <p className="text-sm text-blue-400 font-medium mb-2">{emp.position}</p>
-                      
                       <div className="flex flex-wrap gap-2 mt-2">
-                        <span className="bg-white/10 px-2 py-1 rounded text-xs text-gray-300 font-medium">
-                          {emp.dept}
-                        </span>
-                        <span className="bg-amber-500/20 text-amber-500 px-2 py-1 rounded text-xs font-bold border border-amber-500/20">
-                          {emp.room}-xona
-                        </span>
+                        <span className="bg-white/10 px-2 py-1 rounded text-xs text-gray-300 font-medium">{emp.dept}</span>
+                        <span className="bg-amber-500/20 text-amber-500 px-2 py-1 rounded text-xs font-bold border border-amber-500/20">{emp.room}-xona</span>
                       </div>
                     </div>
                   </div>
-
-                  {/* Pastki qism: Telefon va Qavat */}
                   <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
                      <div className="flex items-center gap-2 text-gray-400 text-xs font-bold uppercase">
-                        <FaBuilding /> {emp.floor === '0' ? 'Podval' : `${emp.floor}-qavat`}
+                        <FaBuilding /> {emp.floor}-qavat
                      </div>
                      <div className="flex items-center gap-2 text-xl font-black text-green-400">
                         <FaPhoneAlt className="text-sm" /> {emp.tel}
@@ -262,7 +223,6 @@ const Employees = () => {
               <div className="col-span-full flex flex-col items-center justify-center py-20 opacity-50 text-center">
                 <FaSearch className="text-6xl mb-4 text-gray-600" />
                 <p className="text-xl text-white font-bold">Hech kim topilmadi</p>
-                <p className="text-sm text-gray-400">Boshqa bo'lim yoki qavatni tanlab ko'ring</p>
               </div>
             )}
           </div>

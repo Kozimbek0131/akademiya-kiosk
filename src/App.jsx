@@ -9,7 +9,9 @@ import Map from './pages/Map';
 import Transport from './pages/Transport';
 import Documents from './pages/Documents';
 import Achievements from './pages/Achievements';
-import Wifi from './pages/Wifi'; // <-- 1. WI-FI IMPORT QILINDI
+import Wifi from './pages/Wifi';
+import FAQ from './pages/FAQ';         // <-- YANGI
+import Leadership from './pages/Leadership'; // <-- YANGI
 
 function App() {
   const navigate = useNavigate();
@@ -23,7 +25,7 @@ function App() {
     const resetTimer = () => {
       setIsIdle(false);
       clearTimeout(timeoutId);
-      // 3 daqiqa harakatsizlikdan keyin
+      // 3 daqiqa (180000ms) harakatsizlikdan keyin screensaver
       timeoutId = setTimeout(() => {
         setIsIdle(true);
         if (location.pathname !== '/') {
@@ -66,11 +68,13 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/employees" element={<Employees />} />
+        <Route path="/leadership" element={<Leadership />} /> {/* <-- YANGI */}
         <Route path="/map" element={<Map />} />
         <Route path="/transport" element={<Transport />} />
         <Route path="/documents" element={<Documents />} />
         <Route path="/achievements" element={<Achievements />} />
-        <Route path="/wifi" element={<Wifi />} /> {/* <-- 2. WI-FI YO'LI QO'SHILDI */}
+        <Route path="/wifi" element={<Wifi />} />
+        <Route path="/faq" element={<FAQ />} /> {/* <-- YANGI */}
       </Routes>
     </div>
   );

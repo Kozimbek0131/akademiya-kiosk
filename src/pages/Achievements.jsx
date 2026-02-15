@@ -8,21 +8,20 @@ const Achievements = () => {
   const { t } = useLanguage();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // NAMUNA YUTUQLAR (Rasmlar va matnlar)
   const achievements = [
     {
       id: 1,
       title: "Xalqaro Sifat Sertifikati",
       desc: "Akademiyamiz ta'lim sifati bo'yicha ISO 9001 xalqaro sertifikatiga ega bo'ldi.",
-      icon: <FaMedal className="text-yellow-400 text-6xl" />,
+      icon: <FaMedal className="text-yellow-400 text-4xl md:text-6xl" />,
       color: "from-blue-600 to-blue-900",
       image: "https://images.unsplash.com/photo-1579389083078-4e7018379f7e?q=80&w=1000&auto=format&fit=crop"
     },
     {
       id: 2,
       title: "Yilning eng yaxshi huquq maktabi",
-      desc: "2025-yil yakunlariga ko'ra O'zbekistondagi eng innovatsion huquqni muhofaza qilish o'quv dargohi deb topildi.",
-      icon: <FaTrophy className="text-amber-500 text-6xl" />,
+      desc: "2025-yil yakunlariga ko'ra innovatsion huquqni muhofaza qilish o'quv dargohi deb topildi.",
+      icon: <FaTrophy className="text-amber-500 text-4xl md:text-6xl" />,
       color: "from-amber-600 to-red-900",
       image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1000&auto=format&fit=crop"
     },
@@ -30,7 +29,7 @@ const Achievements = () => {
       id: 3,
       title: "Sport Musobaqasi G'olibi",
       desc: "Kursantlarimiz qo'l jangi bo'yicha Osiyo chempionatida 1-o'rinni egallashdi.",
-      icon: <FaStar className="text-white text-6xl" />,
+      icon: <FaStar className="text-white text-4xl md:text-6xl" />,
       color: "from-green-600 to-teal-900",
       image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=1000&auto=format&fit=crop"
     },
@@ -38,104 +37,94 @@ const Achievements = () => {
       id: 4,
       title: "Raqamli Kriminalistika Laboratoriyasi",
       desc: "Yangi avlod texnologiyalari bilan jihozlangan zamonaviy laboratoriya ishga tushirildi.",
-      icon: <FaMedal className="text-cyan-400 text-6xl" />,
+      icon: <FaMedal className="text-cyan-400 text-4xl md:text-6xl" />,
       color: "from-indigo-600 to-purple-900",
       image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop"
     }
   ];
 
-  // Avtomatik aylanish (5 sekundda)
   useEffect(() => {
-    const timer = setInterval(() => {
-      nextSlide();
-    }, 5000);
+    const timer = setInterval(() => nextSlide(), 5000);
     return () => clearInterval(timer);
   }, [currentIndex]);
 
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev === achievements.length - 1 ? 0 : prev + 1));
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev === 0 ? achievements.length - 1 : prev - 1));
-  };
+  const nextSlide = () => setCurrentIndex((prev) => (prev === achievements.length - 1 ? 0 : prev + 1));
+  const prevSlide = () => setCurrentIndex((prev) => (prev === 0 ? achievements.length - 1 : prev - 1));
 
   return (
-    <div className="h-screen flex flex-col bg-slate-900 relative overflow-hidden select-none">
+    // Responsive: h-screen o'rniga min-h-screen
+    <div className="min-h-screen flex flex-col bg-slate-900 relative overflow-hidden select-none text-white">
       
-      {/* Orqa fon rasmi (xira) */}
+      {/* FON */}
       <div 
         className="absolute inset-0 bg-cover bg-center transition-all duration-1000 opacity-30 blur-sm scale-105"
         style={{ backgroundImage: `url(${achievements[currentIndex].image})` }}
       ></div>
       <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/80 to-slate-900/90"></div>
 
-      {/* HEADER */}
-      <div className="relative z-10 flex items-center justify-between p-6 border-b border-white/10">
+      {/* HEADER (Mobil moslashuvchanlik qo'shildi) */}
+      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between p-4 md:p-6 border-b border-white/10 gap-4">
         <button 
           onClick={() => navigate('/')}
-          className="flex items-center gap-3 bg-white/10 border border-white/20 text-white px-6 py-3 rounded-2xl hover:bg-white/20 active:scale-95 transition-all text-xl font-bold uppercase"
+          className="flex items-center gap-2 bg-white/10 border border-white/20 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl hover:bg-white/20 active:scale-95 transition-all text-sm md:text-xl font-bold uppercase w-fit"
         >
           <FaArrowLeft /> {t('back_btn') || "ORQAGA"}
         </button>
         
-        <h1 className="text-4xl font-black text-white uppercase tracking-wider flex items-center gap-4">
-          <FaTrophy className="text-yellow-400 animate-bounce" /> 
+        <h1 className="text-xl md:text-4xl font-black text-center uppercase tracking-wider flex items-center gap-3 md:gap-4">
+          <FaTrophy className="text-yellow-400 animate-bounce text-2xl md:text-4xl" /> 
           AKADEMIYA YUTUQLARI
         </h1>
       </div>
 
-      {/* ASOSIY SLAYDER QISMI */}
-      <div className="relative z-10 flex-1 flex items-center justify-center p-10">
+      {/* ASOSIY SLAYDER */}
+      <div className="relative z-10 flex-1 flex items-center justify-center p-4 md:p-10 overflow-hidden">
         
-        {/* Chap tugma */}
-        <button onClick={prevSlide} className="p-4 rounded-full bg-white/10 hover:bg-white/20 text-white text-3xl transition-all hover:scale-110 active:scale-95 absolute left-10 z-50">
+        {/* Navigatsiya tugmalari (Mobil qurilmalarda pastga yoki yashirin bo'lishi mumkin) */}
+        <button onClick={prevSlide} className="p-3 md:p-4 rounded-full bg-white/10 hover:bg-white/20 text-xl md:text-3xl absolute left-2 md:left-10 z-50 active:scale-90">
           <FaChevronLeft />
         </button>
 
-        {/* O'ng tugma */}
-        <button onClick={nextSlide} className="p-4 rounded-full bg-white/10 hover:bg-white/20 text-white text-3xl transition-all hover:scale-110 active:scale-95 absolute right-10 z-50">
+        <button onClick={nextSlide} className="p-3 md:p-4 rounded-full bg-white/10 hover:bg-white/20 text-xl md:text-3xl absolute right-2 md:right-10 z-50 active:scale-90">
           <FaChevronRight />
         </button>
 
-        {/* KARTA */}
-        <div className="w-full max-w-5xl h-[60vh] relative flex items-center">
-          
-          {/* Asosiy Katta Rasm va Matn */}
-          <div className={`w-full h-full bg-gradient-to-br ${achievements[currentIndex].color} rounded-[3rem] shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/20 flex overflow-hidden relative animate-fade-in transition-all duration-500`}>
+        {/* KARTA (Flex-col mobil uchun, Flex-row kiosk uchun) */}
+        <div className="w-full max-w-5xl min-h-[60vh] md:h-[60vh] relative flex items-center">
+          <div className={`w-full h-full bg-gradient-to-br ${achievements[currentIndex].color} rounded-[2rem] md:rounded-[3rem] shadow-2xl border border-white/20 flex flex-col md:flex-row overflow-hidden relative animate-fade-in`}>
             
-            {/* Chap tomon: Matn */}
-            <div className="w-1/2 p-12 flex flex-col justify-center relative z-20">
-              <div className="mb-6">{achievements[currentIndex].icon}</div>
-              <h2 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight drop-shadow-lg">
+            {/* Matn qismi */}
+            <div className="w-full md:w-1/2 p-6 md:p-12 flex flex-col justify-center relative z-20 order-2 md:order-1">
+              <div className="mb-4 md:mb-6">{achievements[currentIndex].icon}</div>
+              <h2 className="text-2xl md:text-5xl font-black text-white mb-4 md:mb-6 leading-tight">
                 {achievements[currentIndex].title}
               </h2>
-              <p className="text-xl text-white/90 leading-relaxed border-l-4 border-white/30 pl-6">
+              <p className="text-sm md:text-xl text-white/90 leading-relaxed border-l-4 border-white/30 pl-4 md:pl-6">
                 {achievements[currentIndex].desc}
               </p>
               
-              <div className="mt-10 flex gap-2">
+              {/* Indikatorlar */}
+              <div className="mt-6 md:mt-10 flex gap-2">
                  {achievements.map((_, idx) => (
                    <div 
                      key={idx} 
-                     className={`h-2 rounded-full transition-all duration-300 ${idx === currentIndex ? 'w-12 bg-white' : 'w-4 bg-white/30'}`}
+                     className={`h-1.5 md:h-2 rounded-full transition-all duration-300 ${idx === currentIndex ? 'w-8 md:w-12 bg-white' : 'w-3 md:w-4 bg-white/30'}`}
                    />
                  ))}
               </div>
             </div>
 
-            {/* O'ng tomon: Rasm */}
-            <div className="w-1/2 h-full relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent z-10"></div>
+            {/* Rasm qismi */}
+            <div className="w-full md:w-1/2 h-48 md:h-full relative order-1 md:order-2">
+              <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black/50 to-transparent z-10"></div>
               <img 
                 src={achievements[currentIndex].image} 
                 alt="Achievement" 
-                className="w-full h-full object-cover transform scale-105 hover:scale-110 transition-transform duration-[2s]"
+                className="w-full h-full object-cover"
               />
             </div>
 
           </div>
-
         </div>
 
       </div>

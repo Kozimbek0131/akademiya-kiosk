@@ -15,7 +15,7 @@ const Documents = () => {
     { id: 'orders', label: "AKADEMIYA BUYRUQLARI", icon: <FaUniversity /> },
   ];
 
-  // Hujjatlar ro'yxati (Namuna uchun)
+  // Hujjatlar ro'yxati
   const documents = {
     laws: [
       { id: 1, title: "Ta'lim to'g'risidagi Qonun", date: "23.09.2020", type: "pdf", size: "2.4 MB" },
@@ -34,45 +34,46 @@ const Documents = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-slate-900 relative overflow-hidden select-none">
+    // Responsive: min-h-screen va overflow-y-auto mobil brauzerlar uchun
+    <div className="min-h-screen flex flex-col bg-slate-900 relative overflow-x-hidden select-none text-white">
       
       {/* Orqa fon */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
+      <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 z-0"></div>
 
       {/* HEADER */}
-      <div className="relative z-10 flex items-center justify-between p-6 bg-slate-800/80 backdrop-blur-md border-b border-white/10 shadow-lg">
+      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between p-4 md:p-6 bg-slate-800/80 backdrop-blur-md border-b border-white/10 shadow-lg gap-4">
         <button 
           onClick={() => navigate('/')}
-          className="flex items-center gap-3 bg-white/10 border border-white/20 text-white px-6 py-3 rounded-2xl hover:bg-white/20 active:scale-95 transition-all text-xl font-bold uppercase"
+          className="flex items-center gap-2 bg-white/10 border border-white/20 text-white px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl hover:bg-white/20 active:scale-95 transition-all text-sm md:text-xl font-bold uppercase w-fit self-start md:self-auto"
         >
           <FaArrowLeft /> {t('back_btn') || "ORQAGA"}
         </button>
         
-        <h1 className="text-4xl font-black text-white uppercase tracking-wider drop-shadow-lg flex items-center gap-4">
-          <FaFilePdf className="text-amber-500" /> 
+        <h1 className="text-xl md:text-4xl font-black text-white uppercase tracking-wider drop-shadow-lg flex items-center gap-3">
+          <FaFilePdf className="text-amber-500 text-2xl md:text-4xl" /> 
           ME'YORIY HUJJATLAR
         </h1>
       </div>
 
-      {/* ASOSIY QISM */}
-      <div className="relative z-10 flex-1 p-6 flex gap-8 overflow-hidden">
+      {/* ASOSIY QISM (Mobil qurilmada ustma-ust tushadi) */}
+      <div className="relative z-10 flex-1 p-4 md:p-6 flex flex-col md:flex-row gap-6 md:gap-8 overflow-y-auto md:overflow-hidden">
         
-        {/* 1. CHAP TOMON - KATEGORIYALAR */}
-        <div className="w-1/3 flex flex-col gap-4">
+        {/* 1. CHAP TOMON - KATEGORIYALAR (Mobilda gorizontal scroll bo'lishi mumkin yoki ustma-ust) */}
+        <div className="w-full md:w-1/3 flex flex-col gap-3 md:gap-4 shrink-0">
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`flex items-center gap-4 p-6 rounded-2xl border-2 transition-all duration-300 text-left group ${
+              className={`flex items-center gap-3 md:gap-4 p-4 md:p-6 rounded-2xl border-2 transition-all duration-300 text-left group ${
                 activeCategory === cat.id 
-                  ? 'bg-amber-500 border-amber-500 text-white shadow-[0_0_30px_rgba(245,158,11,0.4)] scale-105' 
-                  : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10 hover:border-white/30'
+                  ? 'bg-amber-500 border-amber-500 text-white shadow-lg scale-[1.02]' 
+                  : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10'
               }`}
             >
-              <span className={`text-4xl ${activeCategory === cat.id ? 'text-white' : 'text-amber-500 group-hover:scale-110 transition-transform'}`}>
+              <span className={`text-2xl md:text-4xl ${activeCategory === cat.id ? 'text-white' : 'text-amber-500'}`}>
                 {cat.icon}
               </span>
-              <span className="text-xl font-bold uppercase tracking-wider">
+              <span className="text-sm md:text-xl font-bold uppercase tracking-wider leading-tight">
                 {cat.label}
               </span>
             </button>
@@ -80,30 +81,30 @@ const Documents = () => {
         </div>
 
         {/* 2. O'NG TOMON - HUJJATLAR RO'YXATI */}
-        <div className="flex-1 bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-6 overflow-y-auto custom-scrollbar">
-          <h2 className="text-2xl text-white font-bold mb-6 border-b border-white/10 pb-4 flex items-center gap-3">
+        <div className="flex-1 bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-4 md:p-6 overflow-y-auto custom-scrollbar min-h-[400px]">
+          <h2 className="text-lg md:text-2xl text-white font-bold mb-6 border-b border-white/10 pb-4 flex items-center gap-3">
             {categories.find(c => c.id === activeCategory)?.icon}
             {categories.find(c => c.id === activeCategory)?.label}
           </h2>
 
-          <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 gap-4 pb-10">
             {documents[activeCategory].map((doc) => (
-              <div key={doc.id} className="bg-slate-800/50 p-5 rounded-2xl border border-white/5 flex items-center justify-between group hover:bg-slate-700/50 transition-colors cursor-pointer">
-                <div className="flex items-center gap-5">
-                  <div className={`w-16 h-16 rounded-xl flex items-center justify-center text-3xl ${doc.type === 'pdf' ? 'bg-red-500/20 text-red-500' : 'bg-blue-500/20 text-blue-500'}`}>
+              <div key={doc.id} className="bg-slate-800/50 p-4 md:p-5 rounded-2xl border border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 group hover:bg-slate-700/50 transition-colors cursor-pointer">
+                <div className="flex items-center gap-4 md:gap-5">
+                  <div className={`w-12 h-12 md:w-16 md:h-16 rounded-xl flex items-center justify-center text-xl md:text-3xl shrink-0 ${doc.type === 'pdf' ? 'bg-red-500/20 text-red-500' : 'bg-blue-500/20 text-blue-500'}`}>
                     {doc.type === 'pdf' ? <FaFilePdf /> : <FaFileWord />}
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white mb-1 group-hover:text-amber-400 transition-colors">
+                    <h3 className="text-sm md:text-xl font-bold text-white mb-1 group-hover:text-amber-400 transition-colors leading-tight">
                       {doc.title}
                     </h3>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-[10px] md:text-sm text-gray-400">
                       Sana: <span className="text-gray-300">{doc.date}</span> • Hajmi: <span className="text-gray-300">{doc.size}</span>
                     </p>
                   </div>
                 </div>
                 
-                <button className="bg-white/10 text-white px-6 py-3 rounded-xl font-bold hover:bg-amber-500 hover:text-black transition-all uppercase text-sm">
+                <button className="bg-white/10 text-white px-4 py-2 md:px-6 md:py-3 rounded-xl font-bold hover:bg-amber-500 hover:text-black transition-all uppercase text-[10px] md:text-sm w-full sm:w-auto">
                   O'qish
                 </button>
               </div>

@@ -39,9 +39,10 @@ const Transport = () => {
   }, [destination]);
 
   const handleSelectSuggestion = (placeName) => {
-    setDestination(placeName);
+    const cleanName = placeName.split(',')[0];
+    setDestination(cleanName);
     setSuggestions([]);
-    updateMapRoute(placeName);
+    updateMapRoute(cleanName);
   };
 
   const handleSearch = (e) => {
@@ -64,14 +65,17 @@ const Transport = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-900 relative overflow-x-hidden select-none text-white">
-      <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 z-0"></div>
+    // ASOSIY KONTEYNER: h-screen (ekran to'ladi)
+    <div className="h-screen flex flex-col bg-slate-900 relative overflow-hidden select-none text-white">
+      
+      {/* Orqa fon */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 z-0 pointer-events-none"></div>
 
-      {/* HEADER */}
-      <div className="relative z-50 flex flex-col md:flex-row items-center justify-between p-4 md:p-6 bg-slate-800/80 backdrop-blur-md border-b border-white/10 shadow-lg gap-4">
+      {/* HEADER (Qotirilgan - Balandligi aniq) */}
+      <div className="relative z-50 flex flex-col md:flex-row items-center justify-between p-4 md:p-6 bg-slate-800/80 backdrop-blur-md border-b border-white/10 shadow-lg gap-4 shrink-0">
         <button 
           onClick={() => navigate('/')}
-          className="flex items-center gap-2 bg-white/10 border border-white/20 text-white px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl hover:bg-white/20 active:scale-95 transition-all text-sm md:text-xl font-bold uppercase w-fit self-start md:self-auto"
+          className="flex items-center gap-2 bg-white/10 border border-white/20 text-white px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl hover:bg-white/20 active:scale-95 transition-all text-sm md:text-xl font-bold uppercase w-fit self-start md:self-auto cursor-pointer"
         >
           <FaArrowLeft /> {t('back_btn') || "ORQAGA"}
         </button>
@@ -80,47 +84,86 @@ const Transport = () => {
         </h1>
       </div>
 
-      {/* ASOSIY QISM */}
-      <div className="relative z-10 flex-1 p-4 md:p-6 flex flex-col md:flex-row gap-6 overflow-y-auto">
-        <div className="w-full md:w-[380px] lg:w-[420px] flex flex-col gap-4 md:gap-6 shrink-0 relative z-40">
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 md:p-6 rounded-2xl md:rounded-3xl shadow-xl relative">
-            <label className="text-white text-sm md:text-lg font-bold mb-2 md:mb-3 block">Qayerga borasiz?</label>
+      {/* ASOSIY QISM (Headerdan qolgan barcha joyni egallaydi) */}
+      <div className="relative z-10 flex-1 flex flex-col md:flex-row overflow-hidden">
+        
+        {/* 1. CHAP TOMON - SIDEBAR (Qotirilgan kenglik, ichki scroll) */}
+        <div className="w-full md:w-[400px] lg:w-[450px] bg-slate-900/50 backdrop-blur-md border-r border-white/10 flex flex-col gap-4 p-4 md:p-6 z-20 shrink-0 overflow-y-auto custom-scrollbar h-[40vh] md:h-full">
+          
+          {/* Qidiruv Paneli */}
+          <div className="bg-white/10 border border-white/20 p-4 rounded-2xl shadow-xl relative shrink-0">
+            <label className="text-white text-sm md:text-lg font-bold mb-2 block">Qayerga borasiz?</label>
             <form onSubmit={handleSearch} className="relative">
-              <input type="text" placeholder="Joy nomini yozing..." value={destination} onChange={(e) => setDestination(e.target.value)}
-                className="w-full bg-slate-900/90 text-white border-2 border-blue-500/50 rounded-xl md:rounded-2xl py-3 md:py-4 pl-10 md:pl-12 pr-10 md:pr-12 text-base md:text-xl"
+              <input 
+                type="text" 
+                placeholder="Joy nomini yozing..." 
+                value={destination} 
+                onChange={(e) => setDestination(e.target.value)}
+                className="w-full bg-slate-900/90 text-white border-2 border-blue-500/50 rounded-xl py-3 pl-10 pr-10 text-base md:text-lg focus:outline-none focus:border-blue-400 transition-all"
               />
-              <FaSearch className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              {destination && (
+                <FaTimes 
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer hover:text-white"
+                  onClick={clearSearch}
+                />
+              )}
             </form>
 
-            {/* SUGGESTIONS - z-index 100 */}
+            {/* Suggestions */}
             {suggestions.length > 0 && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-slate-800 border border-white/20 rounded-xl md:rounded-2xl shadow-2xl z-[100] max-h-48 md:max-h-60 overflow-y-auto">
+              <div className="mt-2 bg-slate-800 border border-white/20 rounded-xl shadow-2xl overflow-hidden absolute left-0 right-0 top-full z-50">
                 {suggestions.map((item, index) => (
-                  <button key={index} onClick={() => handleSelectSuggestion(item.display_name.split(',')[0])} 
-                    className="w-full text-left px-4 py-3 md:px-5 md:py-4 text-white hover:bg-blue-600 transition-colors border-b border-white/10 last:border-0"
+                  <button key={index} onClick={() => handleSelectSuggestion(item.display_name)} 
+                    className="w-full text-left px-4 py-3 text-white hover:bg-blue-600 transition-colors border-b border-white/10 last:border-0 flex items-center gap-3"
                   >
-                    <span className="truncate text-xs md:text-base font-medium block">{item.display_name.split(',')[0]}</span>
+                    <FaMapMarkerAlt className="text-red-400 shrink-0" />
+                    <span className="truncate text-sm font-medium block">{item.display_name.split(',')[0]}</span>
                   </button>
                 ))}
               </div>
             )}
           </div>
 
-          <div className="bg-slate-800/50 border border-white/10 p-4 md:p-6 rounded-2xl md:rounded-3xl flex-1 flex flex-col min-h-[300px]">
-            <h3 className="text-gray-400 font-bold uppercase tracking-widest mb-3 md:mb-4 text-[10px] md:text-sm">Tezkor yo'nalishlar</h3>
-            <div className="flex flex-col gap-2 md:gap-3 overflow-y-auto custom-scrollbar">
-              {/* Aeroport, Vokzal, Chorsu tugmalari (Kod qisqarmasligi uchun to'liq saqlang) */}
-              <button onClick={() => updateMapRoute("Toshkent Xalqaro Aeroporti")} className="flex items-center gap-3 bg-white/5 p-3 rounded-xl">
-                 <FaPlane className="text-blue-400"/> Aeroport
+          {/* Tezkor tugmalar */}
+          <div className="bg-slate-800/50 border border-white/10 p-4 rounded-2xl flex-1 md:flex-none">
+            <h3 className="text-gray-400 font-bold uppercase tracking-widest mb-3 text-xs md:text-sm">Tezkor yo'nalishlar</h3>
+            <div className="flex flex-col gap-2">
+              <button onClick={() => updateMapRoute("Toshkent Xalqaro Aeroporti")} className="flex items-center gap-3 bg-white/5 p-3 rounded-xl hover:bg-white/10 transition-all cursor-pointer group">
+                 <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-colors"><FaPlane /></div>
+                 <span className="font-bold">Aeroport</span>
+              </button>
+              <button onClick={() => updateMapRoute("Toshkent Janubiy Vokzali")} className="flex items-center gap-3 bg-white/5 p-3 rounded-xl hover:bg-white/10 transition-all cursor-pointer group">
+                 <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 group-hover:bg-green-500 group-hover:text-white transition-colors"><FaTrain /></div>
+                 <span className="font-bold">Janubiy Vokzal</span>
+              </button>
+              <button onClick={() => updateMapRoute("Chorsu Bozori")} className="flex items-center gap-3 bg-white/5 p-3 rounded-xl hover:bg-white/10 transition-all cursor-pointer group">
+                 <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-white transition-colors"><FaLandmark /></div>
+                 <span className="font-bold">Chorsu Bozori</span>
               </button>
             </div>
           </div>
         </div>
 
-        {/* XARITA - Responsive Balandlik */}
-        <div className="flex-1 bg-white rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl border-2 md:border-4 border-slate-700 relative z-0 min-h-[450px] md:h-full">
-           <iframe src={mapSrc || defaultMapUrl} width="100%" height="100%" frameBorder="0" title="Yandex Maps" allowFullScreen className="w-full h-full"></iframe>
+        {/* 2. O'NG TOMON - XARITA (To'liq egallaydi) */}
+        {/* flex-1 va relative ishlatamiz. Iframe esa absolute bo'lib to'liq yoyiladi */}
+        <div className="flex-1 relative bg-gray-100 h-[60vh] md:h-full w-full">
+           <iframe 
+             src={mapSrc || defaultMapUrl} 
+             frameBorder="0" 
+             title="Yandex Maps" 
+             allowFullScreen 
+             className="absolute inset-0 w-full h-full border-0"
+           ></iframe>
+           
+           {/* Agar qidiruv bo'lmasa, ustiga yozuv chiqishi mumkin */}
+           {!mapSrc && (
+             <div className="absolute top-4 left-4 bg-white/90 text-slate-900 px-4 py-2 rounded-lg shadow-lg text-sm font-bold z-10 pointer-events-none border border-slate-200">
+               📍 Akademiya joylashuvi
+             </div>
+           )}
         </div>
+
       </div>
     </div>
   );

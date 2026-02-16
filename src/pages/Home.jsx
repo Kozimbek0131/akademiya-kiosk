@@ -6,14 +6,13 @@ import {
   FaMapMarkedAlt, FaQuestionCircle, FaStar 
 } from 'react-icons/fa';
 
-// FAYLLARNI IMPORT QILISH (Nomlariga e'tibor bering!)
-import bgVideo from '../assets/bg_video.mp4'; // Bosh sahifa foni
+// FAYLLARNI IMPORT QILISH
+// Diqqat: Videoni import qilmaymiz, chunki u endi public papkasida
 import logoImg from '../assets/logo.png';
 
 const Home = () => {
   const navigate = useNavigate();
   const { t, language, setLanguage } = useLanguage();
-  
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -27,14 +26,14 @@ const Home = () => {
   const formattedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
   const menuItems = [
-    { id: 'employees', icon: <FaUserTie />, label: t('menu_employees') || "XODIMLAR", path: '/employees', desc: "Professor va o'qituvchilar" },
-    { id: 'leadership', icon: <FaStar />, label: "RAHBARIYAT", path: '/leadership', desc: "Akademiya boshlig'i" },
-    { id: 'achievements', icon: <FaTrophy />, label: t('menu_achievements') || "YUTUQLAR", path: '/achievements', desc: "Akademiya yutuqlari" },
-    { id: 'documents', icon: <FaFileAlt />, label: t('menu_documents') || "HUJJATLAR", path: '/documents', desc: "Qonunlar va buyruqlar" },
-    { id: 'transport', icon: <FaBus />, label: t('menu_transport') || "TRANSPORT", path: '/transport', desc: "Yo'nalishlar" },
-    { id: 'wifi', icon: <FaWifi />, label: t('menu_wifi') || "WI-FI", path: '/wifi', desc: "Bepul internet" },
-    { id: 'map', icon: <FaMapMarkedAlt />, label: t('menu_map') || "XARITA", path: '/map', desc: "Bino rejasi" },
-    { id: 'faq', icon: <FaQuestionCircle />, label: "MA'LUMOT", path: '/faq', desc: "Savol-javoblar" },
+    { id: 'employees', icon: <FaUserTie />, label: t('menu_employees'), path: '/employees', desc: t('desc_employees') },
+    { id: 'leadership', icon: <FaStar />, label: t('menu_leadership'), path: '/leadership', desc: t('desc_leadership') },
+    { id: 'achievements', icon: <FaTrophy />, label: t('menu_achievements'), path: '/achievements', desc: t('desc_achievements') },
+    { id: 'documents', icon: <FaFileAlt />, label: t('menu_documents'), path: '/documents', desc: t('desc_documents') },
+    { id: 'transport', icon: <FaBus />, label: t('menu_transport'), path: '/transport', desc: t('desc_transport') },
+    { id: 'wifi', icon: <FaWifi />, label: t('menu_wifi'), path: '/wifi', desc: t('desc_wifi') },
+    { id: 'map', icon: <FaMapMarkedAlt />, label: t('menu_map'), path: '/map', desc: t('desc_map') },
+    { id: 'faq', icon: <FaQuestionCircle />, label: t('menu_faq'), path: '/faq', desc: t('desc_faq') },
   ];
 
   const handleNavigation = (path) => {
@@ -53,16 +52,17 @@ const Home = () => {
         {/* Agar video yuklanmasa, orqada rang turadi */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#0f172a]"></div>
         
+        {/* VIDEO MANZILI: /bg.mp4 (public papkasidan oladi) */}
         <video 
-          src={bgVideo} 
+          src="/bg.mp4" 
           autoPlay 
           loop 
           muted 
           playsInline
-          className="w-full h-full object-cover opacity-50" // Opacity: Videoni xira qilish (yozuv ko'rinishi uchun)
+          className="w-full h-full object-cover opacity-50" 
         />
         
-        {/* Qora parda (Gradient): Tepasi va pasti qorayadi */}
+        {/* Qora parda (Gradient): Yozuvlar ko'rinishi uchun */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/90 via-[#0f172a]/40 to-[#0f172a]/90"></div>
       </div>
       
@@ -99,7 +99,7 @@ const Home = () => {
           HUQUQNI MUHOFAZA QILISH AKADEMIYASI
         </h1>
         <div className="w-24 md:w-32 h-0.5 md:h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent mt-2 mb-2 opacity-80"></div>
-        <p className="text-blue-200/60 text-[8px] md:text-xs font-bold tracking-[0.3em] uppercase">{t('subtitle') || "AXBOROT-RESURS KIOSKI"}</p>
+        <p className="text-blue-200/60 text-[8px] md:text-xs font-bold tracking-[0.3em] uppercase">{t('subtitle')}</p>
       </div>
 
       {/* ASOSIY MENYU */}
@@ -131,7 +131,7 @@ const Home = () => {
 
       {/* FOOTER */}
       <div className="relative z-20 text-center py-4 bg-black/40 text-white/20 text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] shrink-0 backdrop-blur-sm border-t border-white/5">
-        © 2026 Akademiya Axborot Texnologiyalari Markazi
+        {t('footer_text')}
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { 
   FaUserTie, FaTrophy, FaFileAlt, FaBus, FaWifi, 
-  FaMapMarkedAlt, FaCloudSun, FaClock, FaQuestionCircle, FaStar 
+  FaMapMarkedAlt, FaQuestionCircle, FaStar 
 } from 'react-icons/fa';
 
 const Home = () => {
@@ -25,7 +25,7 @@ const Home = () => {
   const menuItems = [
     { id: 'employees', icon: <FaUserTie />, label: t('menu_employees') || "XODIMLAR", path: '/employees', desc: "Professor va o'qituvchilar" },
     { id: 'leadership', icon: <FaStar />, label: "RAHBARIYAT", path: '/leadership', desc: "Akademiya boshlig'i" },
-    { id: 'achievements', icon: <FaTrophy />, label: t('menu_achievements') || "YUTUQLAR", path: 'https://proacademy.uz', desc: "proacademy.uz saytiga o'tish" },
+    { id: 'achievements', icon: <FaTrophy />, label: t('menu_achievements') || "YUTUQLAR", path: '/achievements', desc: "Akademiya yutuqlari" }, // Path to'g'irlandi
     { id: 'documents', icon: <FaFileAlt />, label: t('menu_documents') || "HUJJATLAR", path: '/documents', desc: "Qonunlar va buyruqlar" },
     { id: 'transport', icon: <FaBus />, label: t('menu_transport') || "TRANSPORT", path: '/transport', desc: "Yo'nalishlar" },
     { id: 'wifi', icon: <FaWifi />, label: t('menu_wifi') || "WI-FI", path: '/wifi', desc: "Bepul internet" },
@@ -46,21 +46,21 @@ const Home = () => {
     <div className="min-h-screen flex flex-col bg-[#0f172a] relative overflow-x-hidden select-none font-sans text-white">
       
       {/* FON - Fixed qilingan, scroll paytida joyida turadi */}
-      <div className="fixed inset-0 bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#0f172a] z-0"></div>
+      <div className="fixed inset-0 bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#0f172a] z-0 pointer-events-none"></div>
       
       {/* STATUS BAR */}
-      <div className="relative z-20 bg-white/5 backdrop-blur-md border-b border-white/10 px-6 py-4 flex items-center justify-between shadow-lg shrink-0">
+      <div className="relative z-20 bg-white/5 backdrop-blur-md border-b border-white/10 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between shadow-lg shrink-0">
         <div className="flex flex-col">
            <span className="text-xl md:text-3xl font-bold text-white tracking-widest">{formattedTime}</span>
            <span className="text-[10px] md:text-xs text-blue-200 uppercase tracking-wide opacity-80">{formattedDate}</span>
         </div>
-        <div className="flex bg-black/30 rounded-lg p-1">
+        <div className="flex bg-black/30 rounded-lg p-1 gap-1">
             {['uz', 'ru', 'en'].map((lang) => (
               <button
                 key={lang}
                 onClick={() => setLanguage(lang)}
-                className={`px-3 py-1 rounded-md font-bold uppercase text-[10px] md:text-xs transition-all ${
-                  language === lang ? 'bg-blue-600 text-white shadow' : 'text-gray-400'
+                className={`px-2 md:px-3 py-1 rounded-md font-bold uppercase text-[10px] md:text-xs transition-all ${
+                  language === lang ? 'bg-blue-600 text-white shadow' : 'text-gray-400 hover:text-white'
                 }`}
               >
                 {lang}
@@ -70,37 +70,50 @@ const Home = () => {
       </div>
 
       {/* 🏛️ HEADER */}
-      <div className="relative z-10 flex flex-col items-center justify-center pt-6 pb-4 text-center shrink-0 px-4">
+      <div className="relative z-10 flex flex-col items-center justify-center pt-6 md:pt-10 pb-6 text-center shrink-0 px-4">
         <img 
           src="/logo.png" 
           alt="Logo" 
-          className="h-20 md:h-32 w-auto object-contain mb-3 drop-shadow-2xl filter brightness-110"
+          className="h-24 md:h-40 w-auto object-contain mb-4 drop-shadow-2xl filter brightness-110 animate-fade-in-down"
         />
         <h2 className="text-[10px] md:text-sm font-bold text-amber-500 uppercase tracking-[0.2em] mb-1">O'ZBEKISTON RESPUBLIKASI</h2>
-        <h1 className="text-lg md:text-3xl font-black text-white uppercase tracking-wider mb-1 px-2 leading-tight max-w-4xl">HUQUQNI MUHOFAZA QILISH AKADEMIYASI</h1>
-        <div className="w-20 md:w-24 h-0.5 md:h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent mt-3 mb-2 opacity-80"></div>
+        <h1 className="text-xl md:text-4xl font-black text-white uppercase tracking-wider mb-2 px-2 leading-tight max-w-5xl drop-shadow-lg">
+          HUQUQNI MUHOFAZA QILISH AKADEMIYASI
+        </h1>
+        <div className="w-24 md:w-32 h-0.5 md:h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent mt-2 mb-2 opacity-80"></div>
         <p className="text-blue-200/60 text-[8px] md:text-xs font-bold tracking-[0.3em] uppercase">{t('subtitle') || "AXBOROT-RESURS KIOSKI"}</p>
       </div>
 
       {/* ASOSIY MENYU */}
-      <div className="relative z-10 flex-1 px-4 pb-12 overflow-y-visible">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 w-full max-w-5xl mx-auto mt-4 pb-20">
-          {menuItems.map((item, index) => (
+      <div className="relative z-10 flex-1 px-4 md:px-8 pb-12 overflow-y-visible w-full flex justify-center">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full max-w-6xl mt-4 pb-10">
+          {menuItems.map((item) => (
             <button
               key={item.id}
               onClick={() => handleNavigation(item.path)}
-              className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 border border-white/10 hover:border-blue-500/50 transition-all duration-300 flex flex-col items-center justify-center text-center p-4 active:scale-95 shadow-lg min-h-[110px] md:min-h-[160px]"
+              className="group relative overflow-hidden rounded-2xl md:rounded-3xl bg-slate-800/40 backdrop-blur-sm border border-white/10 hover:bg-slate-700/60 hover:border-blue-500/50 transition-all duration-300 flex flex-col items-center justify-center text-center p-4 md:p-6 active:scale-95 shadow-lg min-h-[140px] md:min-h-[220px] cursor-pointer"
             >
-              <div className="text-3xl md:text-5xl text-blue-100 mb-2 group-hover:scale-110 group-hover:text-blue-400 transition-transform duration-300">{item.icon}</div>
-              <span className="text-xs md:text-lg font-bold text-white uppercase tracking-wider mb-0.5 leading-tight">{item.label}</span>
-              <span className="hidden md:block text-[10px] text-gray-500 group-hover:text-gray-300 line-clamp-1 px-1">{item.desc}</span>
+              {/* Icon orqasidagi glow effekti */}
+              <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-20 transition-opacity duration-500 rounded-2xl"></div>
+              
+              <div className="text-4xl md:text-6xl text-blue-400 mb-3 md:mb-5 group-hover:scale-110 group-hover:text-white transition-transform duration-300 drop-shadow-md relative z-10">
+                {item.icon}
+              </div>
+              
+              <span className="text-sm md:text-xl font-black text-white uppercase tracking-wider mb-1 leading-tight relative z-10 group-hover:text-blue-300 transition-colors">
+                {item.label}
+              </span>
+              
+              <span className="text-[10px] md:text-sm text-gray-400 group-hover:text-gray-200 line-clamp-2 px-1 font-medium relative z-10">
+                {item.desc}
+              </span>
             </button>
           ))}
         </div>
       </div>
 
       {/* FOOTER */}
-      <div className="relative z-20 text-center py-4 bg-black/40 text-white/20 text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] shrink-0">
+      <div className="relative z-20 text-center py-4 bg-black/40 text-white/20 text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] shrink-0 backdrop-blur-sm border-t border-white/5">
         © 2026 Akademiya Axborot Texnologiyalari Markazi
       </div>
     </div>

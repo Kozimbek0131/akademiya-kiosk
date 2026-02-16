@@ -6,11 +6,9 @@ import {
   FaMapMarkedAlt, FaQuestionCircle, FaStar 
 } from 'react-icons/fa';
 
-// --- FAYLLARNI IMPORT QILISH ---
+// FAYLLARNI IMPORT QILISH
 import logoImg from '../assets/logo.png';
-// Videoni shu yerdan import qilamiz.
-// Agar bu qatorda xato bersa, demak fayl joyi yoki nomi noto'g'ri!
-import bgVideo from '../assets/video.mp4'; 
+// DIQQAT: Videoni import QILMAYMIZ, chunki u public papkasida
 
 const Home = () => {
   const navigate = useNavigate();
@@ -51,24 +49,22 @@ const Home = () => {
       
       {/* --- VIDEO ORQA FON --- */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        {/* Orqa fon rangi (Video yuklanguncha) */}
-        <div className="absolute inset-0 bg-slate-900"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#0f172a]"></div>
         
-        {/* VIDEO */}
+        {/* MANA SHU YER MUHIM: Fayl nomi public papkasidagi bilan bir xil bo'lishi shart */}
         <video 
-          src={bgVideo} 
+          src="/bg_video.mp4" 
           autoPlay 
           loop 
           muted 
           playsInline
-          className="w-full h-full object-cover opacity-60" 
+          className="w-full h-full object-cover opacity-50" 
         />
         
-        {/* Qora parda (Gradient) */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/90 via-[#0f172a]/50 to-[#0f172a]/90"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/90 via-[#0f172a]/40 to-[#0f172a]/90"></div>
       </div>
       
-      {/* --- TEPADAGI STATUS BAR --- */}
+      {/* STATUS BAR */}
       <div className="relative z-20 bg-white/5 backdrop-blur-md border-b border-white/10 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between shadow-lg shrink-0">
         <div className="flex flex-col">
            <span className="text-xl md:text-3xl font-bold text-white tracking-widest">{formattedTime}</span>
@@ -89,7 +85,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* --- HEADER --- */}
+      {/* HEADER */}
       <div className="relative z-10 flex flex-col items-center justify-center pt-6 md:pt-10 pb-6 text-center shrink-0 px-4">
         <img 
           src={logoImg} 
@@ -104,7 +100,7 @@ const Home = () => {
         <p className="text-blue-200/60 text-[8px] md:text-xs font-bold tracking-[0.3em] uppercase">{t('subtitle')}</p>
       </div>
 
-      {/* --- ASOSIY MENYU --- */}
+      {/* ASOSIY MENYU */}
       <div className="relative z-10 flex-1 px-4 md:px-8 pb-12 overflow-y-visible w-full flex justify-center">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full max-w-6xl mt-4 pb-10">
           {menuItems.map((item) => (
@@ -131,7 +127,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* --- FOOTER --- */}
+      {/* FOOTER */}
       <div className="relative z-20 text-center py-4 bg-black/40 text-white/20 text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] shrink-0 backdrop-blur-sm border-t border-white/5">
         {t('footer_text')}
       </div>

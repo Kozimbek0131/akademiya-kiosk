@@ -4,7 +4,8 @@ import { useLanguage } from '../context/LanguageContext';
 
 // FAYLLARNI IMPORT QILISH
 import logoImg from '../assets/logo.png'; 
-import reklamaVideo from '../assets/reklama.mp4'; // Reklama videosi
+// DIQQAT: Bu video assets papkasida, shuning uchun IMPORT qilamiz
+import reklamaVideo from '../assets/reklama.mp4'; 
 
 const Reklama = () => {
   const { t } = useLanguage();
@@ -23,15 +24,14 @@ const Reklama = () => {
       {/* 1. VIDEO FON (To'liq ekran) */}
       <div className="absolute inset-0 z-0">
         <video 
-          src={reklamaVideo} 
+          src={reklamaVideo}   // <-- O'zgaruvchidan foydalanamiz
           autoPlay 
           loop 
           muted 
           playsInline
-          className="w-full h-full object-cover" // object-cover videoni ekranga cho'zib beradi
+          className="w-full h-full object-cover" 
         />
-        {/* Yengil qora parda (ixtiyoriy, agar video juda yorqin bo'lsa) */}
-        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="absolute inset-0 bg-black/30"></div>
       </div>
 
       {/* 2. USTKI QATLAM (Logo va Matn) */}

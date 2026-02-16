@@ -6,8 +6,7 @@ import {
   FaMapMarkedAlt, FaQuestionCircle, FaStar 
 } from 'react-icons/fa';
 
-// FAYLLARNI IMPORT QILISH
-// Diqqat: Videoni import qilmaymiz, chunki u endi public papkasida
+// LOGONI IMPORT QILAMIZ
 import logoImg from '../assets/logo.png';
 
 const Home = () => {
@@ -15,16 +14,19 @@ const Home = () => {
   const { t, language, setLanguage } = useLanguage();
   const [time, setTime] = useState(new Date());
 
+  // Soatni yangilab turish uchun
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
+  // Sana va vaqt formati
   const formattedDate = time.toLocaleDateString(language === 'uz' ? 'uz-UZ' : (language === 'ru' ? 'ru-RU' : 'en-US'), {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
   });
   const formattedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
+  // Menyu elementlari
   const menuItems = [
     { id: 'employees', icon: <FaUserTie />, label: t('menu_employees'), path: '/employees', desc: t('desc_employees') },
     { id: 'leadership', icon: <FaStar />, label: t('menu_leadership'), path: '/leadership', desc: t('desc_leadership') },
@@ -47,12 +49,12 @@ const Home = () => {
   return (
     <div className="h-screen flex flex-col bg-[#0f172a] relative overflow-hidden select-none font-sans text-white">
       
-      {/* --- VIDEO ORQA FON --- */}
+      {/* --- 1. VIDEO ORQA FON --- */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        {/* Agar video yuklanmasa, orqada rang turadi */}
+        {/* Orqa fon rangi (Video yuklanguncha ko'rinadi) */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#0f172a]"></div>
         
-        {/* VIDEO MANZILI: /bg.mp4 (public papkasidan oladi) */}
+        {/* VIDEO (Public papkasidagi fayl nomi bilan bir xil bo'lishi shart) */}
         <video 
           src="/bg_video.mp4" 
           autoPlay 
@@ -62,11 +64,11 @@ const Home = () => {
           className="w-full h-full object-cover opacity-50" 
         />
         
-        {/* Qora parda (Gradient): Yozuvlar ko'rinishi uchun */}
+        {/* Qora parda (Yozuvlar yaxshi ko'rinishi uchun) */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/90 via-[#0f172a]/40 to-[#0f172a]/90"></div>
       </div>
       
-      {/* STATUS BAR */}
+      {/* --- 2. TEPADAGI STATUS BAR (Soat va Tillar) --- */}
       <div className="relative z-20 bg-white/5 backdrop-blur-md border-b border-white/10 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between shadow-lg shrink-0">
         <div className="flex flex-col">
            <span className="text-xl md:text-3xl font-bold text-white tracking-widest">{formattedTime}</span>
@@ -87,7 +89,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* HEADER */}
+      {/* --- 3. LOGO VA SARLAVHA --- */}
       <div className="relative z-10 flex flex-col items-center justify-center pt-6 md:pt-10 pb-6 text-center shrink-0 px-4">
         <img 
           src={logoImg} 
@@ -102,7 +104,7 @@ const Home = () => {
         <p className="text-blue-200/60 text-[8px] md:text-xs font-bold tracking-[0.3em] uppercase">{t('subtitle')}</p>
       </div>
 
-      {/* ASOSIY MENYU */}
+      {/* --- 4. ASOSIY MENYU (Scroll bo'ladigan qism) --- */}
       <div className="relative z-10 flex-1 px-4 md:px-8 pb-12 overflow-y-visible w-full flex justify-center">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full max-w-6xl mt-4 pb-10">
           {menuItems.map((item) => (
@@ -129,7 +131,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* FOOTER */}
+      {/* --- 5. FOOTER --- */}
       <div className="relative z-20 text-center py-4 bg-black/40 text-white/20 text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] shrink-0 backdrop-blur-sm border-t border-white/5">
         {t('footer_text')}
       </div>

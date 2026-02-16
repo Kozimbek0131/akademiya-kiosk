@@ -54,7 +54,7 @@ const Home = () => {
         
         {/* VIDEO MANZILI: /bg.mp4 (public papkasidan oladi) */}
         <video 
-          src="/bg.mp4" 
+          src="/bg_video.mp4" 
           autoPlay 
           loop 
           muted 

@@ -1,17 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-
-// FAYLLARNI IMPORT QILISH
 import logoImg from '../assets/logo.png'; 
-// DIQQAT: Bu video assets papkasida, shuning uchun IMPORT qilamiz
-import reklamaVideo from '../assets/reklama.mp4'; 
 
 const Reklama = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
 
-  // Ekranga tekkanda Bosh sahifaga qaytish
   const handleInteract = () => {
     navigate('/');
   };
@@ -21,10 +16,10 @@ const Reklama = () => {
       onClick={handleInteract} 
       className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-black cursor-pointer overflow-hidden select-none"
     >
-      {/* 1. VIDEO FON (To'liq ekran) */}
       <div className="absolute inset-0 z-0">
+        {/* PUBLIC papkasidagi video */}
         <video 
-          src={reklamaVideo}   // <-- O'zgaruvchidan foydalanamiz
+          src="/reklama.mp4" 
           autoPlay 
           loop 
           muted 
@@ -34,10 +29,7 @@ const Reklama = () => {
         <div className="absolute inset-0 bg-black/30"></div>
       </div>
 
-      {/* 2. USTKI QATLAM (Logo va Matn) */}
       <div className="relative z-10 flex flex-col items-center animate-fade-in px-4">
-        
-        {/* Logo qismi */}
         <div className="relative mb-10 md:mb-16">
             <div className="absolute inset-0 bg-blue-500/30 blur-[60px] rounded-full animate-pulse"></div>
             <img 
@@ -47,12 +39,10 @@ const Reklama = () => {
             />
         </div>
 
-        {/* Akademiya nomi */}
         <h1 className="text-3xl md:text-6xl font-black text-white text-center uppercase tracking-widest drop-shadow-2xl max-w-6xl leading-tight mb-8">
           {t('app_name') || "HUQUQNI MUHOFAZA QILISH AKADEMIYASI"}
         </h1>
 
-        {/* Harakatga chaqiruvchi tugma */}
         <div className="mt-10 md:mt-20 animate-pulse">
           <div className="text-white text-base md:text-2xl font-bold border-2 border-white/40 px-8 py-3 md:px-12 md:py-5 rounded-full bg-black/40 backdrop-blur-md shadow-2xl hover:bg-white/20 transition-all uppercase tracking-wider flex items-center gap-4">
             <span className="text-2xl md:text-3xl animate-bounce">👆</span> 

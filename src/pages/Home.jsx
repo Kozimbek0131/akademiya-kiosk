@@ -5,10 +5,7 @@ import {
   FaUserTie, FaTrophy, FaFileAlt, FaBus, FaWifi, 
   FaMapMarkedAlt, FaQuestionCircle, FaStar 
 } from 'react-icons/fa';
-
-// FAYLLARNI IMPORT QILISH
 import logoImg from '../assets/logo.png';
-// DIQQAT: Videoni import QILMAYMIZ, chunki u public papkasida
 
 const Home = () => {
   const navigate = useNavigate();
@@ -47,11 +44,11 @@ const Home = () => {
   return (
     <div className="h-screen flex flex-col bg-[#0f172a] relative overflow-hidden select-none font-sans text-white">
       
-      {/* --- VIDEO ORQA FON --- */}
+      {/* VIDEO FON */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#0f172a]"></div>
         
-        {/* MANA SHU YER MUHIM: Fayl nomi public papkasidagi bilan bir xil bo'lishi shart */}
+        {/* PUBLIC papkasidagi video */}
         <video 
           src="/bg_video.mp4" 
           autoPlay 
@@ -100,7 +97,7 @@ const Home = () => {
         <p className="text-blue-200/60 text-[8px] md:text-xs font-bold tracking-[0.3em] uppercase">{t('subtitle')}</p>
       </div>
 
-      {/* ASOSIY MENYU */}
+      {/* MENYU */}
       <div className="relative z-10 flex-1 px-4 md:px-8 pb-12 overflow-y-visible w-full flex justify-center">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full max-w-6xl mt-4 pb-10">
           {menuItems.map((item) => (
@@ -127,7 +124,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* FOOTER */}
       <div className="relative z-20 text-center py-4 bg-black/40 text-white/20 text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] shrink-0 backdrop-blur-sm border-t border-white/5">
         {t('footer_text')}
       </div>

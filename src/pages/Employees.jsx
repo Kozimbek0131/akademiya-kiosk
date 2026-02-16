@@ -54,13 +54,12 @@ const Employees = () => {
   });
 
   return (
-    // O'ZGARISH: h-screen (ekran bo'yi) va overflow-hidden (tashqariga chiqmasin)
     <div className="h-screen flex flex-col bg-slate-900 relative overflow-hidden select-none text-white">
       
       {/* FON */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 z-0 pointer-events-none"></div>
 
-      {/* HEADER (Qotib turadigan qism) */}
+      {/* HEADER */}
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-between p-4 md:p-6 bg-slate-800/80 backdrop-blur-md border-b border-white/10 shadow-lg gap-4 shrink-0">
         <button 
           onClick={() => navigate('/')}
@@ -85,13 +84,10 @@ const Employees = () => {
         </h1>
       </div>
 
-      {/* ASOSIY QISM (Scroll bo'ladigan joy) */}
-      {/* flex-1: Qolgan joyni egallaydi */}
-      {/* overflow-hidden: Ikki ustun alohida aylanishi uchun */}
+      {/* ASOSIY QISM */}
       <div className="relative z-10 flex-1 flex flex-col md:flex-row gap-6 p-4 md:p-6 overflow-hidden">
         
         {/* 1. CHAP TOMON - FILTRLASH MENYUSI */}
-        {/* O'ZGARISH: overflow-y-auto qo'shildi */}
         <div className="w-full md:w-80 flex flex-col bg-slate-800/50 backdrop-blur-md border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl shrink-0 overflow-hidden h-fit md:h-full">
           
           <div className="flex p-1.5 bg-black/20 m-2 rounded-xl shrink-0">
@@ -109,7 +105,6 @@ const Employees = () => {
             </button>
           </div>
 
-          {/* Menyu ro'yxati scroll bo'ladi */}
           <div className="flex-1 overflow-y-auto custom-scrollbar p-2 md:p-3 space-y-1.5 md:space-y-2 max-h-[150px] md:max-h-full">
             <button 
               onClick={() => setActiveFilter('all')}
@@ -151,46 +146,58 @@ const Employees = () => {
           </div>
         </div>
 
-        {/* 2. O'NG TOMON - NATIJALAR KARTOCHKASI */}
-        {/* O'ZGARISH: flex-1 va overflow-y-auto shu yerga berildi */}
-        <div className="flex-1 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl md:rounded-3xl p-4 md:p-6 overflow-y-auto custom-scrollbar h-full pb-24 md:pb-6">
-          <h2 className="text-lg md:text-xl text-white font-bold mb-4 md:mb-6 border-b border-white/10 pb-3 md:pb-4 sticky top-0 bg-slate-900/50 backdrop-blur-md z-10 px-2 rounded-lg">
-             {searchTerm ? "🔍 Natijalar" : (activeFilter === 'all' ? "Barcha xodimlar" : `${activeFilter}-qavat/bo'lim`)}
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
-            {filteredEmployees.length > 0 ? (
-              filteredEmployees.map((emp) => (
-                <div key={emp.id} className="bg-slate-800/80 p-4 md:p-5 rounded-2xl border border-white/5 hover:border-blue-500/50 transition-all hover:bg-slate-800">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xl md:text-2xl shadow-lg shrink-0">
-                      <FaUserTie />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-base md:text-lg font-bold text-white leading-tight mb-1 truncate" title={emp.name}>{emp.name}</h3>
-                      <p className="text-xs md:text-sm text-blue-400 font-medium mb-2 line-clamp-2" title={emp.position}>{emp.position}</p>
-                      <div className="flex flex-wrap gap-2">
-                        <span className="bg-white/10 px-2 py-0.5 rounded text-[10px] md:text-xs text-gray-300">{emp.dept}</span>
-                        <span className="bg-amber-500/20 text-amber-500 px-2 py-0.5 rounded text-[10px] md:text-xs font-bold">{emp.room}-xona</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-gray-400 text-[10px] md:text-xs font-bold uppercase">
-                        <FaBuilding /> {emp.floor}-qavat
-                      </div>
-                      <div className="flex items-center gap-1 text-lg md:text-xl font-black text-green-400">
-                        <FaPhoneAlt className="text-xs" /> {emp.tel}
-                      </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="col-span-full py-10 opacity-50 text-center">
-                <p className="text-lg text-white font-bold">Hech kim topilmadi</p>
-              </div>
-            )}
+        {/* 2. O'NG TOMON - NATIJALAR KARTOCHKASI (O'ZGARTIRILDI) */}
+        {/* Bu yerda flex-col va overflow-hidden ishlatib, ichini ikkiga bo'ldik: Header va List */}
+        <div className="flex-1 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl md:rounded-3xl overflow-hidden flex flex-col h-full shadow-inner">
+          
+          {/* A) NATIJA Sarlavhasi (Qotib turadi) */}
+          <div className="p-4 md:p-6 border-b border-white/10 bg-white/5 shrink-0 z-20">
+             <h2 className="text-lg md:text-xl text-white font-bold flex items-center gap-2">
+                {searchTerm ? "🔍 Natijalar" : (activeFilter === 'all' ? "Barcha xodimlar" : `${activeFilter}-qavat/bo'lim`)}
+                <span className="ml-auto text-xs md:text-sm font-normal text-gray-400 bg-black/20 px-3 py-1 rounded-full">
+                   {filteredEmployees.length} ta
+                </span>
+             </h2>
           </div>
+
+          {/* B) XODIMLAR RO'YXATI (Faqat shu qism aylanadi) */}
+          <div className="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-6 pb-24 md:pb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
+              {filteredEmployees.length > 0 ? (
+                filteredEmployees.map((emp) => (
+                  <div key={emp.id} className="bg-slate-800/80 p-4 md:p-5 rounded-2xl border border-white/5 hover:border-blue-500/50 transition-all hover:bg-slate-800 group">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xl md:text-2xl shadow-lg shrink-0 group-hover:scale-105 transition-transform">
+                        <FaUserTie />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-base md:text-lg font-bold text-white leading-tight mb-1 truncate" title={emp.name}>{emp.name}</h3>
+                        <p className="text-xs md:text-sm text-blue-400 font-medium mb-2 line-clamp-2" title={emp.position}>{emp.position}</p>
+                        <div className="flex flex-wrap gap-2">
+                          <span className="bg-white/10 px-2 py-0.5 rounded text-[10px] md:text-xs text-gray-300">{emp.dept}</span>
+                          <span className="bg-amber-500/20 text-amber-500 px-2 py-0.5 rounded text-[10px] md:text-xs font-bold">{emp.room}-xona</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-gray-400 text-[10px] md:text-xs font-bold uppercase">
+                          <FaBuilding /> {emp.floor}-qavat
+                        </div>
+                        <div className="flex items-center gap-1 text-lg md:text-xl font-black text-green-400">
+                          <FaPhoneAlt className="text-xs" /> {emp.tel}
+                        </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="col-span-full py-10 opacity-50 text-center flex flex-col items-center">
+                  <FaUserTie className="text-6xl mb-4 text-gray-600" />
+                  <p className="text-lg text-white font-bold">Hech kim topilmadi</p>
+                </div>
+              )}
+            </div>
+          </div>
+
         </div>
 
       </div>

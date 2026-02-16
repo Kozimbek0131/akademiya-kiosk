@@ -25,7 +25,7 @@ const Home = () => {
   const menuItems = [
     { id: 'employees', icon: <FaUserTie />, label: t('menu_employees') || "XODIMLAR", path: '/employees', desc: "Professor va o'qituvchilar" },
     { id: 'leadership', icon: <FaStar />, label: "RAHBARIYAT", path: '/leadership', desc: "Akademiya boshlig'i" },
-    { id: 'achievements', icon: <FaTrophy />, label: t('menu_achievements') || "YUTUQLAR", path: '/achievements', desc: "Akademiya yutuqlari" }, // Path to'g'irlandi
+    { id: 'achievements', icon: <FaTrophy />, label: t('menu_achievements') || "YUTUQLAR", path: '/achievements', desc: "Akademiya yutuqlari" },
     { id: 'documents', icon: <FaFileAlt />, label: t('menu_documents') || "HUJJATLAR", path: '/documents', desc: "Qonunlar va buyruqlar" },
     { id: 'transport', icon: <FaBus />, label: t('menu_transport') || "TRANSPORT", path: '/transport', desc: "Yo'nalishlar" },
     { id: 'wifi', icon: <FaWifi />, label: t('menu_wifi') || "WI-FI", path: '/wifi', desc: "Bepul internet" },
@@ -42,14 +42,14 @@ const Home = () => {
   };
 
   return (
-    // MUHIM: min-h-screen va overflow-y-auto scrollni yoqadi
-    <div className="min-h-screen flex flex-col bg-[#0f172a] relative overflow-x-hidden select-none font-sans text-white">
+    // O'ZGARISH: h-screen (ekran to'ladi) va overflow-hidden (tashqariga chiqmaydi)
+    <div className="h-screen flex flex-col bg-[#0f172a] relative overflow-hidden select-none font-sans text-white">
       
-      {/* FON - Fixed qilingan, scroll paytida joyida turadi */}
-      <div className="fixed inset-0 bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#0f172a] z-0 pointer-events-none"></div>
+      {/* FON */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#0f172a] z-0 pointer-events-none"></div>
       
-      {/* STATUS BAR */}
-      <div className="relative z-20 bg-white/5 backdrop-blur-md border-b border-white/10 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between shadow-lg shrink-0">
+      {/* 1. STATUS BAR (Qotirilgan - Balandligi aniq) */}
+      <div className="relative z-20 bg-white/5 backdrop-blur-md border-b border-white/10 px-4 md:px-6 py-2 md:py-3 flex items-center justify-between shadow-lg shrink-0">
         <div className="flex flex-col">
            <span className="text-xl md:text-3xl font-bold text-white tracking-widest">{formattedTime}</span>
            <span className="text-[10px] md:text-xs text-blue-200 uppercase tracking-wide opacity-80">{formattedDate}</span>
@@ -69,42 +69,44 @@ const Home = () => {
         </div>
       </div>
 
-      {/* 🏛️ HEADER */}
-      <div className="relative z-10 flex flex-col items-center justify-center pt-6 md:pt-10 pb-6 text-center shrink-0 px-4">
+      {/* 2. LOGO VA HEADER (Qotirilgan - biroz ixchamlashtirildi) */}
+      <div className="relative z-10 flex flex-col items-center justify-center pt-4 md:pt-6 pb-2 md:pb-4 text-center shrink-0 px-4">
         <img 
           src="/logo.png" 
           alt="Logo" 
-          className="h-24 md:h-40 w-auto object-contain mb-4 drop-shadow-2xl filter brightness-110 animate-fade-in-down"
+          className="h-16 md:h-28 w-auto object-contain mb-2 md:mb-3 drop-shadow-2xl filter brightness-110"
         />
-        <h2 className="text-[10px] md:text-sm font-bold text-amber-500 uppercase tracking-[0.2em] mb-1">O'ZBEKISTON RESPUBLIKASI</h2>
-        <h1 className="text-xl md:text-4xl font-black text-white uppercase tracking-wider mb-2 px-2 leading-tight max-w-5xl drop-shadow-lg">
+        <h2 className="text-[8px] md:text-xs font-bold text-amber-500 uppercase tracking-[0.2em] mb-0.5">O'ZBEKISTON RESPUBLIKASI</h2>
+        <h1 className="text-lg md:text-3xl font-black text-white uppercase tracking-wider mb-1 px-2 leading-tight max-w-5xl drop-shadow-lg">
           HUQUQNI MUHOFAZA QILISH AKADEMIYASI
         </h1>
-        <div className="w-24 md:w-32 h-0.5 md:h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent mt-2 mb-2 opacity-80"></div>
-        <p className="text-blue-200/60 text-[8px] md:text-xs font-bold tracking-[0.3em] uppercase">{t('subtitle') || "AXBOROT-RESURS KIOSKI"}</p>
+        <div className="w-20 md:w-32 h-0.5 md:h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent mt-1 mb-1 opacity-80"></div>
+        <p className="text-blue-200/60 text-[8px] md:text-[10px] font-bold tracking-[0.3em] uppercase">{t('subtitle') || "AXBOROT-RESURS KIOSKI"}</p>
       </div>
 
-      {/* ASOSIY MENYU */}
-      <div className="relative z-10 flex-1 px-4 md:px-8 pb-12 overflow-y-visible w-full flex justify-center">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full max-w-6xl mt-4 pb-10">
+      {/* 3. ASOSIY MENYU (Aylanadigan qism) */}
+      {/* flex-1: Qolgan barcha joyni egallaydi */}
+      {/* overflow-y-auto: Sig'masa scroll bo'ladi */}
+      <div className="relative z-10 flex-1 px-4 md:px-8 w-full flex justify-center overflow-y-auto custom-scrollbar">
+        {/* my-auto: Agar joy ko'p bo'lsa o'rtada turadi, kam bo'lsa tepadan boshlanadi */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5 w-full max-w-6xl py-4 my-auto h-fit">
           {menuItems.map((item) => (
             <button
               key={item.id}
               onClick={() => handleNavigation(item.path)}
-              className="group relative overflow-hidden rounded-2xl md:rounded-3xl bg-slate-800/40 backdrop-blur-sm border border-white/10 hover:bg-slate-700/60 hover:border-blue-500/50 transition-all duration-300 flex flex-col items-center justify-center text-center p-4 md:p-6 active:scale-95 shadow-lg min-h-[140px] md:min-h-[220px] cursor-pointer"
+              className="group relative overflow-hidden rounded-2xl md:rounded-3xl bg-slate-800/40 backdrop-blur-sm border border-white/10 hover:bg-slate-700/60 hover:border-blue-500/50 transition-all duration-300 flex flex-col items-center justify-center text-center p-3 md:p-5 active:scale-95 shadow-lg min-h-[120px] md:min-h-[180px] cursor-pointer"
             >
-              {/* Icon orqasidagi glow effekti */}
               <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-20 transition-opacity duration-500 rounded-2xl"></div>
               
-              <div className="text-4xl md:text-6xl text-blue-400 mb-3 md:mb-5 group-hover:scale-110 group-hover:text-white transition-transform duration-300 drop-shadow-md relative z-10">
+              <div className="text-3xl md:text-5xl text-blue-400 mb-2 md:mb-4 group-hover:scale-110 group-hover:text-white transition-transform duration-300 drop-shadow-md relative z-10">
                 {item.icon}
               </div>
               
-              <span className="text-sm md:text-xl font-black text-white uppercase tracking-wider mb-1 leading-tight relative z-10 group-hover:text-blue-300 transition-colors">
+              <span className="text-xs md:text-lg font-black text-white uppercase tracking-wider mb-0.5 leading-tight relative z-10 group-hover:text-blue-300 transition-colors">
                 {item.label}
               </span>
               
-              <span className="text-[10px] md:text-sm text-gray-400 group-hover:text-gray-200 line-clamp-2 px-1 font-medium relative z-10">
+              <span className="text-[9px] md:text-xs text-gray-400 group-hover:text-gray-200 line-clamp-1 px-1 font-medium relative z-10 hidden sm:block">
                 {item.desc}
               </span>
             </button>
@@ -112,8 +114,8 @@ const Home = () => {
         </div>
       </div>
 
-      {/* FOOTER */}
-      <div className="relative z-20 text-center py-4 bg-black/40 text-white/20 text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] shrink-0 backdrop-blur-sm border-t border-white/5">
+      {/* 4. FOOTER (Qotirilgan) */}
+      <div className="relative z-20 text-center py-3 bg-black/40 text-white/20 text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] shrink-0 backdrop-blur-sm border-t border-white/5">
         © 2026 Akademiya Axborot Texnologiyalari Markazi
       </div>
     </div>

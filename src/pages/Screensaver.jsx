@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import logoImg from '../assets/logo.png'; 
 
-const Reklama = () => {
+// Komponent nomi Screensaver bo'ldi
+const Screensaver = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
 
@@ -17,7 +18,7 @@ const Reklama = () => {
       className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-black cursor-pointer overflow-hidden select-none"
     >
       <div className="absolute inset-0 z-0">
-        {/* PUBLIC papkasidagi video */}
+        {/* PUBLIC papkasidagi video nomi (agar fayl nomi reklama.mp4 bo'lsa shunday qoladi) */}
         <video 
           src="/reklama.mp4" 
           autoPlay 
@@ -55,4 +56,4 @@ const Reklama = () => {
   );
 };
 
-export default Reklama;
+export default Screensaver;

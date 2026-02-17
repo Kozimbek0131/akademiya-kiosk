@@ -6,24 +6,24 @@ const ActivityMonitor = ({ children }) => {
   const location = useLocation();
   const timerRef = useRef(null);
 
-  const SCREENSAVER_PATH = '/reklama'; 
+  // O'ZGARISH: Manzilni '/screensaver' qildik
+  const SCREENSAVER_PATH = '/screensaver'; 
   const HOME_PATH = '/';
   
   // 1 daqiqa = 60000 millisekund
   const TIMEOUT_MS = 60000; 
 
   const resetTimer = () => {
-    // Agar Reklamada bo'lsak va ekranga tegsak -> Homega qayt
+    // Agar Screensaverda bo'lsak va ekranga tegsak -> Homega qayt
     if (location.pathname === SCREENSAVER_PATH) {
       navigate(HOME_PATH);
     }
 
-    // Eski taymerni o'chiramiz
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
 
-    // Agar Reklamada bo'lmasak, vaqtni sanashni boshla
+    // Agar Screensaverda bo'lmasak, vaqtni sanashni boshla
     if (location.pathname !== SCREENSAVER_PATH) {
       timerRef.current = setTimeout(() => {
         navigate(SCREENSAVER_PATH);
@@ -32,14 +32,12 @@ const ActivityMonitor = ({ children }) => {
   };
 
   useEffect(() => {
-    // Barcha harakatlarni kuzatamiz
     const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
 
     events.forEach(event => {
       window.addEventListener(event, resetTimer);
     });
 
-    // Dastur ishga tushganda taymerni boshlash
     resetTimer();
 
     return () => {

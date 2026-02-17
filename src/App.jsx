@@ -1,10 +1,11 @@
 import React from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { LanguageProvider } from './context/LanguageContext';
 
 // YANGI KOMPONENTLAR
 import ActivityMonitor from './components/ActivityMonitor'; 
-import Reklama from './pages/Reklama'; 
+// O'ZGARISH: Reklama o'rniga Screensaver import qilindi
+import Screensaver from './pages/Screensaver'; 
 
 // SAHIFALAR
 import Home from './pages/Home';
@@ -18,7 +19,6 @@ import FAQ from './pages/FAQ';
 import Leadership from './pages/Leadership';
 
 function App() {
-  // O'ng tugmani (Context menu) o'chirish
   React.useEffect(() => {
     const disableContextMenu = (e) => e.preventDefault();
     window.addEventListener('contextmenu', disableContextMenu);
@@ -29,11 +29,12 @@ function App() {
     <LanguageProvider>
       <div className="w-full h-screen bg-slate-900 overflow-hidden relative">
         
-        {/* Butun ilovani ActivityMonitor bilan o'raymiz */}
         <ActivityMonitor>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/reklama" element={<Reklama />} />
+            
+            {/* O'ZGARISH: Route nomi ham /screensaver bo'ldi */}
+            <Route path="/screensaver" element={<Screensaver />} />
             
             <Route path="/employees" element={<Employees />} />
             <Route path="/leadership" element={<Leadership />} />

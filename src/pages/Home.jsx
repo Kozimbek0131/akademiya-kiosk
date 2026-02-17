@@ -44,11 +44,9 @@ const Home = () => {
   return (
     <div className="h-screen flex flex-col bg-[#0f172a] relative overflow-hidden select-none font-sans text-white">
       
-      {/* VIDEO FON */}
+      {/* VIDEO FON (Public papkasidan) */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#0f172a]"></div>
-        
-        {/* PUBLIC papkasidagi video */}
         <video 
           src="/bg_video.mp4" 
           autoPlay 
@@ -57,7 +55,6 @@ const Home = () => {
           playsInline
           className="w-full h-full object-cover opacity-50" 
         />
-        
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/90 via-[#0f172a]/40 to-[#0f172a]/90"></div>
       </div>
       
@@ -107,15 +104,12 @@ const Home = () => {
               className="group relative overflow-hidden rounded-2xl md:rounded-3xl bg-slate-800/40 backdrop-blur-sm border border-white/10 hover:bg-slate-700/60 hover:border-blue-500/50 transition-all duration-300 flex flex-col items-center justify-center text-center p-4 md:p-6 active:scale-95 shadow-lg min-h-[140px] md:min-h-[220px] cursor-pointer"
             >
               <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-20 transition-opacity duration-500 rounded-2xl"></div>
-              
               <div className="text-4xl md:text-6xl text-blue-400 mb-3 md:mb-5 group-hover:scale-110 group-hover:text-white transition-transform duration-300 drop-shadow-md relative z-10">
                 {item.icon}
               </div>
-              
               <span className="text-sm md:text-xl font-black text-white uppercase tracking-wider mb-1 leading-tight relative z-10 group-hover:text-blue-300 transition-colors">
                 {item.label}
               </span>
-              
               <span className="text-[10px] md:text-sm text-gray-400 group-hover:text-gray-200 line-clamp-2 px-1 font-medium relative z-10">
                 {item.desc}
               </span>

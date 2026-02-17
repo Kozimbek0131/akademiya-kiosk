@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { LanguageProvider } from './context/LanguageContext';
 
-// YANGI KOMPONENTLAR (Biz oldin yaratganlarimiz)
+// YANGI KOMPONENTLAR
 import ActivityMonitor from './components/ActivityMonitor'; 
 import Reklama from './pages/Reklama'; 
 
@@ -18,7 +18,7 @@ import FAQ from './pages/FAQ';
 import Leadership from './pages/Leadership';
 
 function App() {
-  // Context menyuni (sichqoncha o'ng tugmasi) o'chirish
+  // O'ng tugmani (Context menu) o'chirish
   React.useEffect(() => {
     const disableContextMenu = (e) => e.preventDefault();
     window.addEventListener('contextmenu', disableContextMenu);
@@ -26,15 +26,15 @@ function App() {
   }, []);
 
   return (
-    // 1. Ilovani Til sozlamalari bilan o'raymiz
     <LanguageProvider>
       <div className="w-full h-screen bg-slate-900 overflow-hidden relative">
         
-        {/* 2. Harakatsizlikni kuzatuvchi (1 daqiqa jim tursa -> Reklamaga otadi) */}
+        {/* Butun ilovani ActivityMonitor bilan o'raymiz */}
         <ActivityMonitor>
           <Routes>
-            {/* Asosiy sahifalar */}
             <Route path="/" element={<Home />} />
+            <Route path="/reklama" element={<Reklama />} />
+            
             <Route path="/employees" element={<Employees />} />
             <Route path="/leadership" element={<Leadership />} />
             <Route path="/map" element={<Map />} />
@@ -43,9 +43,6 @@ function App() {
             <Route path="/achievements" element={<Achievements />} />
             <Route path="/wifi" element={<Wifi />} />
             <Route path="/faq" element={<FAQ />} />
-            
-            {/* 3. REKLAMA (SCREENSAVER) SAHIFASI */}
-            <Route path="/reklama" element={<Reklama />} />
           </Routes>
         </ActivityMonitor>
 

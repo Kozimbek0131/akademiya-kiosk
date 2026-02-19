@@ -6,47 +6,53 @@ const ActivityMonitor = ({ children }) => {
   const location = useLocation();
   const timerRef = useRef(null);
 
-  // O'ZGARISH: Manzilni '/screensaver' qildik
   const SCREENSAVER_PATH = '/screensaver'; 
   const HOME_PATH = '/';
   
-  // 1 daqiqa = 60000 millisekund
+  // 1 daqiqa = 60000 ms (Sinash uchun 5000 (5 soniya) qilib ko'ring, keyin 60000 ga qaytarasiz)
   const TIMEOUT_MS = 60000; 
 
   const resetTimer = () => {
-    // Agar Screensaverda bo'lsak va ekranga tegsak -> Homega qayt
+    // 1. Agar hozir Screensaverda bo'lsak, hech narsa qilmaymiz (u yerdagi onClick ishlaydi)
     if (location.pathname === SCREENSAVER_PATH) {
-      navigate(HOME_PATH);
+      return;
     }
 
+    // 2. Eski taymerni o'chiramiz
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
 
-    // Agar Screensaverda bo'lmasak, vaqtni sanashni boshla
-    if (location.pathname !== SCREENSAVER_PATH) {
-      timerRef.current = setTimeout(() => {
-        navigate(SCREENSAVER_PATH);
-      }, TIMEOUT_MS);
-    }
+    // 3. Konsolga yozamiz (Tekshirish uchun)
+    console.log("Harakat sezildi! Taymer 0 dan boshlandi...");
+
+    // 4. Yangi taymerni ishga tushiramiz
+    timerRef.current = setTimeout(() => {
+      console.log("Vaqt tugadi! Screensaverga o'tmoqda...");
+      navigate(SCREENSAVER_PATH);
+    }, TIMEOUT_MS);
   };
 
   useEffect(() => {
+    // Qaysi harakatlarni kuzatamiz?
     const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
 
+    // Hodisalarni ulaymiz
     events.forEach(event => {
       window.addEventListener(event, resetTimer);
     });
 
+    // Dastur boshlanganda taymerni ishga tushirish
     resetTimer();
 
+    // Tozalash
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
       events.forEach(event => {
         window.removeEventListener(event, resetTimer);
       });
     };
-  }, [location.pathname, navigate]);
+  }, [location.pathname]); // Sahifa o'zgarganda qayta ishga tushadi
 
   return <>{children}</>;
 };

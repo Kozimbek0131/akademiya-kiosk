@@ -42,9 +42,10 @@ const Home = () => {
   };
 
   return (
+    // Asosiy konteyner: h-screen va overflow-hidden (butun sahifa qimirlamaydi)
     <div className="h-screen flex flex-col bg-[#0f172a] relative overflow-hidden select-none font-sans text-white">
       
-      {/* VIDEO FON (Public papkasidan) */}
+      {/* VIDEO FON */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#0f172a]"></div>
         <video 
@@ -58,7 +59,7 @@ const Home = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/90 via-[#0f172a]/40 to-[#0f172a]/90"></div>
       </div>
       
-      {/* STATUS BAR */}
+      {/* STATUS BAR (Fixed Height) */}
       <div className="relative z-20 bg-white/5 backdrop-blur-md border-b border-white/10 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between shadow-lg shrink-0">
         <div className="flex flex-col">
            <span className="text-xl md:text-3xl font-bold text-white tracking-widest">{formattedTime}</span>
@@ -79,12 +80,12 @@ const Home = () => {
         </div>
       </div>
 
-      {/* HEADER */}
-      <div className="relative z-10 flex flex-col items-center justify-center pt-6 md:pt-10 pb-6 text-center shrink-0 px-4">
+      {/* HEADER (Fixed Height) */}
+      <div className="relative z-10 flex flex-col items-center justify-center pt-4 md:pt-8 pb-4 text-center shrink-0 px-4">
         <img 
           src={logoImg} 
           alt="Logo" 
-          className="h-24 md:h-40 w-auto object-contain mb-4 drop-shadow-2xl filter brightness-110 animate-fade-in-down"
+          className="h-20 md:h-36 w-auto object-contain mb-3 drop-shadow-2xl filter brightness-110 animate-fade-in-down"
         />
         <h2 className="text-[10px] md:text-sm font-bold text-amber-500 uppercase tracking-[0.2em] mb-1">O'ZBEKISTON RESPUBLIKASI</h2>
         <h1 className="text-xl md:text-4xl font-black text-white uppercase tracking-wider mb-2 px-2 leading-tight max-w-5xl drop-shadow-lg">
@@ -94,22 +95,26 @@ const Home = () => {
         <p className="text-blue-200/60 text-[8px] md:text-xs font-bold tracking-[0.3em] uppercase">{t('subtitle')}</p>
       </div>
 
-      {/* MENYU */}
-      <div className="relative z-10 flex-1 px-4 md:px-8 pb-12 overflow-y-visible w-full flex justify-center">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full max-w-6xl mt-4 pb-10">
+      {/* --- ASOSIY MENYU (SCROLL BO'LADIGAN QISM) --- */}
+      {/* O'ZGARISH: overflow-y-auto qo'shildi, overflow-y-visible olib tashlandi */}
+      <div className="relative z-10 flex-1 px-4 md:px-8 w-full flex justify-center overflow-y-auto custom-scrollbar pb-20">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full max-w-6xl mt-4 h-fit">
           {menuItems.map((item) => (
             <button
               key={item.id}
               onClick={() => handleNavigation(item.path)}
-              className="group relative overflow-hidden rounded-2xl md:rounded-3xl bg-slate-800/40 backdrop-blur-sm border border-white/10 hover:bg-slate-700/60 hover:border-blue-500/50 transition-all duration-300 flex flex-col items-center justify-center text-center p-4 md:p-6 active:scale-95 shadow-lg min-h-[140px] md:min-h-[220px] cursor-pointer"
+              className="group relative overflow-hidden rounded-2xl md:rounded-3xl bg-slate-800/40 backdrop-blur-sm border border-white/10 hover:bg-slate-700/60 hover:border-blue-500/50 transition-all duration-300 flex flex-col items-center justify-center text-center p-4 md:p-6 active:scale-95 shadow-lg min-h-[140px] md:min-h-[200px] cursor-pointer"
             >
               <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-20 transition-opacity duration-500 rounded-2xl"></div>
+              
               <div className="text-4xl md:text-6xl text-blue-400 mb-3 md:mb-5 group-hover:scale-110 group-hover:text-white transition-transform duration-300 drop-shadow-md relative z-10">
                 {item.icon}
               </div>
+              
               <span className="text-sm md:text-xl font-black text-white uppercase tracking-wider mb-1 leading-tight relative z-10 group-hover:text-blue-300 transition-colors">
                 {item.label}
               </span>
+              
               <span className="text-[10px] md:text-sm text-gray-400 group-hover:text-gray-200 line-clamp-2 px-1 font-medium relative z-10">
                 {item.desc}
               </span>
@@ -117,12 +122,3 @@ const Home = () => {
           ))}
         </div>
       </div>
-
-      <div className="relative z-20 text-center py-4 bg-black/40 text-white/20 text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] shrink-0 backdrop-blur-sm border-t border-white/5">
-        {t('footer_text')}
-      </div>
-    </div>
-  );
-};
-
-export default Home;

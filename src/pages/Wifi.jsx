@@ -1,135 +1,152 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { FaArrowLeft, FaWifi, FaUserTie, FaUserGraduate, FaChalkboardTeacher, FaLock } from 'react-icons/fa';
+import { FaArrowLeft, FaWifi, FaLock, FaUserGraduate, FaUserTie, FaUsers } from 'react-icons/fa';
+import qrPlaceholder from '../assets/logo.png'; // Agar tayyor QR rasm bo'lmasa, hozircha logo turadi
 
 const Wifi = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
 
-  const networks = [
-    {
-      id: 'staff',
-      ssid: "Akadimiya",
-      password: "staff_password_1", 
-      label: "XODIMLAR",
-      desc: "Xodimlar va o'qituvchilar uchun",
-      icon: <FaUserTie />,
-      color: "blue"
+  // Wi-Fi tarmoqlari ro'yxati (o'zingizning ma'lumotlaringiz bilan almashtirishingiz mumkin)
+  const wifiNetworks = [
+    { 
+      id: 'staff', 
+      name: 'XODIMLAR', 
+      desc: 'Akademiya xodimlari uchun',
+      icon: <FaUserTie />, 
+      password: 'staff_password_1',
+      qr: 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=WIFI:S:Akademiya_Xodim;T:WPA;P:staff_password_1;;' 
     },
-    {
-      id: 'guest',
-      ssid: "CONFERENCE",
-      password: "guest_password_2",
-      label: "KONFERENSIYA",
-      desc: "Mehmonlar va qatnashchilar uchun",
-      icon: <FaChalkboardTeacher />,
-      color: "amber"
+    { 
+      id: 'conference', 
+      name: 'KONFERENSIYA', 
+      desc: 'Mehmonlar va qatnashuvchilar uchun',
+      icon: <FaUsers />, 
+      password: 'guest_password_2',
+      qr: 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=WIFI:S:Conference;T:WPA;P:guest_password_2;;' 
     },
-    {
-      id: 'student',
-      ssid: "talaba_student",
-      password: "student_password_3",
-      label: "TALABALAR",
-      desc: "Kursantlar va tinglovchilar uchun",
-      icon: <FaUserGraduate />,
-      color: "green"
-    }
+    { 
+      id: 'students', 
+      name: 'TALABALAR', 
+      desc: 'Bakalavr va magistrlar uchun',
+      icon: <FaUserGraduate />, 
+      password: 'student_password_3',
+      qr: 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=WIFI:S:Talabalar;T:WPA;P:student_password_3;;' 
+    },
   ];
 
-  const [activeNetwork, setActiveNetwork] = useState(networks[1]);
-
-  const qrString = `WIFI:T:WPA;S:${activeNetwork.ssid};P:${activeNetwork.password};;`;
-  const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrString)}&bgcolor=ffffff&color=000000&margin=10`;
+  const [activeWifi, setActiveWifi] = useState(wifiNetworks[0]);
 
   return (
-    // O'ZGARISH: h-screen (ekran bo'yi) va overflow-hidden (sahifa qotiriladi)
     <div className="h-screen flex flex-col bg-slate-900 relative overflow-hidden select-none text-white">
       
-      {/* Orqa fon (Fixed position) */}
-      <div className={`absolute inset-0 bg-gradient-to-br transition-all duration-700 from-slate-900 via-slate-900 to-${activeNetwork.color}-900/40 z-0 pointer-events-none`}></div>
-      
-      {/* HEADER (Qotirilgan - Balandligi o'zgarmaydi) */}
-      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between p-4 md:p-6 bg-slate-800/50 backdrop-blur-md border-b border-white/10 gap-4 shrink-0">
+      {/* ORQA FON */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 z-0 pointer-events-none"></div>
+
+      {/* HEADER QISMI */}
+      <div className="relative z-50 flex flex-col md:flex-row items-center justify-between p-4 md:p-6 bg-slate-800/80 backdrop-blur-md border-b border-white/10 shadow-lg shrink-0">
         <button 
-          onClick={() => navigate('/')}
-          className="flex items-center gap-2 bg-white/10 border border-white/20 text-white px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl hover:bg-white/20 active:scale-95 transition-all text-sm md:text-xl font-bold uppercase w-fit self-start md:self-auto cursor-pointer"
+          onClick={() => navigate('/')} 
+          className="flex items-center gap-2 bg-white/10 border border-white/20 text-white px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl hover:bg-white/20 active:scale-95 transition-all text-sm md:text-xl font-bold uppercase cursor-pointer"
         >
-          <FaArrowLeft /> {t('back_btn') || "ORQAGA"}
+          <FaArrowLeft /> {t('back_btn') || "ASOSIY MENYU"}
         </button>
-        
-        <h1 className="text-xl md:text-4xl font-black text-white uppercase tracking-wider flex items-center gap-3">
-          <FaWifi className={`text-${activeNetwork.color}-500 animate-pulse text-2xl md:text-4xl`} /> 
-          WI-FI TARMOQLARI
+        <h1 className="text-xl md:text-4xl font-black text-white uppercase tracking-wider drop-shadow-lg flex items-center gap-3 mt-4 md:mt-0">
+          <FaWifi className="text-blue-400 text-2xl md:text-4xl" /> WI-FI TARMOQLARI
         </h1>
       </div>
 
-      {/* ASOSIY QISM (Aylanadigan joy) */}
-      <div className="relative z-10 flex-1 flex flex-col md:flex-row gap-6 md:gap-8 p-4 md:p-8 overflow-hidden">
+      {/* ASOSIY KONTENT */}
+      <div className="relative z-10 flex-1 flex flex-col md:flex-row overflow-hidden">
         
-        {/* 1. CHAP TOMON - TARMOQ TANLASH RO'YXATI */}
-        {/* O'ZGARISH: overflow-y-auto va h-full berildi */}
-        <div className="w-full md:w-1/3 flex flex-col gap-3 md:gap-4 shrink-0 overflow-y-auto custom-scrollbar h-fit md:h-full pr-2">
-          {networks.map((net) => (
-            <button
-              key={net.id}
-              onClick={() => setActiveNetwork(net)}
-              className={`group p-4 md:p-6 rounded-2xl md:rounded-3xl border-2 text-left transition-all duration-300 relative overflow-hidden cursor-pointer shrink-0 ${
-                activeNetwork.id === net.id
-                  ? `bg-${net.color}-600 border-${net.color}-400 shadow-xl scale-[1.02]`
-                  : 'bg-white/5 border-white/10 hover:bg-white/10'
-              }`}
-            >
-              <div className="flex items-center gap-3 md:gap-4 relative z-10">
-                <div className={`w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center text-xl md:text-3xl ${
-                  activeNetwork.id === net.id ? 'bg-white/20' : `bg-white/5 text-${net.color}-400`
+        {/* 1. CHAP TOMON - TARMOQLAR RO'YXATI */}
+        <div className="w-full md:w-[400px] lg:w-[450px] bg-slate-900/50 backdrop-blur-md border-r border-white/10 p-4 md:p-8 flex flex-col gap-4 overflow-y-auto custom-scrollbar shrink-0">
+          
+          <h2 className="text-gray-400 font-bold uppercase tracking-widest mb-2 text-sm md:text-base px-2">
+            Tarmoqni tanlang
+          </h2>
+
+          {wifiNetworks.map((wifi) => {
+            const isActive = activeWifi.id === wifi.id;
+            return (
+              <button
+                key={wifi.id}
+                onClick={() => setActiveWifi(wifi)}
+                // MUHIM O'ZGARISH: Bu yerda p-4 va rounded-2xl orqali chap tomon ham chiroyli yopiladi
+                className={`flex items-center gap-4 p-4 md:p-5 rounded-2xl border-2 transition-all cursor-pointer text-left ${
+                  isActive 
+                    ? 'bg-blue-600/20 border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.3)]' 
+                    : 'bg-slate-800/50 border-white/5 hover:bg-slate-700/50 hover:border-white/20'
+                }`}
+              >
+                {/* Ikonka */}
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl shrink-0 transition-colors ${
+                  isActive ? 'bg-blue-500 text-white' : 'bg-white/10 text-gray-400'
                 }`}>
-                  {net.icon}
+                  {wifi.icon}
                 </div>
-                <div>
-                  <h3 className={`text-sm md:text-xl font-black uppercase ${activeNetwork.id === net.id ? 'text-white' : 'text-gray-300'}`}>
-                    {net.label}
-                  </h3>
-                  <p className={`text-[10px] md:text-xs font-mono ${activeNetwork.id === net.id ? 'text-white/80' : 'text-gray-500'}`}>
-                    {net.ssid}
-                  </p>
+                
+                {/* Matn */}
+                <div className="flex flex-col">
+                  <span className={`font-black text-lg md:text-xl uppercase tracking-wider ${isActive ? 'text-blue-400' : 'text-gray-200'}`}>
+                    {wifi.name}
+                  </span>
+                  <span className="text-xs md:text-sm text-gray-400 font-medium">
+                    {wifi.desc}
+                  </span>
                 </div>
-              </div>
-            </button>
-          ))}
+              </button>
+            );
+          })}
         </div>
 
         {/* 2. O'NG TOMON - QR KOD VA MA'LUMOT */}
-        {/* O'ZGARISH: Markazlashtirildi va toshib ketsa scroll bo'ladigan qilindi */}
-        <div className="flex-1 flex items-center justify-center overflow-y-auto custom-scrollbar h-full w-full">
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] shadow-2xl flex flex-col items-center gap-4 md:gap-6 max-w-sm md:max-w-lg w-full m-auto">
+        <div className="flex-1 p-4 md:p-8 flex items-center justify-center relative bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed">
+          
+          <div className="absolute inset-0 bg-slate-900/80"></div>
+
+          <div className="relative z-10 w-full max-w-lg flex flex-col items-center animate-fade-in-up">
+            
+            {/* Oq fonli QR kod kartochkasi */}
+            <div className="bg-white p-6 md:p-8 rounded-[40px] shadow-2xl flex flex-col items-center w-full">
               
-              {/* QR Kod */}
-              <div className="bg-white p-3 md:p-4 rounded-2xl md:rounded-3xl shadow-lg relative group shrink-0">
-                <img src={qrImageUrl} alt="QR Code" className="w-48 h-48 md:w-64 md:h-64 mix-blend-multiply opacity-95" />
-                <div className={`absolute -bottom-2 left-1/2 -translate-x-1/2 bg-${activeNetwork.color}-600 text-white px-3 py-1 rounded-full text-[10px] md:text-xs font-bold uppercase shadow-lg whitespace-nowrap`}>
-                  Skaner qiling
-                </div>
+              <div className="bg-blue-50 text-blue-600 w-16 h-16 rounded-full flex items-center justify-center text-3xl mb-6 shadow-inner">
+                <FaWifi />
               </div>
 
-              {/* Matnli ma'lumotlar */}
-              <div className="w-full text-center space-y-3 md:space-y-4">
-                <div>
-                  <h2 className="text-xl md:text-3xl font-black text-white">{activeNetwork.ssid}</h2>
-                  <p className="text-gray-400 text-[10px] md:text-sm line-clamp-1">{activeNetwork.desc}</p>
-                </div>
-
-                <div className="bg-black/40 rounded-xl md:rounded-2xl p-3 md:p-4 flex items-center justify-between border border-white/10">
-                  <div className="flex items-center gap-2">
-                    <FaLock className="text-gray-500 text-xs md:text-base" />
-                    <span className="text-gray-400 text-[10px] md:text-xs uppercase font-bold">Parol:</span>
-                  </div>
-                  <span className="text-lg md:text-2xl font-mono text-white font-bold tracking-wider select-all">
-                    {activeNetwork.password}
-                  </span>
-                </div>
+              {/* QR Code rasmi (API orqali avtomatik yasaladi) */}
+              <div className="w-56 h-56 md:w-64 md:h-64 bg-gray-100 rounded-2xl p-2 mb-6 border-4 border-gray-100 shadow-md">
+                <img 
+                  src={activeWifi.qr} 
+                  alt="QR Code" 
+                  className="w-full h-full object-contain mix-blend-multiply"
+                />
               </div>
 
+              <h2 className="text-2xl md:text-4xl font-black text-slate-800 uppercase tracking-wider text-center mb-2">
+                {activeWifi.name}
+              </h2>
+              <p className="text-gray-500 font-medium text-center mb-8">
+                {activeWifi.desc}
+              </p>
+
+              {/* Parol ko'rsatiladigan qism */}
+              <div className="w-full bg-slate-100 rounded-2xl p-4 flex items-center justify-between border border-slate-200">
+                <div className="flex items-center gap-3 text-slate-500">
+                  <FaLock className="text-xl" />
+                  <span className="font-bold uppercase text-xs tracking-widest">Parol</span>
+                </div>
+                <span className="font-mono text-lg md:text-xl font-bold text-slate-800 tracking-wider">
+                  {activeWifi.password}
+                </span>
+              </div>
+              
+              <div className="mt-6 text-center text-gray-400 text-xs font-bold uppercase tracking-widest">
+                Ulanish uchun kamerani qarating
+              </div>
+
+            </div>
           </div>
         </div>
 

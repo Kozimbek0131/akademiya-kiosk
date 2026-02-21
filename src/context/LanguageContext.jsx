@@ -46,17 +46,35 @@ export const LanguageProvider = ({ children }) => {
       all_employees: "Barcha xodimlar",
       floor: "-Qavat",
       room: "-xona",
-      
-      // Xodimlar ro'yxati (O'zbek tilida)
-      emp_1_name: "Ahmadjonov Alisher",
-      emp_1_position: "Kafedra mudiri",
-      emp_1_dept: "Jinoyat huquqi kafedrasi",
 
-      emp_2_name: "Rahimova Malika",
-      emp_2_position: "Katta o'qituvchi",
-      emp_2_dept: "Kriminalistika kafedrasi",
+      // BO'LIMLAR (Lotin tilida)
+      dept_rahbariyat: "Akademiya rahbariyati",
+      dept_kadrlar: "Kadrlar va Tashkiliy-nazorat",
+      dept_xalqaro: "Xalqaro hamkorlik",
+      dept_tillar: "Til o'rgatish kafedrasi",
+      dept_sud: "Sud faoliyati",
+      dept_korrupsiya: "Antikorrupsiya markazi",
+      dept_it: "AKT va axborot xavfsizligi",
       
-      // ... (boshqa xodimlarni shu yerga qo'shib ketasiz)
+      // XODIMLAR RO'YXATI (Lotin tilida)
+      emp_1_name: "Kolenko Yevgeniy Vyacheslavovich",
+      emp_1_position: "Akademiya boshlig'ining birinchi o'rinbosari",
+      emp_2_name: "Turaxonov Durbek Lermonovich",
+      emp_2_position: "Akademiya boshlig'i o'rinbosari",
+      emp_3_name: "Odinayev Adham Sa'dulloyevich",
+      emp_3_position: "Akademiya boshlig'i o'rinbosari",
+      emp_4_name: "Nigmadjanov Uyg'un Uchqunovich",
+      emp_4_position: "Akademiya boshlig'i o'rinbosari",
+      emp_14_name: "Oqbutayev Abror Abdurahmanovich",
+      emp_14_position: "Xalqaro hamkorlik bo'limi boshlig'i",
+      emp_16_name: "Mirzoqulova Xursanoy Ne'matjonovna",
+      emp_16_position: "Til o'rgatish kafedrasi katta o'qituvchisi",
+      emp_18_name: "Qandahorova Dilnoza Sattorovna",
+      emp_18_position: "Kafedra katta o'qituvchisi",
+      emp_22_name: "Tursunbekov Xudayberdi",
+      emp_22_position: "Korrupsiyaga qarshi kurashish markazi boshlig'i",
+      emp_28_name: "G'iyosov Bilolbek Jumazoda",
+      emp_28_position: "AKT bo'limi boshlig'i",
 
       // --- RAHBARIYAT (LEADERSHIP) ---
       page_leadership: "AKADEMIYA RAHBARIYATI",
@@ -132,14 +150,34 @@ export const LanguageProvider = ({ children }) => {
       floor: "-Этаж",
       room: "-каб.",
 
-      // Список сотрудников (На русском)
-      emp_1_name: "Ахмаджонов Алишер",
-      emp_1_position: "Заведующий кафедрой",
-      emp_1_dept: "Кафедра уголовного права",
+      // ОТДЕЛЫ (На русском)
+      dept_rahbariyat: "Руководство Академии",
+      dept_kadrlar: "Кадры и орг-контроль",
+      dept_xalqaro: "Международное сотрудничество",
+      dept_tillar: "Кафедра обучения языкам",
+      dept_sud: "Судебная деятельность",
+      dept_korrupsiya: "Антикоррупционный центр",
+      dept_it: "ИКТ и инф. безопасность",
 
-      emp_2_name: "Рахимова Малика",
-      emp_2_position: "Старший преподаватель",
-      emp_2_dept: "Кафедра криминалистики",
+      // СПИСОК СОТРУДНИКОВ (На русском / Кириллица)
+      emp_1_name: "Коленко Евгений Вячеславович",
+      emp_1_position: "Первый заместитель начальника Академии",
+      emp_2_name: "Турахонов Дурбек Лермонович",
+      emp_2_position: "Заместитель начальника Академии",
+      emp_3_name: "Одинаев Адхам Саъдуллоевич",
+      emp_3_position: "Заместитель начальника Академии",
+      emp_4_name: "Нигмаджанов Уйгун Учкунович",
+      emp_4_position: "Заместитель начальника Академии",
+      emp_14_name: "Акбутаев Аброр Абдурахманович",
+      emp_14_position: "Начальник отдела международного сотрудничества",
+      emp_16_name: "Мирзокулова Хурсаной Нематжоновна",
+      emp_16_position: "Старший преподаватель кафедры обучения языкам",
+      emp_18_name: "Кандахорова Дилноза Саттаровна",
+      emp_18_position: "Старший преподаватель кафедры",
+      emp_22_name: "Турсунбеков Худайберди",
+      emp_22_position: "Начальник Антикоррупционного центра",
+      emp_28_name: "Гиясов Билолбек Жумазода",
+      emp_28_position: "Начальник отдела ИКТ",
 
       // --- РУКОВОДСТВО ---
       page_leadership: "РУКОВОДСТВО АКАДЕМИИ",
@@ -215,14 +253,34 @@ export const LanguageProvider = ({ children }) => {
       floor: "-Floor",
       room: "-room",
 
-      // Employees List (In English)
-      emp_1_name: "Akhmadjonov Alisher",
-      emp_1_position: "Head of Department",
-      emp_1_dept: "Department of Criminal Law",
+      // DEPARTMENTS (In English)
+      dept_rahbariyat: "Academy Leadership",
+      dept_kadrlar: "HR & Organizational Control",
+      dept_xalqaro: "International Cooperation",
+      dept_tillar: "Language Teaching Dept",
+      dept_sud: "Judicial Activity",
+      dept_korrupsiya: "Anti-Corruption Center",
+      dept_it: "ICT & Info Security",
 
-      emp_2_name: "Rakhimova Malika",
-      emp_2_position: "Senior Lecturer",
-      emp_2_dept: "Department of Criminalistics",
+      // EMPLOYEES LIST (In English)
+      emp_1_name: "Kolenko Evgeniy Vyacheslavovich",
+      emp_1_position: "First Deputy Head of the Academy",
+      emp_2_name: "Turakhonov Durbek Lermonovich",
+      emp_2_position: "Deputy Head of the Academy",
+      emp_3_name: "Odinaev Adham Sadulloevich",
+      emp_3_position: "Deputy Head of the Academy",
+      emp_4_name: "Nigmadjanov Uygun Uchkunovich",
+      emp_4_position: "Deputy Head of the Academy",
+      emp_14_name: "Akbutayev Abror Abdurakhmanovich",
+      emp_14_position: "Head of International Cooperation",
+      emp_16_name: "Mirzokulova Khursanoy Nematjonovna",
+      emp_16_position: "Senior Lecturer of Language Teaching",
+      emp_18_name: "Kandakhorova Dilnoza Sattorovna",
+      emp_18_position: "Senior Lecturer of the Department",
+      emp_22_name: "Tursunbekov Khudayberdi",
+      emp_22_position: "Head of the Anti-Corruption Center",
+      emp_28_name: "Giyosov Bilolbek Jumazoda",
+      emp_28_position: "Head of the ICT Department",
 
       // --- LEADERSHIP ---
       page_leadership: "ACADEMY LEADERSHIP",

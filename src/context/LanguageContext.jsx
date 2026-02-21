@@ -5,7 +5,7 @@ const LanguageContext = createContext();
 export const LanguageProvider = ({ children }) => {
   const [language, setLanguage] = useState('uz'); // Default: O'zbek
 
-  // 📖 KATTA LUG'AT (Barcha sahifalar uchun)
+  // 📖 KATTA LUG'AT (Barcha sahifalar va MA'LUMOTLAR uchun)
   const translations = {
     uz: {
       // --- UMUMIY ---
@@ -13,11 +13,13 @@ export const LanguageProvider = ({ children }) => {
       subtitle: "AXBOROT-RESURS KIOSKI",
       country_name: "O'ZBEKISTON RESPUBLIKASI",
       footer_text: "© 2026 Akademiya Axborot Texnologiyalari Markazi",
-      back_btn: "ORQAGA",
+      back_btn: "ASOSIY MENYU",
       search_placeholder: "Qidiruv...",
       results: "Natijalar",
       no_results: "Hech kim topilmadi",
       loading: "Yuklanmoqda...",
+      select_network: "Tarmoqni tanlang",
+      scan_to_connect: "Ulanish uchun kamerani qarating",
 
       // --- ASOSIY MENYU (HOME) ---
       menu_employees: "XODIMLAR",
@@ -45,6 +47,17 @@ export const LanguageProvider = ({ children }) => {
       floor: "-Qavat",
       room: "-xona",
       
+      // Xodimlar ro'yxati (O'zbek tilida)
+      emp_1_name: "Ahmadjonov Alisher",
+      emp_1_position: "Kafedra mudiri",
+      emp_1_dept: "Jinoyat huquqi kafedrasi",
+
+      emp_2_name: "Rahimova Malika",
+      emp_2_position: "Katta o'qituvchi",
+      emp_2_dept: "Kriminalistika kafedrasi",
+      
+      // ... (boshqa xodimlarni shu yerga qo'shib ketasiz)
+
       // --- RAHBARIYAT (LEADERSHIP) ---
       page_leadership: "AKADEMIYA RAHBARIYATI",
 
@@ -72,9 +85,9 @@ export const LanguageProvider = ({ children }) => {
       wifi_staff: "XODIMLAR",
       wifi_guest: "KONFERENSIYA",
       wifi_student: "TALABALAR",
-      wifi_staff_desc: "Xodimlar va o'qituvchilar uchun",
-      wifi_guest_desc: "Mehmonlar va qatnashchilar uchun",
-      wifi_student_desc: "Kursantlar va tinglovchilar uchun",
+      wifi_staff_desc: "Akademiya xodimlari uchun",
+      wifi_guest_desc: "Mehmonlar va qatnashuvchilar uchun",
+      wifi_student_desc: "Bakalavr va magistrlar uchun",
       scan_qr: "Skaner qiling",
       password: "Parol",
     },
@@ -85,11 +98,13 @@ export const LanguageProvider = ({ children }) => {
       subtitle: "ИНФОРМАЦИОННО-РЕСУРСНЫЙ КИОСК",
       country_name: "РЕСПУБЛИКА УЗБЕКИСТАН",
       footer_text: "© 2026 Центр информационных технологий Академии",
-      back_btn: "НАЗАД",
+      back_btn: "ГЛАВНОЕ МЕНЮ",
       search_placeholder: "Поиск...",
       results: "Результаты",
       no_results: "Ничего не найдено",
       loading: "Загрузка...",
+      select_network: "Выберите сеть",
+      scan_to_connect: "Наведите камеру для подключения",
 
       // --- ГЛАВНОЕ МЕНЮ ---
       menu_employees: "СОТРУДНИКИ",
@@ -116,6 +131,15 @@ export const LanguageProvider = ({ children }) => {
       all_employees: "Все сотрудники",
       floor: "-Этаж",
       room: "-каб.",
+
+      // Список сотрудников (На русском)
+      emp_1_name: "Ахмаджонов Алишер",
+      emp_1_position: "Заведующий кафедрой",
+      emp_1_dept: "Кафедра уголовного права",
+
+      emp_2_name: "Рахимова Малика",
+      emp_2_position: "Старший преподаватель",
+      emp_2_dept: "Кафедра криминалистики",
 
       // --- РУКОВОДСТВО ---
       page_leadership: "РУКОВОДСТВО АКАДЕМИИ",
@@ -144,9 +168,9 @@ export const LanguageProvider = ({ children }) => {
       wifi_staff: "СОТРУДНИКИ",
       wifi_guest: "КОНФЕРЕНЦИЯ",
       wifi_student: "СТУДЕНТЫ",
-      wifi_staff_desc: "Для сотрудников и преподавателей",
+      wifi_staff_desc: "Для сотрудников академии",
       wifi_guest_desc: "Для гостей и участников",
-      wifi_student_desc: "Для курсантов и слушателей",
+      wifi_student_desc: "Для бакалавров и магистров",
       scan_qr: "Сканируйте",
       password: "Пароль",
     },
@@ -157,11 +181,13 @@ export const LanguageProvider = ({ children }) => {
       subtitle: "INFORMATION RESOURCE KIOSK",
       country_name: "REPUBLIC OF UZBEKISTAN",
       footer_text: "© 2026 Academy Information Technology Center",
-      back_btn: "GO BACK",
+      back_btn: "MAIN MENU",
       search_placeholder: "Search...",
       results: "Results",
       no_results: "No results found",
       loading: "Loading...",
+      select_network: "Select network",
+      scan_to_connect: "Point camera to connect",
 
       // --- MAIN MENU ---
       menu_employees: "EMPLOYEES",
@@ -188,6 +214,15 @@ export const LanguageProvider = ({ children }) => {
       all_employees: "All Employees",
       floor: "-Floor",
       room: "-room",
+
+      // Employees List (In English)
+      emp_1_name: "Akhmadjonov Alisher",
+      emp_1_position: "Head of Department",
+      emp_1_dept: "Department of Criminal Law",
+
+      emp_2_name: "Rakhimova Malika",
+      emp_2_position: "Senior Lecturer",
+      emp_2_dept: "Department of Criminalistics",
 
       // --- LEADERSHIP ---
       page_leadership: "ACADEMY LEADERSHIP",
@@ -216,9 +251,9 @@ export const LanguageProvider = ({ children }) => {
       wifi_staff: "STAFF",
       wifi_guest: "CONFERENCE",
       wifi_student: "STUDENTS",
-      wifi_staff_desc: "For staff and teachers",
+      wifi_staff_desc: "For academy staff",
       wifi_guest_desc: "For guests and participants",
-      wifi_student_desc: "For cadets and listeners",
+      wifi_student_desc: "For bachelor and master students",
       scan_qr: "Scan this",
       password: "Password",
     }

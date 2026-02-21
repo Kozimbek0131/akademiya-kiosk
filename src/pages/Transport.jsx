@@ -91,10 +91,10 @@ const Transport = () => {
       {/* HEADER */}
       <div className="relative z-50 flex flex-col md:flex-row items-center justify-between p-4 md:p-6 bg-slate-800/80 backdrop-blur-md border-b border-white/10 shadow-lg gap-4 shrink-0">
         <button 
-          onClick={() => navigate(-1)} // Orqaga qaytish yanada to'g'ri ishlashi uchun navigate(-1) ishlatildi
+          onClick={() => navigate('/')} // TO'G'RIDAN-TO'G'RI BOSH SAHIFAGA!
           className="flex items-center gap-2 bg-white/10 border border-white/20 text-white px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl hover:bg-white/20 active:scale-95 transition-all text-sm md:text-xl font-bold uppercase w-fit self-start md:self-auto cursor-pointer"
         >
-          <FaArrowLeft /> {t('back_btn') || "ORQAGA"}
+          <FaArrowLeft /> {t('back_btn') || "ASOSIY MENYU"}
         </button>
         <h1 className="text-xl md:text-4xl font-black text-white uppercase tracking-wider drop-shadow-lg flex items-center gap-3">
           <FaBus className="text-blue-400 text-2xl md:text-4xl" /> YO'NALISHNI IZLASH
@@ -150,7 +150,7 @@ const Transport = () => {
               {quickDestinations.map((dest) => (
                 <button 
                   key={dest.id}
-                  onClick={() => updateMapRoute(dest.query)} // Qidiruv uchun aniq manzil yuboriladi
+                  onClick={() => updateMapRoute(dest.query)} 
                   className="flex items-center gap-3 bg-white/5 p-3 rounded-xl hover:bg-white/10 transition-all cursor-pointer group shrink-0"
                 >
                   <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full ${dest.bg} flex items-center justify-center ${dest.color} group-hover:scale-110 transition-transform`}>

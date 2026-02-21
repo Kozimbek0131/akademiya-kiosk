@@ -11,27 +11,26 @@ const Sidebar = () => {
   const location = useLocation();
   const { t } = useLanguage();
 
-  // Bosh sahifadagi barcha 8 ta menyu bu yerga ham qo'shildi
   const menuItems = [
     { path: '/', icon: <FaHome />, title: "Bosh sahifa" },
-    { path: '/employees', icon: <FaUserTie />, title: t('menu_employees') },
+    { path: '/employees', icon: <FaUserTie />, title: t('menu_employees') || "Xodimlar" },
     { path: '/leadership', icon: <FaStar />, title: t('menu_leadership') || "Rahbariyat" },
-    { path: '/achievements', icon: <FaTrophy />, title: t('menu_achievements') },
-    { path: '/documents', icon: <FaFileAlt />, title: t('menu_documents') },
-    { path: '/transport', icon: <FaBus />, title: t('menu_transport') },
-    { path: '/wifi', icon: <FaWifi />, title: t('menu_wifi') },
-    { path: '/map', icon: <FaMapMarkedAlt />, title: t('menu_map') },
+    { path: '/achievements', icon: <FaTrophy />, title: t('menu_achievements') || "Yutuqlar" },
+    { path: '/documents', icon: <FaFileAlt />, title: t('menu_documents') || "Hujjatlar" },
+    { path: '/transport', icon: <FaBus />, title: t('menu_transport') || "Transport" },
+    { path: '/wifi', icon: <FaWifi />, title: t('menu_wifi') || "Wi-Fi" },
+    { path: '/map', icon: <FaMapMarkedAlt />, title: t('menu_map') || "Xarita" },
     { path: '/faq', icon: <FaQuestionCircle />, title: t('menu_faq') || "Ma'lumot" },
   ];
 
   return (
     <div className="w-24 bg-slate-900 border-r border-white/10 h-full flex flex-col items-center py-6 gap-4 shadow-xl z-50 shrink-0">
       
-      {/* Orqaga qaytish tugmasi */}
+      {/* Orqaga qaytish tugmasi (TO'G'RIDAN-TO'G'RI BOSH SAHIFAGA) */}
       <button 
-        onClick={() => navigate(-1)} // Oldingi sahifaga qaytish uchun (-1) yaxshiroq
+        onClick={() => navigate('/')} 
         className="p-4 bg-amber-500 rounded-2xl text-white mb-2 shadow-lg hover:bg-amber-400 active:scale-95 transition-all"
-        title="Orqaga"
+        title="Asosiy menyuga"
       >
          <FaArrowLeft size={24} />
       </button>
@@ -47,7 +46,7 @@ const Sidebar = () => {
             <button
               key={item.path}
               onClick={() => navigate(item.path)}
-              title={item.title} // Sichqoncha borganda nomini ko'rsatadi
+              title={item.title}
               className={`p-4 rounded-xl text-2xl transition-all flex justify-center items-center group relative ${
                 isActive 
                 ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.5)] scale-105' 
@@ -56,7 +55,7 @@ const Sidebar = () => {
             >
               {item.icon}
               
-              {/* Tanlangan sahifa bo'lsa, yonida kichik ko'rsatkich paydo bo'ladi */}
+              {/* Tanlangan sahifa indikatori */}
               {isActive && (
                 <div className="absolute -right-2 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-amber-500 rounded-l-full"></div>
               )}

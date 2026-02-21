@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import HeaderClock from '../components/HeaderClock';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { 
@@ -45,9 +46,12 @@ const Home = () => {
     // Asosiy konteyner: h-screen va overflow-hidden (butun sahifa qimirlamaydi)
     <div className="h-screen flex flex-col bg-[#0f172a] relative overflow-hidden select-none font-sans text-white">
       
-      {/* VIDEO FON */}
+      {/* --- VIDEO FON (Vercel uchun vaqtincha o'chirilgan) --- */}
       <div className="absolute inset-0 z-0 pointer-events-none">
+        {/* Asosiy chiroyli rangli fon (Video o'rnida turadi) */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#0f172a]"></div>
+        
+        {/* VIDEO KODI (Taqdimot payti kerak bo'lsa, qavslarni {/* va */} { /* olib tashlaysiz)
         <video 
           src="/bg_video.mp4" 
           autoPlay 
@@ -56,6 +60,8 @@ const Home = () => {
           playsInline
           className="w-full h-full object-cover opacity-50" 
         />
+        */}
+        
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/90 via-[#0f172a]/40 to-[#0f172a]/90"></div>
       </div>
       
@@ -96,7 +102,6 @@ const Home = () => {
       </div>
 
       {/* --- ASOSIY MENYU (SCROLL BO'LADIGAN QISM) --- */}
-      {/* O'ZGARISH: overflow-y-auto qo'shildi, overflow-y-visible olib tashlandi */}
       <div className="relative z-10 flex-1 px-4 md:px-8 w-full flex justify-center overflow-y-auto custom-scrollbar pb-20">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full max-w-6xl mt-4 h-fit">
           {menuItems.map((item) => (
@@ -122,3 +127,14 @@ const Home = () => {
           ))}
         </div>
       </div>
+
+      {/* FOOTER */}
+      <div className="relative z-20 text-center py-4 bg-black/40 text-white/20 text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] shrink-0 backdrop-blur-sm border-t border-white/5">
+        {t('footer_text')}
+      </div>
+
+    </div>
+  );
+};
+
+export default Home;

@@ -6,53 +6,56 @@ const ActivityMonitor = ({ children }) => {
   const location = useLocation();
   const timerRef = useRef(null);
 
-  const SCREENSAVER_PATH = '/screensaver'; 
-  const HOME_PATH = '/';
-  
-  // 1 daqiqa = 60000 ms (Sinash uchun 5000 (5 soniya) qilib ko'ring, keyin 60000 ga qaytarasiz)
-  const TIMEOUT_MS = 60000; 
+  // location.pathname doim yangilanib turishi uchun ref ishlatamiz
+  const pathnameRef = useRef(location.pathname);
+
+  useEffect(() => {
+    pathnameRef.current = location.pathname;
+  }, [location.pathname]);
 
   const resetTimer = () => {
-    // 1. Agar hozir Screensaverda bo'lsak, hech narsa qilmaymiz (u yerdagi onClick ishlaydi)
-    if (location.pathname === SCREENSAVER_PATH) {
+    // Agar allaqachon reklama (screensaver) sahifasida bo'lsak, taymerni sanashga hojat yo'q
+    if (pathnameRef.current === '/screensaver') {
+      if (timerRef.current) clearTimeout(timerRef.current);
       return;
     }
 
-    // 2. Eski taymerni o'chiramiz
+    // Eski taymerni nolga tushiramiz
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
 
-    // 3. Konsolga yozamiz (Tekshirish uchun)
-    console.log("Harakat sezildi! Taymer 0 dan boshlandi...");
-
-    // 4. Yangi taymerni ishga tushiramiz
+    // Yangi 1 daqiqalik (60000 ms) taymerni boshlaymiz
     timerRef.current = setTimeout(() => {
-      console.log("Vaqt tugadi! Screensaverga o'tmoqda...");
-      navigate(SCREENSAVER_PATH);
-    }, TIMEOUT_MS);
+      navigate('/screensaver');
+    }, 60000); 
   };
 
   useEffect(() => {
-    // Qaysi harakatlarni kuzatamiz?
-    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
-
-    // Hodisalarni ulaymiz
-    events.forEach(event => {
-      window.addEventListener(event, resetTimer);
-    });
-
-    // Dastur boshlanganda taymerni ishga tushirish
+    // Kiosk ishga tushishi bilan taymerni birinchi marta boshlaymiz
     resetTimer();
 
-    // Tozalash
+    // Kuzatiladigan harakatlar ro'yxati (touch - ekran uchun, click/mouse - kompyuter uchun)
+    const events = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart', 'click', 'pointerdown'];
+
+    // Harakat bo'lganda ishlaydigan funksiya
+    const handleActivity = () => {
+      resetTimer();
+    };
+
+    // Hodisalarni butun hujjatga (document) majburiy (capture: true) rejimida ulaymiz. 
+    // Bu - istalgan tugma bosilsa ham harakatni o'tkazib yubormasligini kafolatlaydi.
+    events.forEach(event => {
+      document.addEventListener(event, handleActivity, true);
+    });
+
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
       events.forEach(event => {
-        window.removeEventListener(event, resetTimer);
+        document.removeEventListener(event, handleActivity, true);
       });
     };
-  }, [location.pathname]); // Sahifa o'zgarganda qayta ishga tushadi
+  }, [navigate]);
 
   return <>{children}</>;
 };

@@ -23,8 +23,8 @@ const Employees = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        // MANZIL ENDI QOTIRILMAGAN, VERCEL'DAN AVTOMATIK OLADI:
-        const baseUrl = process.env.REACT_APP_API_URL; 
+        // MANZIL ENDI VITE UCHUN TO'G'RILANDI:
+        const baseUrl = import.meta.env.VITE_API_URL; 
         const response = await fetch(`${baseUrl}/api/employees/`);
         
         const data = await response.json();

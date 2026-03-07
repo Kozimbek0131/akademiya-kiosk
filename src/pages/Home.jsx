@@ -23,9 +23,10 @@ const Home = () => {
   });
   const formattedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
+  // 1-O'ZGARISH: Rahbariyat 1-o'ringa, Xodimlar 2-o'ringa o'tdi
   const menuItems = [
-    { id: 'employees', icon: <FaUserTie />, label: t('menu_employees'), path: '/employees', desc: t('desc_employees') },
     { id: 'leadership', icon: <FaStar />, label: t('menu_leadership'), path: '/leadership', desc: t('desc_leadership') },
+    { id: 'employees', icon: <FaUserTie />, label: t('menu_employees'), path: '/employees', desc: t('desc_employees') },
     { id: 'achievements', icon: <FaTrophy />, label: t('menu_achievements'), path: '/achievements', desc: t('desc_achievements') },
     { id: 'documents', icon: <FaFileAlt />, label: t('menu_documents'), path: '/documents', desc: t('desc_documents') },
     { id: 'transport', icon: <FaBus />, label: t('menu_transport'), path: '/transport', desc: t('desc_transport') },
@@ -43,36 +44,22 @@ const Home = () => {
   };
 
   return (
-    // Asosiy konteyner: h-screen va overflow-hidden (butun sahifa qimirlamaydi)
     <div className="h-screen flex flex-col bg-[#0f172a] relative overflow-hidden select-none font-sans text-white">
       
-      {/* --- VIDEO FON (Vercel uchun vaqtincha o'chirilgan) --- */}
+      {/* --- VIDEO FON --- */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        {/* Asosiy chiroyli rangli fon (Video o'rnida turadi) */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#0f172a]"></div>
-        
-        {/* VIDEO KODI (Taqdimot payti kerak bo'lsa, qavslarni {/* va */} { /* olib tashlaysiz)
-        <video 
-          src="/bg_video.mp4" 
-          autoPlay 
-          loop 
-          muted 
-          playsInline
-          className="w-full h-full object-cover opacity-50" 
-        />
-        */}
-        
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/90 via-[#0f172a]/40 to-[#0f172a]/90"></div>
       </div>
       
-      {/* STATUS BAR (Fixed Height) */}
+      {/* STATUS BAR */}
       <div className="relative z-20 bg-white/5 backdrop-blur-md border-b border-white/10 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between shadow-lg shrink-0">
         <div className="flex flex-col">
            <span className="text-xl md:text-3xl font-bold text-white tracking-widest">{formattedTime}</span>
            <span className="text-[10px] md:text-xs text-blue-200 uppercase tracking-wide opacity-80">{formattedDate}</span>
         </div>
         <div className="flex bg-black/30 rounded-lg p-1 gap-1">
-            {['uz', 'ru', 'en'].map((lang) => (
+             {['uz', 'ru', 'en'].map((lang) => (
               <button
                 key={lang}
                 onClick={() => setLanguage(lang)}
@@ -86,7 +73,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* HEADER (Fixed Height) */}
+      {/* HEADER */}
       <div className="relative z-10 flex flex-col items-center justify-center pt-4 md:pt-8 pb-4 text-center shrink-0 px-4">
         <img 
           src={logoImg} 
@@ -101,26 +88,28 @@ const Home = () => {
         <p className="text-blue-200/60 text-[8px] md:text-xs font-bold tracking-[0.3em] uppercase">{t('subtitle')}</p>
       </div>
 
-      {/* --- ASOSIY MENYU (SCROLL BO'LADIGAN QISM) --- */}
-      <div className="relative z-10 flex-1 px-4 md:px-8 w-full flex justify-center overflow-y-auto custom-scrollbar pb-20">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full max-w-6xl mt-4 h-fit">
+      {/* --- ASOSIY MENYU (2-O'ZGARISH: Grid va Scroll to'g'rilandi) --- */}
+      <div className="relative z-10 flex-1 px-4 md:px-8 w-full flex justify-center overflow-y-auto custom-scrollbar touch-pan-y pb-24">
+        
+        {/* lg:grid-cols-4 olib tashlandi, har doim 2 ta ustun bo'ladi */}
+        <div className="grid grid-cols-2 gap-4 md:gap-8 w-full max-w-4xl mt-4 h-fit">
           {menuItems.map((item) => (
             <button
               key={item.id}
               onClick={() => handleNavigation(item.path)}
-              className="group relative overflow-hidden rounded-2xl md:rounded-3xl bg-slate-800/40 backdrop-blur-sm border border-white/10 hover:bg-slate-700/60 hover:border-blue-500/50 transition-all duration-300 flex flex-col items-center justify-center text-center p-4 md:p-6 active:scale-95 shadow-lg min-h-[140px] md:min-h-[200px] cursor-pointer"
+              className="group relative overflow-hidden rounded-2xl md:rounded-3xl bg-slate-800/40 backdrop-blur-sm border border-white/10 hover:bg-slate-700/60 hover:border-blue-500/50 transition-all duration-300 flex flex-col items-center justify-center text-center p-6 md:p-8 active:scale-95 shadow-lg min-h-[160px] md:min-h-[240px] cursor-pointer"
             >
               <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-20 transition-opacity duration-500 rounded-2xl"></div>
               
-              <div className="text-4xl md:text-6xl text-blue-400 mb-3 md:mb-5 group-hover:scale-110 group-hover:text-white transition-transform duration-300 drop-shadow-md relative z-10">
+              <div className="text-5xl md:text-7xl text-blue-400 mb-4 md:mb-6 group-hover:scale-110 group-hover:text-white transition-transform duration-300 drop-shadow-md relative z-10">
                 {item.icon}
               </div>
               
-              <span className="text-sm md:text-xl font-black text-white uppercase tracking-wider mb-1 leading-tight relative z-10 group-hover:text-blue-300 transition-colors">
+              <span className="text-base md:text-2xl font-black text-white uppercase tracking-wider mb-2 leading-tight relative z-10 group-hover:text-blue-300 transition-colors">
                 {item.label}
               </span>
               
-              <span className="text-[10px] md:text-sm text-gray-400 group-hover:text-gray-200 line-clamp-2 px-1 font-medium relative z-10">
+              <span className="text-xs md:text-base text-gray-400 group-hover:text-gray-200 line-clamp-2 px-2 font-medium relative z-10">
                 {item.desc}
               </span>
             </button>

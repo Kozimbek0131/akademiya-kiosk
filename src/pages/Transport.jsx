@@ -17,9 +17,9 @@ const Transport = () => {
 
   const akademiyaLat = "41.374751";
   const akademiyaLong = "69.272917";
-  const defaultMapUrl = `https://yandex.uz/map-widget/v1/?ll=${akademiyaLong}%2C${akademiyaLat}&z=17&pt=${akademiyaLong}%2C${akademiyaLat},pm2rdm`;
+  const defaultMapUrl = `https://yandex.uz/map-widget/v1/?ll=${akademiyaLong}%2C${akademiyaLat}&z=15&pt=${akademiyaLong}%2C${akademiyaLat},pm2rdm`;
 
-  // TEZKOR MANZILLAR RO'YXATI (10 ta muhim joy)
+  // TEZKOR MANZILLAR RO'YXATI
   const quickDestinations = [
     { id: 1, name: "Bosh Prokuratura", query: "Bosh prokuratura, Toshkent", icon: <FaBuilding />, color: "text-blue-400", bg: "bg-blue-500/20" },
     { id: 2, name: "Oliy Sud", query: "Oliy Sud, Toshkent", icon: <FaBalanceScale />, color: "text-amber-500", bg: "bg-amber-500/20" },
@@ -33,9 +33,10 @@ const Transport = () => {
     { id: 10, name: "Chorsu Bozori", query: "Chorsu bozori, Toshkent", icon: <FaStore />, color: "text-orange-500", bg: "bg-orange-500/20" },
   ];
 
+  // Qidiruv so'rovlari
   useEffect(() => {
     const fetchSuggestions = async () => {
-      if (destination.length < 2) {
+      if (destination.length < 3) {
         setSuggestions([]);
         return;
       }
@@ -52,15 +53,25 @@ const Transport = () => {
         setIsSearching(false);
       }
     };
-    const timeoutId = setTimeout(fetchSuggestions, 300);
+    const timeoutId = setTimeout(fetchSuggestions, 400);
     return () => clearTimeout(timeoutId);
   }, [destination]);
 
-  const handleSelectSuggestion = (placeName) => {
-    const cleanName = placeName.split(',')[0];
+  // YANGILANISH: Matn emas, aniq KOORDINATALAR (lat, lon) yuboriladi
+  const handleSelectSuggestion = (item) => {
+    const cleanName = item.display_name.split(',')[0];
     setDestination(cleanName);
     setSuggestions([]);
-    updateMapRoute(cleanName);
+    
+    // Yandex'ga to'g'ridan-to'g'ri koordinatani beramiz (100% aniq ishlashi uchun)
+    const routeUrl = `https://yandex.uz/map-widget/v1/?rtext=${akademiyaLat},${akademiyaLong}~${item.lat},${item.lon}&rtt=mt&z=13`;
+    setMapSrc(routeUrl);
+  };
+
+  // Tezkor tugmalar va enter bosilganda matn orqali izlash
+  const updateMapRoute = (placeQuery) => {
+    const routeUrl = `https://yandex.uz/map-widget/v1/?rtext=${akademiyaLat},${akademiyaLong}~${encodeURIComponent(placeQuery)}&rtt=mt&z=12`;
+    setMapSrc(routeUrl);
   };
 
   const handleSearch = (e) => {
@@ -69,11 +80,6 @@ const Transport = () => {
       updateMapRoute(destination);
       setSuggestions([]);
     }
-  };
-
-  const updateMapRoute = (placeQuery) => {
-    const routeUrl = `https://yandex.uz/map-widget/v1/?rtext=${akademiyaLat},${akademiyaLong}~${encodeURIComponent(placeQuery)}&rtt=mt&z=12`;
-    setMapSrc(routeUrl);
   };
 
   const clearSearch = () => {
@@ -85,102 +91,98 @@ const Transport = () => {
   return (
     <div className="h-screen flex flex-col bg-slate-900 relative overflow-hidden select-none text-white">
       
-      {/* Orqa fon */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 z-0 pointer-events-none"></div>
-
-      {/* HEADER */}
-      <div className="relative z-50 flex flex-col md:flex-row items-center justify-between p-4 md:p-6 bg-slate-800/80 backdrop-blur-md border-b border-white/10 shadow-lg gap-4 shrink-0">
+      {/* 1. HEADER (Tepa qism) */}
+      <div className="relative z-50 flex items-center justify-between p-4 md:p-6 bg-slate-900/90 backdrop-blur-md border-b border-white/10 shadow-lg shrink-0">
         <button 
-          onClick={() => navigate('/')} // TO'G'RIDAN-TO'G'RI BOSH SAHIFAGA!
-          className="flex items-center gap-2 bg-white/10 border border-white/20 text-white px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl hover:bg-white/20 active:scale-95 transition-all text-sm md:text-xl font-bold uppercase w-fit self-start md:self-auto cursor-pointer"
+          onClick={() => navigate('/')} 
+          className="flex items-center gap-2 bg-white/10 border border-white/20 text-white px-5 py-3 rounded-2xl hover:bg-white/20 active:scale-95 transition-all text-base md:text-xl font-bold uppercase cursor-pointer"
         >
           <FaArrowLeft /> {t('back_btn') || "ASOSIY MENYU"}
         </button>
-        <h1 className="text-xl md:text-4xl font-black text-white uppercase tracking-wider drop-shadow-lg flex items-center gap-3">
-          <FaBus className="text-blue-400 text-2xl md:text-4xl" /> YO'NALISHNI IZLASH
+        <h1 className="text-xl md:text-3xl font-black text-white uppercase tracking-wider flex items-center gap-3">
+          <FaBus className="text-blue-400" /> YO'NALISHNI IZLASH
         </h1>
       </div>
 
-      {/* ASOSIY QISM */}
-      <div className="relative z-10 flex-1 flex flex-col md:flex-row overflow-hidden">
+      {/* 2. XARITA QISMI (O'rta va orqa fon) */}
+      <div className="flex-1 relative bg-gray-200 w-full z-0">
+         <iframe 
+           src={mapSrc || defaultMapUrl} 
+           frameBorder="0" 
+           title="Yandex Maps" 
+           allowFullScreen 
+           className="absolute inset-0 w-full h-full border-0 grayscale-[20%] contrast-125"
+         ></iframe>
+         
+         {!mapSrc && (
+           <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-6 py-3 rounded-2xl shadow-2xl text-base md:text-lg font-bold z-10 pointer-events-none border border-white/20 animate-pulse">
+             📍 Akademiya joylashuvi
+           </div>
+         )}
+      </div>
+
+      {/* 3. BOSHQARUV PANELI (Pastki qism - Qo'l yetadigan joyda) */}
+      <div className="relative z-20 w-full h-[45%] bg-slate-900 border-t border-white/10 rounded-t-[2.5rem] md:rounded-t-[3rem] shadow-[0_-20px_50px_rgba(0,0,0,0.5)] flex flex-col p-6 md:p-8">
         
-        {/* 1. CHAP TOMON - SIDEBAR */}
-        <div className="w-full md:w-[400px] lg:w-[450px] bg-slate-900/50 backdrop-blur-md border-r border-white/10 flex flex-col gap-4 p-4 md:p-6 z-20 shrink-0 overflow-y-auto custom-scrollbar h-[40vh] md:h-full">
-          
-          {/* Qidiruv Paneli */}
-          <div className="bg-white/10 border border-white/20 p-4 rounded-2xl shadow-xl relative shrink-0">
-            <label className="text-white text-sm md:text-lg font-bold mb-2 block">Qayerga borasiz?</label>
-            <form onSubmit={handleSearch} className="relative">
-              <input 
-                type="text" 
-                placeholder="Joy nomini yozing..." 
-                value={destination} 
-                onChange={(e) => setDestination(e.target.value)}
-                className="w-full bg-slate-900/90 text-white border-2 border-blue-500/50 rounded-xl py-3 pl-10 pr-10 text-base md:text-lg focus:outline-none focus:border-blue-400 transition-all"
+        {/* Qidiruv Paneli */}
+        <div className="relative w-full max-w-4xl mx-auto mb-6">
+          <form onSubmit={handleSearch} className="relative shadow-2xl">
+            <input 
+              type="text" 
+              placeholder="Qayerga borasiz? Joy nomini yozing..." 
+              value={destination} 
+              onChange={(e) => setDestination(e.target.value)}
+              className="w-full bg-slate-800 text-white border-2 border-white/10 rounded-2xl py-4 pl-14 pr-12 text-lg md:text-xl focus:outline-none focus:border-blue-500 transition-all placeholder-gray-400"
+            />
+            <FaSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
+            {destination && (
+              <FaTimes 
+                className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer hover:text-white transition-colors text-xl"
+                onClick={clearSearch}
               />
-              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              {destination && (
-                <FaTimes 
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer hover:text-white transition-colors"
-                  onClick={clearSearch}
-                />
-              )}
-            </form>
-
-            {/* Suggestions */}
-            {suggestions.length > 0 && (
-              <div className="mt-2 bg-slate-800 border border-white/20 rounded-xl shadow-2xl overflow-hidden absolute left-0 right-0 top-full z-50">
-                {suggestions.map((item, index) => (
-                  <button key={index} onClick={() => handleSelectSuggestion(item.display_name)} 
-                    className="w-full text-left px-4 py-3 text-white hover:bg-blue-600 transition-colors border-b border-white/10 last:border-0 flex items-center gap-3"
-                  >
-                    <FaMapMarkerAlt className="text-blue-400 shrink-0" />
-                    <span className="truncate text-sm font-medium block">{item.display_name.split(',')[0]}</span>
-                  </button>
-                ))}
-              </div>
             )}
-          </div>
+          </form>
 
-          {/* Tezkor tugmalar ro'yxati */}
-          <div className="bg-slate-800/50 border border-white/10 p-4 rounded-2xl flex-1 md:flex-none flex flex-col">
-            <h3 className="text-gray-400 font-bold uppercase tracking-widest mb-4 text-xs md:text-sm">Tezkor yo'nalishlar</h3>
-            
-            <div className="flex flex-col gap-2 overflow-y-auto custom-scrollbar pr-1 pb-4">
-              {quickDestinations.map((dest) => (
+          {/* Suggestions (Natijalar) - Qidiruvning tepasiga chiqadi */}
+          {suggestions.length > 0 && (
+            <div className="absolute bottom-full left-0 right-0 mb-2 bg-slate-800 border border-white/20 rounded-2xl shadow-2xl overflow-hidden z-50">
+              {suggestions.map((item, index) => (
                 <button 
-                  key={dest.id}
-                  onClick={() => updateMapRoute(dest.query)} 
-                  className="flex items-center gap-3 bg-white/5 p-3 rounded-xl hover:bg-white/10 transition-all cursor-pointer group shrink-0"
+                  key={index} 
+                  onClick={() => handleSelectSuggestion(item)} 
+                  className="w-full text-left px-5 py-4 text-white hover:bg-blue-600 transition-colors border-b border-white/10 last:border-0 flex items-center gap-4 cursor-pointer"
                 >
-                  <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full ${dest.bg} flex items-center justify-center ${dest.color} group-hover:scale-110 transition-transform`}>
-                    {dest.icon}
+                  <FaMapMarkerAlt className="text-blue-400 shrink-0 text-xl" />
+                  <div>
+                    <span className="text-base md:text-lg font-bold block">{item.display_name.split(',')[0]}</span>
+                    <span className="text-xs md:text-sm text-gray-400 line-clamp-1">{item.display_name}</span>
                   </div>
-                  <span className="font-bold text-sm md:text-base text-gray-200 group-hover:text-white transition-colors">
-                    {dest.name}
-                  </span>
                 </button>
               ))}
             </div>
-
-          </div>
+          )}
         </div>
 
-        {/* 2. O'NG TOMON - XARITA */}
-        <div className="flex-1 relative bg-gray-100 h-[60vh] md:h-full w-full">
-           <iframe 
-             src={mapSrc || defaultMapUrl} 
-             frameBorder="0" 
-             title="Yandex Maps" 
-             allowFullScreen 
-             className="absolute inset-0 w-full h-full border-0"
-           ></iframe>
-           
-           {!mapSrc && (
-             <div className="absolute top-4 left-4 bg-white/90 text-slate-900 px-4 py-2 rounded-lg shadow-lg text-sm font-bold z-10 pointer-events-none border border-slate-200">
-               📍 Akademiya joylashuvi
-             </div>
-           )}
+        {/* Tezkor tugmalar ro'yxati (Grid usulida) */}
+        <div className="w-full max-w-4xl mx-auto flex-1 overflow-y-auto custom-scrollbar pb-10">
+          <h3 className="text-gray-400 font-bold uppercase tracking-widest mb-4 text-sm px-2">Tezkor yo'nalishlar</h3>
+          
+          <div className="grid grid-cols-2 gap-3 md:gap-4">
+            {quickDestinations.map((dest) => (
+              <button 
+                key={dest.id}
+                onClick={() => updateMapRoute(dest.query)} 
+                className="flex items-center gap-3 bg-white/5 border border-white/5 p-3 md:p-4 rounded-2xl hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer group text-left shadow-md active:scale-95"
+              >
+                <div className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl ${dest.bg} flex items-center justify-center ${dest.color} group-hover:scale-110 transition-transform shrink-0 text-xl md:text-2xl`}>
+                  {dest.icon}
+                </div>
+                <span className="font-bold text-sm md:text-base text-gray-200 group-hover:text-white transition-colors leading-tight">
+                  {dest.name}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
 
       </div>

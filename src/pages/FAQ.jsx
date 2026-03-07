@@ -8,7 +8,7 @@ const FAQ = () => {
   const { t } = useLanguage();
   const [openIndex, setOpenIndex] = useState(null);
 
-  // UMUMIY SAVOL-JAVOBLAR (Hamma uchun)
+  // UMUMIY SAVOL-JAVOBLAR
   const questions = [
     {
       id: 1,
@@ -47,80 +47,99 @@ const FAQ = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-slate-900 relative overflow-hidden select-none">
+    <div className="h-screen flex flex-col bg-slate-950 relative overflow-hidden select-none text-white font-sans">
       
-      {/* Orqa fon */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
-      
-      {/* HEADER */}
-      <div className="relative z-10 flex items-center justify-between p-6 bg-slate-800/80 backdrop-blur-md border-b border-white/10">
+      {/* ORQA FON */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-cyan-950/20 to-slate-900 z-0 pointer-events-none"></div>
+
+      {/* 1. HEADER (Tepa qism) */}
+      <div className="relative z-50 flex items-center justify-between p-6 bg-slate-900/80 backdrop-blur-xl border-b border-white/10 shadow-lg shrink-0">
         <button 
-          onClick={() => navigate('/')}
-          className="flex items-center gap-3 bg-white/10 border border-white/20 text-white px-6 py-3 rounded-2xl hover:bg-white/20 active:scale-95 transition-all text-xl font-bold uppercase"
+          onClick={() => navigate('/')} 
+          className="flex items-center gap-3 bg-white/10 border border-white/20 text-white px-6 py-3 rounded-2xl hover:bg-white/20 active:scale-95 transition-all text-lg font-bold uppercase cursor-pointer"
         >
-          <FaArrowLeft /> {t('back_btn') || "ORQAGA"}
+          <FaArrowLeft /> {t('back_btn') || "ASOSIY MENYU"}
         </button>
-        
-        <h1 className="text-3xl md:text-4xl font-black text-white uppercase tracking-wider flex items-center gap-4">
-          <FaQuestionCircle className="text-cyan-400" /> 
-          MA'LUMOTNOOMA (SAVOL-JAVOB)
+        <h1 className="text-2xl md:text-3xl font-black text-white uppercase tracking-wider drop-shadow-lg flex items-center gap-4">
+          <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center border border-cyan-500/50">
+            <FaQuestionCircle className="text-cyan-400 text-2xl" />
+          </div>
+          MA'LUMOTNOMA
         </h1>
       </div>
 
-      {/* ASOSIY QISM */}
-      <div className="relative z-10 flex-1 p-6 md:p-10 overflow-y-auto custom-scrollbar">
-        <div className="max-w-5xl mx-auto space-y-4">
+      {/* 2. SAVOL-JAVOBLAR RO'YXATI (Skrol bo'ladigan qism) */}
+      <div className="relative z-10 flex-1 p-6 md:p-8 overflow-y-auto custom-scrollbar">
+        <div className="max-w-4xl mx-auto space-y-4 md:space-y-6 pb-6">
           
-          {questions.map((item, index) => (
-            <div 
-              key={item.id}
-              className={`bg-slate-800/50 border border-white/10 rounded-3xl overflow-hidden transition-all duration-300 ${openIndex === index ? 'bg-cyan-900/20 border-cyan-500/50 shadow-lg' : 'hover:bg-white/5'}`}
-            >
-              <button
-                onClick={() => toggleQuestion(index)}
-                className="w-full flex items-center justify-between p-6 text-left group"
-              >
-                <div className="flex items-center gap-5">
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl font-bold transition-colors ${openIndex === index ? 'bg-cyan-500 text-white' : 'bg-white/5 text-gray-500 group-hover:bg-white/10'}`}>
-                    ?
-                  </div>
-                  <h3 className={`text-xl font-bold ${openIndex === index ? 'text-white' : 'text-gray-300 group-hover:text-white'}`}>
-                    {item.question}
-                  </h3>
-                </div>
-                {openIndex === index ? <FaChevronUp className="text-cyan-400" /> : <FaChevronDown className="text-gray-500" />}
-              </button>
-
+          {questions.map((item, index) => {
+            const isOpen = openIndex === index;
+            return (
               <div 
-                className={`transition-all duration-300 overflow-hidden ${openIndex === index ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'}`}
+                key={item.id}
+                className={`bg-slate-800/60 backdrop-blur-sm border rounded-[2rem] overflow-hidden transition-all duration-300 ${isOpen ? 'border-cyan-500 shadow-[0_10px_30px_rgba(6,182,212,0.15)] bg-slate-800/90' : 'border-white/10 hover:border-white/30'}`}
               >
-                <div className="p-6 pt-0 pl-[4.5rem] text-lg text-gray-300 leading-relaxed border-t border-white/5 mt-2">
-                  {item.answer}
+                {/* Savol qutisi (Bosishga qulay qilib kattalashtirildi) */}
+                <button
+                  onClick={() => toggleQuestion(index)}
+                  className="w-full flex items-center justify-between p-6 md:p-8 text-left group cursor-pointer active:scale-[0.99] transition-transform"
+                >
+                  <div className="flex items-center gap-6">
+                    <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center text-2xl font-black transition-colors shadow-inner ${isOpen ? 'bg-cyan-500 text-white' : 'bg-slate-700 text-cyan-400 group-hover:bg-cyan-500/20'}`}>
+                      ?
+                    </div>
+                    <h3 className={`text-xl md:text-2xl font-bold pr-4 ${isOpen ? 'text-white' : 'text-gray-300 group-hover:text-white transition-colors'}`}>
+                      {item.question}
+                    </h3>
+                  </div>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${isOpen ? 'bg-cyan-500/20 text-cyan-400' : 'bg-slate-700 text-gray-400 group-hover:bg-slate-600'}`}>
+                    {isOpen ? <FaChevronUp className="text-xl" /> : <FaChevronDown className="text-xl" />}
+                  </div>
+                </button>
+
+                {/* Javob ochiladigan qism (Silliq animatsiya bilan) */}
+                <div 
+                  className={`transition-all duration-300 ease-in-out ${isOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'}`}
+                >
+                  <div className="p-6 md:p-8 pt-0 pl-[6.5rem] md:pl-[7.5rem] text-lg md:text-xl text-cyan-100/80 leading-relaxed border-t border-white/5 mx-6">
+                    {item.answer}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
+        </div>
+      </div>
 
-          {/* Qo'shimcha ma'lumot bloki */}
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-             <div className="bg-blue-600/20 border border-blue-500/30 p-6 rounded-3xl flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white text-xl"><FaPhoneAlt /></div>
-                <div>
-                  <h4 className="text-white font-bold uppercase text-sm">Ishonch telefoni</h4>
-                  <p className="text-2xl font-mono text-blue-300 font-bold">10-02</p>
-                </div>
+      {/* 3. PASTKI QISM (Footer) - Huvillab yotgan joyni to'ldiradi */}
+      <div className="relative z-20 w-full bg-slate-900 border-t border-white/10 shadow-[0_-20px_50px_rgba(0,0,0,0.5)] p-6 md:p-8 shrink-0">
+        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          {/* Telefon bloki */}
+          <div className="bg-gradient-to-r from-blue-600/20 to-blue-900/20 border border-blue-500/30 p-6 md:p-8 rounded-[2rem] flex items-center gap-6 group hover:border-blue-500/50 transition-colors">
+             <div className="w-16 h-16 rounded-[1.5rem] bg-blue-500 flex items-center justify-center text-white text-3xl shadow-[0_0_20px_rgba(59,130,246,0.5)] group-hover:scale-110 transition-transform">
+               <FaPhoneAlt />
              </div>
-             <div className="bg-green-600/20 border border-green-500/30 p-6 rounded-3xl flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center text-white text-xl"><FaClock /></div>
-                <div>
-                  <h4 className="text-white font-bold uppercase text-sm">Ish tartibi</h4>
-                  <p className="text-xl font-mono text-green-300 font-bold">08:00 — 18:00</p>
-                </div>
+             <div>
+               <h4 className="text-blue-200 font-bold uppercase tracking-widest text-sm mb-1">Ishonch telefoni</h4>
+               <p className="text-3xl md:text-4xl font-black text-white font-mono tracking-wider">10-02</p>
+             </div>
+          </div>
+
+          {/* Vaqt bloki */}
+          <div className="bg-gradient-to-r from-emerald-600/20 to-emerald-900/20 border border-emerald-500/30 p-6 md:p-8 rounded-[2rem] flex items-center gap-6 group hover:border-emerald-500/50 transition-colors">
+             <div className="w-16 h-16 rounded-[1.5rem] bg-emerald-500 flex items-center justify-center text-white text-3xl shadow-[0_0_20px_rgba(16,185,129,0.5)] group-hover:scale-110 transition-transform">
+               <FaClock />
+             </div>
+             <div>
+               <h4 className="text-emerald-200 font-bold uppercase tracking-widest text-sm mb-1">Ish tartibi</h4>
+               <p className="text-3xl md:text-4xl font-black text-white font-mono tracking-wider">08:00 - 18:00</p>
              </div>
           </div>
 
         </div>
       </div>
+
     </div>
   );
 };

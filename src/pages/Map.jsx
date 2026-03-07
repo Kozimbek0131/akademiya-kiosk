@@ -53,7 +53,7 @@ const Map = () => {
         </h2>
         
         <p className="text-xl md:text-2xl text-gray-400 max-w-3xl leading-relaxed font-medium mb-12">
-          Akademiya binosining interaktiv <span className="text-cyan-400 font-bold">3D xaritasi</span> va xonalar joylashuvi hozirda ishlab chiqilmoqda. Tez orada ushbu bo'lim orqali kerakli xonani oson topishingiz mumkin bo'ladi!
+          Akademiya binosining interaktiv <span className="text-cyan-400 font-bold"> xaritasi</span> va xonalar joylashuvi hozirda ishlab chiqilmoqda. Tez orada ushbu bo'lim orqali kerakli xonani oson topishingiz mumkin bo'ladi!
         </p>
 
         {/* Soxta yuklanish (Progress bar) */}

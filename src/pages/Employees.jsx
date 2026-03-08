@@ -8,41 +8,40 @@ import {
 
 const Employees = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage(); 
   
-  // API dan keladigan ma'lumotlar uchun statelar
+  // Ma'lumotlar uchun statelar
   const [employees, setEmployees] = useState([]);
+  const [departments, setDepartments] = useState([]); 
   const [isLoading, setIsLoading] = useState(true);
   
   // Filtrlash uchun statelar
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState('floor'); 
+  const [filterType, setFilterType] = useState('floor'); // 'floor' yoki 'dept'
   const [activeFilter, setActiveFilter] = useState('all');
 
-  // --- 1. BACKENDDAN MA'LUMOTLARNI YUKLASH ---
+  // -------------------------------------------------------------
+  // TOPSHIRIQ 2: Til o'zgarganda API ga ?lang= qo'shish
+  // -------------------------------------------------------------
   useEffect(() => {
-    const fetchEmployees = async () => {
+    const fetchData = async () => {
+      setIsLoading(true);
       try {
-        // DIQQAT: Shu yerdagi ssilkani o'zingizning aniq API manzilingizga almashtiring!
-        // Masalan: const baseUrl = "https://backend-api.uz";
         const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8000"; 
         
-        const response = await fetch(`${baseUrl}/api/employees/`);
+        const [empRes, deptRes] = await Promise.all([
+          fetch(`${baseUrl}/api/employees/?lang=${language}`),
+          fetch(`${baseUrl}/api/departments/?lang=${language}`)
+        ]);
         
-        if (!response.ok) {
-          throw new Error(`Server xatosi: ${response.status}`);
-        }
+        if (!empRes.ok || !deptRes.ok) throw new Error("Server xatosi");
         
-        const data = await response.json();
+        const empData = await empRes.json();
+        const deptData = await deptRes.json();
 
-        // MUHIM O'ZGARISH: Agar Backend "Pagination" qo'shgan bo'lsa, data.results ishlatiladi
-        if (data && data.results) {
-          setEmployees(data.results);
-        } else if (Array.isArray(data)) {
-          setEmployees(data);
-        } else {
-          setEmployees([]);
-        }
+        // Xodimlar va Bo'limlar (Pagination bo'lsa .results ichidan olamiz)
+        setEmployees(empData.results ? empData.results : (Array.isArray(empData) ? empData : []));
+        setDepartments(deptData.results ? deptData.results : (Array.isArray(deptData) ? deptData : []));
 
       } catch (error) {
         console.error("API xatoligi:", error);
@@ -51,39 +50,34 @@ const Employees = () => {
       }
     };
 
-    fetchEmployees();
-  }, []);
+    fetchData();
+  }, [language]); 
 
-  // --- 2. BO'LIMLARNI DINAMIK AJRATIB OLISH ---
-  const uniqueDepartments = [];
-  const deptSet = new Set();
-  
-  employees.forEach(emp => {
-    const deptName = emp.department;
-    if (deptName && !deptSet.has(deptName)) {
-      deptSet.add(deptName);
-      uniqueDepartments.push(deptName);
-    }
-  });
-
-  // --- 3. FILTRLASH MANTIQI ---
+  // -------------------------------------------------------------
+  // FILTRLASH MANTIQI
+  // -------------------------------------------------------------
   const filteredEmployees = employees.filter(emp => {
-    const empName = emp.full_name_uz || '';
-    const empPos = emp.position_uz || '';
-    const empDept = emp.department || '';
+    // TOPSHIRIQ 3: To'g'ri maydon nomlarini ishlatish
+    const empName = emp.full_name || '';
+    const empPos = emp.position || '';
+    const empDeptName = emp.department_name || '';
     
+    // Matn bo'yicha qidiruv
     if (searchTerm) {
+      const term = searchTerm.toLowerCase();
       return (
-        empName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        empPos.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        empDept.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (emp.room && String(emp.room).includes(searchTerm))
+        empName.toLowerCase().includes(term) ||
+        empPos.toLowerCase().includes(term) ||
+        empDeptName.toLowerCase().includes(term) ||
+        (emp.room && String(emp.room).includes(term))
       );
     }
     
+    // Yon panel bo'yicha filtr
     if (activeFilter === 'all') return true;
     if (filterType === 'floor') return String(emp.floor) === String(activeFilter);
-    if (filterType === 'dept') return empDept === activeFilter;
+    // TOPSHIRIQ 1: id bo'yicha filtrlash
+    if (filterType === 'dept') return String(emp.department) === String(activeFilter); 
     
     return true;
   });
@@ -92,6 +86,10 @@ const Employees = () => {
     if (searchTerm) return `🔍 ${t('results')}`;
     if (activeFilter === 'all') return t('all_employees');
     if (filterType === 'floor') return `${activeFilter}${t('floor')}`;
+    if (filterType === 'dept') {
+      const foundDept = departments.find(d => String(d.id) === String(activeFilter));
+      return foundDept ? foundDept.name : activeFilter;
+    }
     return activeFilter;
   };
 
@@ -124,7 +122,7 @@ const Employees = () => {
       {/* ASOSIY QISM */}
       <div className="relative z-10 flex-1 flex gap-6 p-6 overflow-hidden">
         
-        {/* YON PANEL */}
+        {/* YON PANEL (BO'LIMLAR VA QAVATLAR) */}
         <div className="w-[350px] flex flex-col bg-slate-800/50 backdrop-blur-md border border-white/10 rounded-3xl shadow-2xl shrink-0 overflow-hidden h-full">
           <div className="flex p-2 bg-black/20 m-3 rounded-2xl shrink-0">
             <button onClick={() => { setFilterType('floor'); setActiveFilter('all'); }} className={`flex-1 py-3 rounded-xl font-bold text-sm uppercase transition-all flex items-center justify-center gap-2 cursor-pointer ${filterType === 'floor' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:bg-white/5'}`}>
@@ -147,16 +145,17 @@ const Employees = () => {
                 </button>
               ))
             ) : (
-              uniqueDepartments.map(deptName => (
-                <button key={deptName} onClick={() => setActiveFilter(deptName)} className={`w-full p-4 rounded-2xl flex items-center gap-3 transition-all border border-transparent text-sm leading-tight cursor-pointer ${activeFilter === deptName ? 'bg-amber-500 text-black shadow-lg' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}>
-                  <span className="font-bold text-left break-words">{deptName}</span>
+              // TOPSHIRIQ 1: Bo'limlarni API dan ko'rsatish
+              departments.map(dept => (
+                <button key={dept.id} onClick={() => setActiveFilter(dept.id)} className={`w-full p-4 rounded-2xl flex items-center gap-3 transition-all border border-transparent text-sm leading-tight cursor-pointer ${String(activeFilter) === String(dept.id) ? 'bg-amber-500 text-black shadow-lg' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}>
+                  <span className="font-bold text-left break-words">{dept.name}</span>
                 </button>
               ))
             )}
           </div>
         </div>
 
-        {/* NATIJALAR */}
+        {/* XODIMLAR KARTACHKALARI */}
         <div className="flex-1 bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl overflow-hidden flex flex-col h-full shadow-inner">
           <div className="p-6 border-b border-white/10 bg-slate-800/80 shrink-0 z-20 flex items-center justify-between">
              <h2 className="text-xl text-white font-bold flex items-center gap-3">
@@ -178,9 +177,10 @@ const Employees = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 pb-20">
                 {filteredEmployees.length > 0 ? (
                   filteredEmployees.map((e, index) => {
-                    const name = e.full_name_uz || 'Noma\'lum xodim';
-                    const pos = e.position_uz || 'Lavozim kiritilmagan';
-                    const dept = e.department || 'Bo\'lim kiritilmagan';
+                    // TOPSHIRIQ 3: Kartochkada to'g'ri nomlarni ishlatish
+                    const name = e.full_name || 'Noma\'lum xodim';
+                    const pos = e.position || 'Lavozim kiritilmagan';
+                    const deptName = e.department_name || 'Bo\'lim kiritilmagan';
                     
                     return (
                     <div key={e.id || index} className="bg-slate-800/90 p-5 md:p-6 rounded-[2rem] border border-white/10 hover:border-blue-500/50 transition-all hover:bg-slate-700/80 shadow-xl flex flex-col justify-between">
@@ -203,7 +203,7 @@ const Employees = () => {
                           </p>
                           <div className="flex flex-wrap gap-2">
                             <span className="bg-white/10 border border-white/5 px-2 py-1 rounded-lg text-[10px] md:text-xs text-gray-300 break-words line-clamp-2">
-                              {dept}
+                              {deptName}
                             </span>
                             {e.room && (
                               <span className="bg-amber-500/20 border border-amber-500/30 text-amber-400 px-3 py-1 rounded-lg text-xs font-black shrink-0">

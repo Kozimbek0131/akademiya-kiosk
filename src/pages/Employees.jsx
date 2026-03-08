@@ -8,7 +8,7 @@ import {
 
 const Employees = () => {
   const navigate = useNavigate();
-  const { language, t } = useLanguage();
+  const { t } = useLanguage();
   
   // API dan keladigan ma'lumotlar uchun statelar
   const [employees, setEmployees] = useState([]);
@@ -23,14 +23,12 @@ const Employees = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        // MANZIL ENDI VITE UCHUN TO'G'RILANDI:
         const baseUrl = import.meta.env.VITE_API_URL; 
         const response = await fetch(`${baseUrl}/api/employees/`);
-        
         const data = await response.json();
         setEmployees(data);
       } catch (error) {
-        console.error("API xatoligi (Backend ishlayaptimi?):", error);
+        console.error("API xatoligi:", error);
       } finally {
         setIsLoading(false);
       }
@@ -39,29 +37,24 @@ const Employees = () => {
     fetchEmployees();
   }, []);
 
-  // --- 2. BO'LIMLARNI DINAMIK AJRATIB OLISH ---
-  // API dan kelgan xodimlar ro'yxatidan faqat takrorlanmas bo'limlarni yig'ib olamiz
+  // --- 2. BO'LIMLARNI DINAMIK AJRATIB OLISH (Yangi JSON'ga moslandi) ---
   const uniqueDepartments = [];
   const deptSet = new Set();
   
   employees.forEach(emp => {
-    // Backend qanday qaytarganiga qarab ID olamiz
-    const deptId = emp.department_id || (emp.department_name && emp.department_name.uz);
-    if (deptId && !deptSet.has(deptId)) {
-      deptSet.add(deptId);
-      uniqueDepartments.push({
-        id: deptId,
-        nameObj: emp.department_name
-      });
+    const deptName = emp.department;
+    if (deptName && !deptSet.has(deptName)) {
+      deptSet.add(deptName);
+      uniqueDepartments.push(deptName);
     }
   });
 
   // --- 3. FILTRLASH MANTIQI ---
   const filteredEmployees = employees.filter(emp => {
-    // Null bo'lib qolmasligi uchun xavfsizlik tekshiruvi
-    const empName = emp.name?.[language] || emp.name?.['uz'] || '';
-    const empPos = emp.position?.[language] || emp.position?.['uz'] || '';
-    const empDept = emp.department_name?.[language] || emp.department_name?.['uz'] || '';
+    // Backendning yangi maydonlari:
+    const empName = emp.full_name_uz || '';
+    const empPos = emp.position_uz || '';
+    const empDept = emp.department || '';
     
     if (searchTerm) {
       return (
@@ -74,11 +67,7 @@ const Employees = () => {
     
     if (activeFilter === 'all') return true;
     if (filterType === 'floor') return String(emp.floor) === String(activeFilter);
-    
-    if (filterType === 'dept') {
-      const currentDeptId = emp.department_id || (emp.department_name && emp.department_name.uz);
-      return currentDeptId === activeFilter;
-    }
+    if (filterType === 'dept') return empDept === activeFilter;
     
     return true;
   });
@@ -87,135 +76,144 @@ const Employees = () => {
     if (searchTerm) return `🔍 ${t('results')}`;
     if (activeFilter === 'all') return t('all_employees');
     if (filterType === 'floor') return `${activeFilter}${t('floor')}`;
-    const dept = uniqueDepartments.find(d => d.id === activeFilter);
-    return dept ? (dept.nameObj[language] || dept.nameObj['uz']) : activeFilter;
+    return activeFilter; // Bo'lim nomi
   };
 
   return (
-    <div className="h-screen flex flex-col bg-slate-900 relative overflow-hidden select-none text-white">
+    <div className="h-screen flex flex-col bg-slate-900 relative overflow-hidden select-none text-white font-sans">
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 z-0 pointer-events-none"></div>
 
       {/* HEADER */}
-      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between p-4 md:p-6 bg-slate-800/80 backdrop-blur-md border-b border-white/10 shadow-lg gap-4 shrink-0">
-        <button onClick={() => navigate('/')} className="flex items-center gap-2 bg-white/10 border border-white/20 text-white px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl hover:bg-white/20 active:scale-95 transition-all text-sm md:text-xl font-bold uppercase w-fit self-start md:self-auto cursor-pointer">
+      <div className="relative z-10 flex items-center justify-between p-4 md:p-6 bg-slate-800/80 backdrop-blur-md border-b border-white/10 shadow-lg shrink-0">
+        <button onClick={() => navigate('/')} className="flex items-center gap-3 bg-white/10 border border-white/20 text-white px-5 py-3 rounded-2xl hover:bg-white/20 active:scale-95 transition-all text-base md:text-xl font-bold uppercase cursor-pointer">
           <FaArrowLeft /> {t('back_btn')}
         </button>
-        <div className="w-full md:flex-1 md:mx-8 relative max-w-2xl">
-          <FaSearch className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 text-gray-400 text-lg md:text-2xl" />
+        
+        <div className="flex-1 mx-8 relative max-w-3xl">
+          <FaSearch className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
           <input 
             type="text" 
             placeholder={t('search_placeholder')} 
             value={searchTerm} 
             onChange={(e) => setSearchTerm(e.target.value)} 
-            className="w-full bg-slate-700/50 text-white border-2 border-white/10 rounded-xl md:rounded-2xl py-3 md:py-4 pl-12 md:pl-16 pr-4 text-base md:text-2xl focus:outline-none focus:border-blue-400 transition-all placeholder-gray-500 shadow-inner" 
+            className="w-full bg-slate-700/50 text-white border-2 border-white/10 rounded-2xl py-4 pl-16 pr-6 text-lg md:text-xl focus:outline-none focus:border-blue-500 transition-all placeholder-gray-400 shadow-inner" 
           />
         </div>
-        <h1 className="text-xl md:text-3xl font-black text-white uppercase tracking-wider hidden md:block">
-          {t('menu_employees')}
+        
+        <h1 className="text-xl md:text-3xl font-black text-white uppercase tracking-wider flex items-center gap-3">
+           <FaUserTie className="text-blue-400" /> {t('menu_employees')}
         </h1>
       </div>
 
       {/* ASOSIY QISM */}
-      <div className="relative z-10 flex-1 flex flex-col md:flex-row gap-6 p-4 md:p-6 overflow-hidden">
+      <div className="relative z-10 flex-1 flex gap-6 p-6 overflow-hidden">
         
         {/* 1. YON PANEL (FILTRLAR) */}
-        <div className="w-full md:w-80 flex flex-col bg-slate-800/50 backdrop-blur-md border border-white/10 rounded-2xl md:rounded-3xl shadow-2xl shrink-0 overflow-hidden h-fit md:h-full">
-          <div className="flex p-1.5 bg-black/20 m-2 rounded-xl shrink-0">
-            <button onClick={() => { setFilterType('floor'); setActiveFilter('all'); }} className={`flex-1 py-2 md:py-3 rounded-lg md:rounded-xl font-bold text-xs md:text-sm uppercase transition-all flex items-center justify-center gap-2 cursor-pointer ${filterType === 'floor' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:bg-white/5'}`}>
+        <div className="w-[350px] flex flex-col bg-slate-800/50 backdrop-blur-md border border-white/10 rounded-3xl shadow-2xl shrink-0 overflow-hidden h-full">
+          <div className="flex p-2 bg-black/20 m-3 rounded-2xl shrink-0">
+            <button onClick={() => { setFilterType('floor'); setActiveFilter('all'); }} className={`flex-1 py-3 rounded-xl font-bold text-sm uppercase transition-all flex items-center justify-center gap-2 cursor-pointer ${filterType === 'floor' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:bg-white/5'}`}>
               <FaBuilding /> {t('filter_floors')}
             </button>
-            <button onClick={() => { setFilterType('dept'); setActiveFilter('all'); }} className={`flex-1 py-2 md:py-3 rounded-lg md:rounded-xl font-bold text-xs md:text-sm uppercase transition-all flex items-center justify-center gap-2 cursor-pointer ${filterType === 'dept' ? 'bg-amber-500 text-black shadow-lg' : 'text-gray-400 hover:bg-white/5'}`}>
+            <button onClick={() => { setFilterType('dept'); setActiveFilter('all'); }} className={`flex-1 py-3 rounded-xl font-bold text-sm uppercase transition-all flex items-center justify-center gap-2 cursor-pointer ${filterType === 'dept' ? 'bg-amber-500 text-black shadow-lg' : 'text-gray-400 hover:bg-white/5'}`}>
               <FaLayerGroup /> {t('filter_depts')}
             </button>
           </div>
           
-          <div className="flex-1 overflow-y-auto custom-scrollbar p-2 md:p-3 space-y-1.5 md:space-y-2 max-h-[150px] md:max-h-full">
-            <button onClick={() => setActiveFilter('all')} className={`w-full p-3 md:p-4 rounded-xl text-left font-bold transition-all border border-transparent flex items-center gap-3 text-sm md:text-base cursor-pointer ${activeFilter === 'all' ? 'bg-white/10 border-white/20 text-white' : 'text-gray-400 hover:bg-white/5'}`}>
-              <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-white/10 flex items-center justify-center text-xs">A</div>{t('all_employees')}
+          <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-2">
+            <button onClick={() => setActiveFilter('all')} className={`w-full p-4 rounded-2xl text-left font-bold transition-all border border-transparent flex items-center gap-4 text-base cursor-pointer ${activeFilter === 'all' ? 'bg-white/10 border-white/20 text-white' : 'text-gray-400 hover:bg-white/5'}`}>
+              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-sm">A</div>{t('all_employees')}
             </button>
             
             {filterType === 'floor' ? (
-              // Qavatlar filtri (5 dan 1 gacha)
               ['5', '4', '3', '2', '1'].map(floor => (
-                <button key={floor} onClick={() => setActiveFilter(floor)} className={`w-full p-3 md:p-4 rounded-xl flex items-center justify-between transition-all border border-transparent text-sm md:text-base cursor-pointer ${activeFilter === floor ? 'bg-blue-600 text-white shadow-lg' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}>
+                <button key={floor} onClick={() => setActiveFilter(floor)} className={`w-full p-4 rounded-2xl flex items-center justify-between transition-all border border-transparent text-base cursor-pointer ${activeFilter === floor ? 'bg-blue-600 text-white shadow-lg' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}>
                   <div className="flex items-center gap-4"><span className="font-bold">{floor}{t('floor')}</span></div><FaBuilding className="opacity-50" />
                 </button>
               ))
             ) : (
-              // API dan kelgan dinamik bo'limlar filtri
-              uniqueDepartments.map(dept => {
-                const deptName = dept.nameObj[language] || dept.nameObj['uz'];
-                return (
-                  <button key={dept.id} onClick={() => setActiveFilter(dept.id)} className={`w-full p-3 md:p-4 rounded-xl flex items-center gap-3 transition-all border border-transparent text-xs md:text-sm leading-tight cursor-pointer ${activeFilter === dept.id ? 'bg-amber-500 text-black shadow-lg' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}>
-                    <span className="font-bold text-left">{deptName}</span>
-                  </button>
-                )
-              })
+              uniqueDepartments.map(deptName => (
+                <button key={deptName} onClick={() => setActiveFilter(deptName)} className={`w-full p-4 rounded-2xl flex items-center gap-3 transition-all border border-transparent text-sm leading-tight cursor-pointer ${activeFilter === deptName ? 'bg-amber-500 text-black shadow-lg' : 'bg-white/5 text-gray-300 hover:bg-white/10'}`}>
+                  <span className="font-bold text-left break-words">{deptName}</span>
+                </button>
+              ))
             )}
           </div>
         </div>
 
         {/* 2. NATIJALAR (XODIMLAR RO'YXATI) */}
-        <div className="flex-1 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl md:rounded-3xl overflow-hidden flex flex-col h-full shadow-inner">
-          <div className="p-4 md:p-6 border-b border-white/10 bg-white/5 shrink-0 z-20">
-             <h2 className="text-lg md:text-xl text-white font-bold flex items-center gap-2">
-                {getFilterTitle()} <span className="ml-auto text-xs md:text-sm font-normal text-gray-400 bg-black/20 px-3 py-1 rounded-full">{filteredEmployees.length}</span>
+        <div className="flex-1 bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl overflow-hidden flex flex-col h-full shadow-inner">
+          <div className="p-6 border-b border-white/10 bg-slate-800/80 shrink-0 z-20 flex items-center justify-between">
+             <h2 className="text-xl text-white font-bold flex items-center gap-3">
+                {getFilterTitle()} 
              </h2>
+             <span className="text-sm font-black text-blue-300 bg-blue-900/50 border border-blue-500/30 px-4 py-1.5 rounded-full">
+                {filteredEmployees.length} ta xodim
+             </span>
           </div>
           
-          <div className="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-6 pb-24 md:pb-6 relative">
+          <div className="flex-1 overflow-y-auto custom-scrollbar p-6 relative">
             
-            {/* YUKLANMOQDA (Loading Spinner) */}
             {isLoading ? (
               <div className="absolute inset-0 flex flex-col items-center justify-center text-blue-400">
                  <FaSpinner className="animate-spin text-5xl mb-4" />
                  <p className="font-bold tracking-widest uppercase">{t('loading')}</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 pb-20">
                 {filteredEmployees.length > 0 ? (
-                  filteredEmployees.map((e) => {
-                    const name = e.name?.[language] || e.name?.['uz'] || '';
-                    const pos = e.position?.[language] || e.position?.['uz'] || '';
-                    const dept = e.department_name?.[language] || e.department_name?.['uz'] || '';
+                  filteredEmployees.map((e, index) => {
+                    const name = e.full_name_uz || 'Noma\'lum xodim';
+                    const pos = e.position_uz || 'Lavozim kiritilmagan';
+                    const dept = e.department || 'Bo\'lim kiritilmagan';
                     
                     return (
-                    <div key={e.id} className="bg-slate-800/80 p-4 md:p-5 rounded-2xl border border-white/5 hover:border-blue-500/50 transition-all hover:bg-slate-800 group">
-                      <div className="flex items-start gap-4">
+                    <div key={e.id || index} className="bg-slate-800/90 p-5 md:p-6 rounded-[2rem] border border-white/10 hover:border-blue-500/50 transition-all hover:bg-slate-700/80 shadow-xl flex flex-col justify-between">
+                      <div className="flex items-start gap-5 mb-4">
                         
-                        {/* RASM YAKI IKONKA */}
-                        <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xl md:text-2xl shadow-lg shrink-0 group-hover:scale-105 transition-transform overflow-hidden">
+                        {/* RASM YO'Q BO'LSA DEFAULT IKONKA */}
+                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-800 border-2 border-white/10 flex items-center justify-center text-white text-3xl shadow-inner shrink-0 overflow-hidden">
                           {e.image ? (
                              <img src={e.image} alt={name} className="w-full h-full object-cover" />
                           ) : (
-                             <FaUserTie />
+                             <FaUserTie className="text-gray-400 opacity-50" />
                           )}
                         </div>
 
+                        {/* MUHIM: Uzun matnlar kesilmaydi (break-words, line-clamp) */}
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-base md:text-lg font-bold text-white leading-tight mb-1 truncate" title={name}>{name}</h3>
-                          <p className="text-xs md:text-sm text-blue-400 font-medium mb-2 line-clamp-2" title={pos}>{pos}</p>
+                          <h3 className="text-lg md:text-xl font-black text-white leading-tight mb-2 line-clamp-2 break-words" title={name}>
+                            {name}
+                          </h3>
+                          <p className="text-sm text-blue-400 font-bold mb-3 line-clamp-3 break-words leading-snug" title={pos}>
+                            {pos}
+                          </p>
                           <div className="flex flex-wrap gap-2">
-                            <span className="bg-white/10 px-2 py-0.5 rounded text-[10px] md:text-xs text-gray-300">{dept}</span>
-                            {e.room && <span className="bg-amber-500/20 text-amber-500 px-2 py-0.5 rounded text-[10px] md:text-xs font-bold">{e.room}{t('room')}</span>}
+                            <span className="bg-white/10 border border-white/5 px-2 py-1 rounded-lg text-[10px] md:text-xs text-gray-300 break-words line-clamp-2">
+                              {dept}
+                            </span>
+                            {e.room && (
+                              <span className="bg-amber-500/20 border border-amber-500/30 text-amber-400 px-3 py-1 rounded-lg text-xs font-black shrink-0">
+                                {e.room}{t('room')}
+                              </span>
+                            )}
                           </div>
                         </div>
                       </div>
                       
-                      <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
-                          <div className="flex items-center gap-2 text-gray-400 text-[10px] md:text-xs font-bold uppercase">
-                            {e.floor && <><FaBuilding /> {e.floor}{t('floor')}</>}
+                      <div className="pt-4 border-t border-white/10 flex items-center justify-between mt-auto">
+                          <div className="flex items-center gap-2 text-gray-400 text-xs md:text-sm font-bold uppercase tracking-wider">
+                            {e.floor && <><FaBuilding className="text-gray-500" /> {e.floor}{t('floor')}</>}
                           </div>
-                          <div className="flex items-center gap-1 text-lg md:text-xl font-black text-green-400">
-                            {e.phone && <><FaPhoneAlt className="text-xs" /> {e.phone}</>}
+                          <div className="flex items-center gap-2 text-xl md:text-2xl font-black text-emerald-400 font-mono">
+                            {e.phone && <><FaPhoneAlt className="text-sm text-emerald-500" /> {e.phone}</>}
                           </div>
                       </div>
                     </div>
                   )})
                 ) : (
-                  <div className="col-span-full py-10 opacity-50 text-center flex flex-col items-center">
-                    <FaUserTie className="text-6xl mb-4 text-gray-600" />
-                    <p className="text-lg text-white font-bold">{t('no_results')}</p>
+                  <div className="col-span-full py-20 opacity-50 text-center flex flex-col items-center">
+                    <FaUserTie className="text-7xl mb-6 text-gray-600" />
+                    <p className="text-2xl text-white font-black uppercase tracking-widest">{t('no_results')}</p>
                   </div>
                 )}
               </div>

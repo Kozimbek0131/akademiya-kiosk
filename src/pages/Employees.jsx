@@ -23,10 +23,27 @@ const Employees = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const baseUrl = import.meta.env.VITE_API_URL; 
+        // DIQQAT: Shu yerdagi ssilkani o'zingizning aniq API manzilingizga almashtiring!
+        // Masalan: const baseUrl = "https://backend-api.uz";
+        const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8000"; 
+        
         const response = await fetch(`${baseUrl}/api/employees/`);
+        
+        if (!response.ok) {
+          throw new Error(`Server xatosi: ${response.status}`);
+        }
+        
         const data = await response.json();
-        setEmployees(data);
+
+        // MUHIM O'ZGARISH: Agar Backend "Pagination" qo'shgan bo'lsa, data.results ishlatiladi
+        if (data && data.results) {
+          setEmployees(data.results);
+        } else if (Array.isArray(data)) {
+          setEmployees(data);
+        } else {
+          setEmployees([]);
+        }
+
       } catch (error) {
         console.error("API xatoligi:", error);
       } finally {
@@ -37,7 +54,7 @@ const Employees = () => {
     fetchEmployees();
   }, []);
 
-  // --- 2. BO'LIMLARNI DINAMIK AJRATIB OLISH (Yangi JSON'ga moslandi) ---
+  // --- 2. BO'LIMLARNI DINAMIK AJRATIB OLISH ---
   const uniqueDepartments = [];
   const deptSet = new Set();
   
@@ -51,7 +68,6 @@ const Employees = () => {
 
   // --- 3. FILTRLASH MANTIQI ---
   const filteredEmployees = employees.filter(emp => {
-    // Backendning yangi maydonlari:
     const empName = emp.full_name_uz || '';
     const empPos = emp.position_uz || '';
     const empDept = emp.department || '';
@@ -76,7 +92,7 @@ const Employees = () => {
     if (searchTerm) return `🔍 ${t('results')}`;
     if (activeFilter === 'all') return t('all_employees');
     if (filterType === 'floor') return `${activeFilter}${t('floor')}`;
-    return activeFilter; // Bo'lim nomi
+    return activeFilter;
   };
 
   return (
@@ -108,7 +124,7 @@ const Employees = () => {
       {/* ASOSIY QISM */}
       <div className="relative z-10 flex-1 flex gap-6 p-6 overflow-hidden">
         
-        {/* 1. YON PANEL (FILTRLAR) */}
+        {/* YON PANEL */}
         <div className="w-[350px] flex flex-col bg-slate-800/50 backdrop-blur-md border border-white/10 rounded-3xl shadow-2xl shrink-0 overflow-hidden h-full">
           <div className="flex p-2 bg-black/20 m-3 rounded-2xl shrink-0">
             <button onClick={() => { setFilterType('floor'); setActiveFilter('all'); }} className={`flex-1 py-3 rounded-xl font-bold text-sm uppercase transition-all flex items-center justify-center gap-2 cursor-pointer ${filterType === 'floor' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:bg-white/5'}`}>
@@ -140,7 +156,7 @@ const Employees = () => {
           </div>
         </div>
 
-        {/* 2. NATIJALAR (XODIMLAR RO'YXATI) */}
+        {/* NATIJALAR */}
         <div className="flex-1 bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl overflow-hidden flex flex-col h-full shadow-inner">
           <div className="p-6 border-b border-white/10 bg-slate-800/80 shrink-0 z-20 flex items-center justify-between">
              <h2 className="text-xl text-white font-bold flex items-center gap-3">
@@ -170,7 +186,6 @@ const Employees = () => {
                     <div key={e.id || index} className="bg-slate-800/90 p-5 md:p-6 rounded-[2rem] border border-white/10 hover:border-blue-500/50 transition-all hover:bg-slate-700/80 shadow-xl flex flex-col justify-between">
                       <div className="flex items-start gap-5 mb-4">
                         
-                        {/* RASM YO'Q BO'LSA DEFAULT IKONKA */}
                         <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-slate-700 to-slate-800 border-2 border-white/10 flex items-center justify-center text-white text-3xl shadow-inner shrink-0 overflow-hidden">
                           {e.image ? (
                              <img src={e.image} alt={name} className="w-full h-full object-cover" />
@@ -179,7 +194,6 @@ const Employees = () => {
                           )}
                         </div>
 
-                        {/* MUHIM: Uzun matnlar kesilmaydi (break-words, line-clamp) */}
                         <div className="flex-1 min-w-0">
                           <h3 className="text-lg md:text-xl font-black text-white leading-tight mb-2 line-clamp-2 break-words" title={name}>
                             {name}

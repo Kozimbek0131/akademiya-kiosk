@@ -161,13 +161,14 @@ const Employees = () => {
     fetchData();
   }, [language]);
 
-  // Tanlangan qavatda mavjud bo'limlar
+  // Tanlangan qavatda mavjud bo'limlar (department_name orqali)
   const deptsOnFloor = departments.filter(dept =>
     selectedFloor === 'all'
       ? true
       : employees.some(e =>
           String(e.floor) === String(selectedFloor) &&
-          String(e.department) === String(dept.id)
+          (e.department_name === dept.name ||
+           String(e.department) === String(dept.id))
         )
   );
 
@@ -175,15 +176,20 @@ const Employees = () => {
   const filteredEmployees = employees.filter(emp => {
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      return (
+      const floorOk = selectedFloor === 'all' || String(emp.floor) === String(selectedFloor);
+      const deptOk  = selectedDept  === 'all' || emp.department_name === selectedDept || String(emp.department) === String(selectedDept);
+      const textOk  = (
         (emp.full_name       || '').toLowerCase().includes(term) ||
         (emp.position        || '').toLowerCase().includes(term) ||
         (emp.department_name || '').toLowerCase().includes(term) ||
         (emp.room && String(emp.room).includes(term))
       );
+      return floorOk && deptOk && textOk;
     }
     const floorOk = selectedFloor === 'all' || String(emp.floor) === String(selectedFloor);
-    const deptOk  = selectedDept  === 'all' || String(emp.department) === String(selectedDept);
+    const deptOk  = selectedDept  === 'all' ||
+                    emp.department_name === selectedDept ||
+                    String(emp.department) === String(selectedDept);
     return floorOk && deptOk;
   });
 
@@ -200,10 +206,9 @@ const Employees = () => {
 
   const getTitle = () => {
     if (searchTerm) return `🔍 ${t('results') || 'Natijalar'}`;
-    const deptObj = departments.find(d => String(d.id) === String(selectedDept));
-    if (selectedFloor !== 'all' && selectedDept !== 'all') return deptObj?.name || '';
+    if (selectedFloor !== 'all' && selectedDept !== 'all') return selectedDept;
     if (selectedFloor !== 'all') return floorLabel(selectedFloor);
-    if (selectedDept  !== 'all') return deptObj?.name || '';
+    if (selectedDept  !== 'all') return selectedDept;
     return t('all_employees') || 'Barcha xodimlar';
   };
 
@@ -298,8 +303,8 @@ const Employees = () => {
             {deptsOnFloor.map(dept => (
               <button
                 key={dept.id}
-                onClick={() => setSelectedDept(dept.id)}
-                className={`w-full px-3 py-2.5 rounded-xl text-left text-xs leading-snug transition-all cursor-pointer ${String(selectedDept) === String(dept.id) ? 'bg-amber-500 text-black font-bold' : 'bg-white/5 text-slate-300 hover:bg-white/10 font-medium'}`}
+                onClick={() => setSelectedDept(dept.name)}
+                className={`w-full px-3 py-2.5 rounded-xl text-left text-xs leading-snug transition-all cursor-pointer ${selectedDept === dept.name ? 'bg-amber-500 text-black font-bold' : 'bg-white/5 text-slate-300 hover:bg-white/10 font-medium'}`}
               >
                 {dept.name}
               </button>

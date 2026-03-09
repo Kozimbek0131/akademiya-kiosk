@@ -3,41 +3,49 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { FaArrowLeft, FaBus, FaSearch, FaMapMarkerAlt, FaPlane, FaTrain, FaLandmark, FaTimes, FaBuilding, FaBalanceScale, FaMonument, FaCity, FaStore } from 'react-icons/fa';
 
+const quickDestinations = [
+  { id: 1, name: { uz: "Bosh Prokuratura",    ru: "Генеральная прокуратура", en: "General Prosecutor's Office" }, query: "Bosh prokuratura, Toshkent",     icon: 'building',  color: "text-blue-400",   bg: "bg-blue-500/20" },
+  { id: 2, name: { uz: "Oliy Sud",            ru: "Верховный суд",           en: "Supreme Court" },              query: "Oliy Sud, Toshkent",            icon: 'balance',   color: "text-amber-500",  bg: "bg-amber-500/20" },
+  { id: 3, name: { uz: "Adliya Vazirligi",    ru: "Министерство юстиции",    en: "Ministry of Justice" },        query: "Adliya vazirligi, Toshkent",    icon: 'landmark',  color: "text-sky-400",    bg: "bg-sky-500/20" },
+  { id: 4, name: { uz: "Xalqaro Aeroport",    ru: "Международный аэропорт",  en: "International Airport" },      query: "Toshkent Xalqaro Aeroporti",    icon: 'plane',     color: "text-blue-500",   bg: "bg-blue-600/20" },
+  { id: 5, name: { uz: "Shimoliy Vokzal",     ru: "Северный вокзал",         en: "North Railway Station" },      query: "Toshkent Shimoliy Vokzali",     icon: 'train',     color: "text-green-500",  bg: "bg-green-500/20" },
+  { id: 6, name: { uz: "Janubiy Vokzal",      ru: "Южный вокзал",            en: "South Railway Station" },      query: "Toshkent Janubiy Vokzali",      icon: 'train',     color: "text-teal-500",   bg: "bg-teal-500/20" },
+  { id: 7, name: { uz: "Tashkent City",       ru: "Ташкент Сити",            en: "Tashkent City" },              query: "Tashkent City, Toshkent",       icon: 'city',      color: "text-purple-400", bg: "bg-purple-500/20" },
+  { id: 8, name: { uz: "Mustaqillik Maydoni", ru: "пл. Независимости",       en: "Independence Square" },        query: "Mustaqillik Maydoni, Toshkent", icon: 'monument',  color: "text-yellow-500", bg: "bg-yellow-500/20" },
+  { id: 9, name: { uz: "Amir Temur Maydoni",  ru: "сквер Амира Тимура",      en: "Amir Temur Square" },          query: "Amir Temur Xiyoboni, Toshkent", icon: 'marker',    color: "text-red-400",    bg: "bg-red-500/20" },
+  { id:10, name: { uz: "Chorsu Bozori",       ru: "Базар Чорсу",             en: "Chorsu Bazaar" },              query: "Chorsu bozori, Toshkent",       icon: 'store',     color: "text-orange-500", bg: "bg-orange-500/20" },
+];
+
+const Icon = ({ type, className }) => {
+  if (type === 'balance')  return <FaBalanceScale className={className} />;
+  if (type === 'landmark') return <FaLandmark     className={className} />;
+  if (type === 'plane')    return <FaPlane        className={className} />;
+  if (type === 'train')    return <FaTrain        className={className} />;
+  if (type === 'city')     return <FaCity         className={className} />;
+  if (type === 'monument') return <FaMonument     className={className} />;
+  if (type === 'marker')   return <FaMapMarkerAlt className={className} />;
+  if (type === 'store')    return <FaStore        className={className} />;
+  return                          <FaBuilding     className={className} />;
+};
+
 const Transport = () => {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
   const [destination, setDestination] = useState('');
   const [mapSrc, setMapSrc] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
-  const [isSearching, setIsSearching] = useState(false);
 
   const akademiyaLat  = "41.374751";
   const akademiyaLong = "69.272917";
   const defaultMapUrl = `https://yandex.uz/map-widget/v1/?ll=${akademiyaLong}%2C${akademiyaLat}&z=15&pt=${akademiyaLong}%2C${akademiyaLat},pm2rdm`;
 
-  const quickDestinations = [
-    { id: 1, name: { uz: "Bosh Prokuratura",      ru: "Генеральная прокуратура", en: "General Prosecutor" },       query: "Bosh prokuratura, Toshkent",      icon: <FaBuilding />,     color: "text-blue-400",   bg: "bg-blue-500/20" },
-    { id: 2, name: { uz: "Oliy Sud",              ru: "Верховный суд",           en: "Supreme Court" },            query: "Oliy Sud, Toshkent",             icon: <FaBalanceScale />, color: "text-amber-500",  bg: "bg-amber-500/20" },
-    { id: 3, name: { uz: "Adliya Vazirligi",      ru: "Министерство юстиции",    en: "Ministry of Justice" },      query: "Adliya vazirligi, Toshkent",     icon: <FaLandmark />,     color: "text-sky-400",    bg: "bg-sky-500/20" },
-    { id: 4, name: { uz: "Xalqaro Aeroport",      ru: "Международный аэропорт",  en: "International Airport" },    query: "Toshkent Xalqaro Aeroporti",     icon: <FaPlane />,        color: "text-blue-500",   bg: "bg-blue-600/20" },
-    { id: 5, name: { uz: "Shimoliy Vokzal",       ru: "Северный вокзал",         en: "North Railway Station" },    query: "Toshkent Shimoliy Vokzali",      icon: <FaTrain />,        color: "text-green-500",  bg: "bg-green-500/20" },
-    { id: 6, name: { uz: "Janubiy Vokzal",        ru: "Южный вокзал",            en: "South Railway Station" },    query: "Toshkent Janubiy Vokzali",       icon: <FaTrain />,        color: "text-teal-500",   bg: "bg-teal-500/20" },
-    { id: 7, name: { uz: "Tashkent City",         ru: "Ташкент Сити",            en: "Tashkent City" },            query: "Tashkent City, Toshkent",        icon: <FaCity />,         color: "text-purple-400", bg: "bg-purple-500/20" },
-    { id: 8, name: { uz: "Mustaqillik Maydoni",   ru: "площадь Независимости",   en: "Independence Square" },      query: "Mustaqillik Maydoni, Toshkent",  icon: <FaMonument />,     color: "text-yellow-500", bg: "bg-yellow-500/20" },
-    { id: 9, name: { uz: "Amir Temur Maydoni",    ru: "сквер Амира Тимура",      en: "Amir Temur Square" },        query: "Amir Temur Xiyoboni, Toshkent",  icon: <FaMapMarkerAlt />, color: "text-red-400",    bg: "bg-red-500/20" },
-    { id: 10, name: { uz: "Chorsu Bozori",        ru: "Базар Чорсу",             en: "Chorsu Bazaar" },            query: "Chorsu bozori, Toshkent",        icon: <FaStore />,        color: "text-orange-500", bg: "bg-orange-500/20" },
-  ];
-
   useEffect(() => {
     const fetchSuggestions = async () => {
       if (destination.length < 3) { setSuggestions([]); return; }
-      setIsSearching(true);
       try {
         const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(destination)}&addressdetails=1&limit=5&countrycodes=uz`);
-        const data = await res.json();
-        setSuggestions(data);
+        setSuggestions(await res.json());
       } catch (e) { console.error(e); }
-      finally { setIsSearching(false); }
     };
     const id = setTimeout(fetchSuggestions, 400);
     return () => clearTimeout(id);
@@ -49,16 +57,10 @@ const Transport = () => {
     setMapSrc(`https://yandex.uz/map-widget/v1/?rtext=${akademiyaLat},${akademiyaLong}~${item.lat},${item.lon}&rtt=mt&z=13`);
   };
 
-  const updateMapRoute = (query) => {
-    setMapSrc(`https://yandex.uz/map-widget/v1/?rtext=${akademiyaLat},${akademiyaLong}~${encodeURIComponent(query)}&rtt=mt&z=12`);
-  };
+  const updateMapRoute = (query) => setMapSrc(`https://yandex.uz/map-widget/v1/?rtext=${akademiyaLat},${akademiyaLong}~${encodeURIComponent(query)}&rtt=mt&z=12`);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (destination.trim()) { updateMapRoute(destination); setSuggestions([]); }
-  };
-
-  const clearSearch = () => { setDestination(''); setSuggestions([]); setMapSrc(null); };
+  const handleSearch = (e) => { e.preventDefault(); if (destination.trim()) { updateMapRoute(destination); setSuggestions([]); } };
+  const clearSearch  = () => { setDestination(''); setSuggestions([]); setMapSrc(null); };
 
   return (
     <div className="h-screen flex flex-col bg-slate-900 relative overflow-hidden select-none text-white">
@@ -77,7 +79,7 @@ const Transport = () => {
       <div className="flex-1 relative bg-gray-200 w-full z-0">
         <iframe src={mapSrc || defaultMapUrl} frameBorder="0" title="Yandex Maps" allowFullScreen className="absolute inset-0 w-full h-full border-0 grayscale-[20%] contrast-125"></iframe>
         {!mapSrc && (
-          <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-6 py-3 rounded-2xl shadow-2xl text-base md:text-lg font-bold z-10 pointer-events-none border border-white/20 animate-pulse">
+          <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-6 py-3 rounded-2xl shadow-2xl font-bold z-10 pointer-events-none border border-white/20 animate-pulse">
             📍 {t('map_academy_loc')}
           </div>
         )}
@@ -95,7 +97,6 @@ const Transport = () => {
             <FaSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
             {destination && <FaTimes className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer hover:text-white text-xl" onClick={clearSearch} />}
           </form>
-
           {suggestions.length > 0 && (
             <div className="absolute bottom-full left-0 right-0 mb-2 bg-slate-800 border border-white/20 rounded-2xl shadow-2xl overflow-hidden z-50">
               {suggestions.map((item, i) => (
@@ -119,7 +120,7 @@ const Transport = () => {
               <button key={dest.id} onClick={() => updateMapRoute(dest.query)}
                 className="flex items-center gap-3 bg-white/5 border border-white/5 p-3 md:p-4 rounded-2xl hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer group text-left shadow-md active:scale-95">
                 <div className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl ${dest.bg} flex items-center justify-center ${dest.color} group-hover:scale-110 transition-transform shrink-0 text-xl md:text-2xl`}>
-                  {dest.icon}
+                  <Icon type={dest.icon} />
                 </div>
                 <span className="font-bold text-sm md:text-base text-gray-200 group-hover:text-white leading-tight">
                   {dest.name[language] || dest.name.uz}

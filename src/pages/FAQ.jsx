@@ -12,27 +12,27 @@ const FAQ = () => {
     {
       id: 1,
       question: { uz: "Akademiya ish vaqti qanday?", ru: "Каков режим работы Академии?", en: "What are the Academy's working hours?" },
-      answer:   { uz: "Akademiya dushanbadan shanbagacha soat 08:00 dan 18:00 gacha ishlaydi. Tushlik vaqti: 13:00 dan 14:00 gacha. Yakshanba — dam olish kuni.", ru: "Академия работает с понедельника по субботу с 08:00 до 18:00. Обед: с 13:00 до 14:00. Воскресенье — выходной день.", en: "The Academy works Monday through Saturday from 08:00 to 18:00. Lunch break: 13:00–14:00. Sunday is a day off." }
+      answer:   { uz: "Akademiya dushanbadan shanbagacha soat 08:00 dan 18:00 gacha ishlaydi. Tushlik vaqti: 13:00 dan 14:00 gacha. Yakshanba — dam olish kuni.", ru: "Академия работает с понедельника по субботу с 08:00 до 18:00. Обед: 13:00–14:00. Воскресенье — выходной.", en: "The Academy works Monday–Saturday from 08:00 to 18:00. Lunch: 13:00–14:00. Sunday is a day off." }
     },
     {
       id: 2,
       question: { uz: "Rahbariyat qabuliga qanday yozilish mumkin?", ru: "Как записаться на приём к руководству?", en: "How to schedule an appointment with management?" },
-      answer:   { uz: "Boshliq va o'rinbosarlar qabuli har hafta Chorshanba kuni 10:00 da o'tkaziladi. Ro'yxatdan o'tish uchun Devonxonaga (1-qavat, 105-xona) murojaat qiling yoki +998 71 200-00-00 raqamiga qo'ng'iroq qiling.", ru: "Приём у начальника и его заместителей проводится каждую среду в 10:00. Для записи обратитесь в Канцелярию (1-й этаж, каб. 105) или позвоните по номеру +998 71 200-00-00.", en: "Reception by the Head and deputies is held every Wednesday at 10:00. To register, contact the Secretariat (1st floor, room 105) or call +998 71 200-00-00." }
+      answer:   { uz: "Boshliq va o'rinbosarlar qabuli har hafta Chorshanba kuni 10:00 da o'tkaziladi. Ro'yxatdan o'tish uchun Devonxonaga (1-qavat, 105-xona) murojaat qiling yoki +998 71 200-00-00 raqamiga qo'ng'iroq qiling.", ru: "Приём у начальника и заместителей — каждую среду в 10:00. Для записи обратитесь в Канцелярию (1-й этаж, каб. 105) или позвоните: +998 71 200-00-00.", en: "Reception is held every Wednesday at 10:00. Contact the Secretariat (1st floor, room 105) or call +998 71 200-00-00." }
     },
     {
       id: 3,
       question: { uz: "Oshxona va Tibbiyot punkti qayerda?", ru: "Где находится столовая и медпункт?", en: "Where is the canteen and medical point?" },
-      answer:   { uz: "Oshxona 1-qavatning chap qanotida joylashgan. Tibbiyot punkti esa 1-qavat, 112-xonada joylashgan (Sport zal yonida).", ru: "Столовая расположена в левом крыле 1-го этажа. Медпункт — на 1-м этаже, каб. 112 (рядом со спортзалом).", en: "The canteen is located in the left wing of the 1st floor. The medical point is on the 1st floor, room 112 (next to the gym)." }
+      answer:   { uz: "Oshxona 1-qavatning chap qanotida joylashgan. Tibbiyot punkti esa 1-qavat, 112-xonada joylashgan (Sport zal yonida).", ru: "Столовая — в левом крыле 1-го этажа. Медпункт — 1-й этаж, каб. 112 (рядом со спортзалом).", en: "The canteen is in the left wing of the 1st floor. The medical point is on the 1st floor, room 112 (next to the gym)." }
     },
     {
       id: 4,
       question: { uz: "Wi-Fi tarmog'idan qanday foydalanaman?", ru: "Как пользоваться Wi-Fi?", en: "How do I use the Wi-Fi network?" },
-      answer:   { uz: "Bosh sahifadagi 'WI-FI' tugmasini bosing. U yerda siz uchun maxsus (Mehmon yoki Xodim) tarmoqlar va ularning parollari ko'rsatilgan.", ru: "Нажмите кнопку 'WI-FI' на главной странице. Там отображены специальные сети (Гость или Сотрудник) и их пароли.", en: "Press the 'WI-FI' button on the main page. There you will find dedicated networks (Guest or Staff) and their passwords." }
+      answer:   { uz: "Bosh sahifadagi 'WI-FI' tugmasini bosing. U yerda maxsus tarmoqlar va ularning parollari ko'rsatilgan.", ru: "Нажмите кнопку 'WI-FI' на главной странице. Там отображены сети и их пароли.", en: "Press the 'WI-FI' button on the main page. There you will find networks and their passwords." }
     },
     {
       id: 5,
       question: { uz: "Sport zali kimlar uchun?", ru: "Для кого предназначен спортзал?", en: "Who is the gym for?" },
-      answer:   { uz: "Sport majmuasi xodimlar va kursantlar uchun har kuni 18:00 dan 21:00 gacha ochiq. Mehmonlar ruxsatnoma bilan kirishi mumkin.", ru: "Спортивный комплекс открыт для сотрудников и курсантов ежедневно с 18:00 до 21:00. Гости могут войти с пропуском.", en: "The sports complex is open for staff and cadets daily from 18:00 to 21:00. Guests may enter with a pass." }
+      answer:   { uz: "Sport majmuasi xodimlar va kursantlar uchun har kuni 18:00 dan 21:00 gacha ochiq. Mehmonlar ruxsatnoma bilan kirishi mumkin.", ru: "Спортивный комплекс открыт для сотрудников и курсантов ежедневно с 18:00 до 21:00. Гости — с пропуском.", en: "The sports complex is open for staff and cadets daily from 18:00 to 21:00. Guests may enter with a pass." }
     },
     {
       id: 6,
@@ -91,18 +91,14 @@ const FAQ = () => {
       <div className="relative z-20 w-full bg-slate-900 border-t border-white/10 shadow-[0_-20px_50px_rgba(0,0,0,0.5)] p-6 md:p-8 shrink-0">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-gradient-to-r from-blue-600/20 to-blue-900/20 border border-blue-500/30 p-6 md:p-8 rounded-[2rem] flex items-center gap-6 group hover:border-blue-500/50 transition-colors">
-            <div className="w-16 h-16 rounded-[1.5rem] bg-blue-500 flex items-center justify-center text-white text-3xl shadow-[0_0_20px_rgba(59,130,246,0.5)] group-hover:scale-110 transition-transform">
-              <FaPhoneAlt />
-            </div>
+            <div className="w-16 h-16 rounded-[1.5rem] bg-blue-500 flex items-center justify-center text-white text-3xl shadow-[0_0_20px_rgba(59,130,246,0.5)] group-hover:scale-110 transition-transform"><FaPhoneAlt /></div>
             <div>
               <h4 className="text-blue-200 font-bold uppercase tracking-widest text-sm mb-1">{t('faq_hotline')}</h4>
               <p className="text-3xl md:text-4xl font-black text-white font-mono tracking-wider">10-02</p>
             </div>
           </div>
           <div className="bg-gradient-to-r from-emerald-600/20 to-emerald-900/20 border border-emerald-500/30 p-6 md:p-8 rounded-[2rem] flex items-center gap-6 group hover:border-emerald-500/50 transition-colors">
-            <div className="w-16 h-16 rounded-[1.5rem] bg-emerald-500 flex items-center justify-center text-white text-3xl shadow-[0_0_20px_rgba(16,185,129,0.5)] group-hover:scale-110 transition-transform">
-              <FaClock />
-            </div>
+            <div className="w-16 h-16 rounded-[1.5rem] bg-emerald-500 flex items-center justify-center text-white text-3xl shadow-[0_0_20px_rgba(16,185,129,0.5)] group-hover:scale-110 transition-transform"><FaClock /></div>
             <div>
               <h4 className="text-emerald-200 font-bold uppercase tracking-widest text-sm mb-1">{t('faq_worktime')}</h4>
               <p className="text-3xl md:text-4xl font-black text-white font-mono tracking-wider">08:00 - 18:00</p>

@@ -147,42 +147,23 @@ const Home = () => {
         </div>
       </div>
 
-      {/* FOOTER VA YUGURUVCHI QATOR */}
-      <div className="relative z-20 w-full flex flex-col shrink-0">
+     {/* YANGI: YUGURUVCHI QATOR (Copyright olib tashlandi) */}
+      {/* ========================================================= */}
+      <div className="relative z-20 w-full flex flex-col shrink-0 mt-auto">
         
-        {/* Yuguruvchi qator */}
-        <div className="w-full bg-black/80 backdrop-blur-md text-amber-500 overflow-hidden flex items-center py-2.5 md:py-3 border-t border-white/10 shadow-[0_-5px_20px_rgba(0,0,0,0.5)]">
-          <div className="whitespace-nowrap animate-marquee flex items-center gap-6 text-[10px] md:text-sm tracking-widest px-4">
-            
-            <FaExclamationTriangle className="text-lg md:text-xl animate-pulse text-amber-500" />
-            <span className="uppercase font-black">{t('test_mode_warning')}</span>
-            <span className="text-white/20 mx-2 font-black">///</span>
-            <div className="flex items-center">
-               <span className="uppercase font-bold text-amber-200">{t('suggestions_text').split('@')[0]}</span>
-               <span className="lowercase font-black text-amber-400">@akhatov0131</span>
-            </div>
-            
-            <span className="text-white/20 mx-2 font-black">///</span>
-            
-            <FaExclamationTriangle className="text-lg md:text-xl animate-pulse text-amber-500" />
-            <span className="uppercase font-black">{t('test_mode_warning')}</span>
-            <span className="text-white/20 mx-2 font-black">///</span>
-            <div className="flex items-center">
-               <span className="uppercase font-bold text-amber-200">{t('suggestions_text').split('@')[0]}</span>
-               <span className="lowercase font-black text-amber-400">@akhatov0131</span>
-            </div>
-
-            <span className="text-white/20 mx-2 font-black">///</span>
-            
-            <FaExclamationTriangle className="text-lg md:text-xl animate-pulse text-amber-500" />
-            <span className="uppercase font-black">{t('test_mode_warning')}</span>
-            <span className="text-white/20 mx-2 font-black">///</span>
-            <div className="flex items-center">
-               <span className="uppercase font-bold text-amber-200">{t('suggestions_text').split('@')[0]}</span>
-               <span className="lowercase font-black text-amber-400">@akhatov0131</span>
-            </div>
-            
+        {/* Yuguruvchi qator (Marquee) */}
+        <div className="w-full bg-amber-500/90 backdrop-blur-md text-slate-950 overflow-hidden flex items-center py-3 md:py-4 border-t border-amber-400 shadow-[0_-5px_20px_rgba(245,158,11,0.2)]">
+          <div className="whitespace-nowrap animate-marquee flex items-center gap-6 text-[10px] md:text-sm font-black uppercase tracking-widest px-4">
+            <FaExclamationTriangle className="text-lg md:text-xl animate-pulse text-red-700" />
+            <span>{t('test_mode_warning')}</span>
+            <span className="text-black/30 mx-4">///</span>
+            <span>{t('suggestions_text')}</span>
+            <span className="text-black/30 mx-4">///</span>
+            <span>{t('test_mode_warning')}</span>
+            <span className="text-black/30 mx-4">///</span>
+            <span>{t('suggestions_text')}</span>
           </div>
+        </div>
         </div>
 
         {/* Copyright qismi va YASHIRIN FULLSCREEN TUGMASI */}

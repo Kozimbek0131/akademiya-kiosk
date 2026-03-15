@@ -3,13 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { 
   FaUserTie, FaTrophy, FaFileAlt, FaBus, FaWifi, 
-  FaMapMarkedAlt, FaQuestionCircle, FaStar 
+  FaMapMarkedAlt, FaQuestionCircle, FaStar, FaExclamationTriangle 
 } from 'react-icons/fa';
 import logoImg from '../assets/logo.png';
 
 const Home = () => {
   const navigate = useNavigate();
-  // 1. Shu yerda 't' funksiyasi olinmoqda:
   const { t, language, setLanguage } = useLanguage(); 
   const [time, setTime] = useState(new Date());
 
@@ -33,7 +32,6 @@ const Home = () => {
   const formattedDate = getFormattedDate();
   const formattedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-  // Menyular uchun ham 't' ishlatilgan:
   const menuItems = [
     { id: 'leadership', icon: <FaStar />, label: t('menu_leadership'), path: '/leadership', desc: t('desc_leadership') },
     { id: 'employees', icon: <FaUserTie />, label: t('menu_employees'), path: '/employees', desc: t('desc_employees') },
@@ -56,23 +54,36 @@ const Home = () => {
   return (
     <div className="h-screen flex flex-col bg-[#0f172a] relative overflow-hidden select-none font-sans text-white">
       
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#0f172a]"></div>
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/90 via-[#0f172a]/40 to-[#0f172a]/90"></div>
+      {/* 1. DINAMIK ORQA FON VIDEOSI */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        {/* Public papkasidagi videoni chaqirish */}
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover scale-105"
+        >
+          <source src="/bg_video.mp4" type="video/mp4" />
+        </video>
+        
+        {/* Matnlar o'qilishi uchun qoramtir shisha effekt (Overlay) */}
+        <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-[2px]"></div>
       </div>
       
+      {/* 2. STATUS BAR VA TILLAR */}
       <div className="relative z-20 bg-white/5 backdrop-blur-md border-b border-white/10 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between shadow-lg shrink-0">
         <div className="flex flex-col">
-           <span className="text-xl md:text-3xl font-bold text-white tracking-widest">{formattedTime}</span>
+           <span className="text-xl md:text-3xl font-bold text-white tracking-widest drop-shadow-lg">{formattedTime}</span>
            <span className="text-[10px] md:text-sm text-blue-200 uppercase tracking-wide opacity-80">{formattedDate}</span>
         </div>
-        <div className="flex bg-black/30 rounded-lg p-1 gap-1">
+        <div className="flex bg-black/40 backdrop-blur-md rounded-lg p-1 gap-1 border border-white/10">
              {['uz', 'ru', 'en'].map((lang) => (
               <button
                 key={lang}
                 onClick={() => setLanguage(lang)}
-                className={`px-2 md:px-3 py-1 md:py-2 rounded-md font-bold uppercase text-[10px] md:text-sm transition-all ${
-                  language === lang ? 'bg-blue-600 text-white shadow' : 'text-gray-400 hover:text-white'
+                className={`px-3 py-2 rounded-md font-bold uppercase text-xs md:text-sm transition-all ${
+                  language === lang ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.6)]' : 'text-gray-400 hover:text-white'
                 }`}
               >
                 {lang}
@@ -81,50 +92,59 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="relative z-10 flex flex-col items-center justify-center pt-4 md:pt-8 pb-4 text-center shrink-0 px-4">
+      {/* 3. TEST SINOVIDA BILDIRISHNOMASI */}
+      <div className="relative z-20 w-full bg-amber-500 text-slate-950 py-1.5 md:py-2 flex items-center justify-center gap-3 shadow-[0_5px_15px_rgba(245,158,11,0.2)]">
+         <FaExclamationTriangle className="text-lg md:text-xl animate-pulse" />
+         <span className="font-black uppercase tracking-widest text-[10px] md:text-sm">
+           {t('test_mode_warning')}
+         </span>
+      </div>
+
+      {/* HEADER LOGO */}
+      <div className="relative z-10 flex flex-col items-center justify-center pt-4 md:pt-6 pb-2 text-center shrink-0 px-4">
         <img 
           src={logoImg} 
           alt="Logo" 
-          className="h-20 md:h-36 w-auto object-contain mb-3 drop-shadow-2xl filter brightness-110 animate-fade-in-down"
+          className="h-20 md:h-32 w-auto object-contain mb-3 drop-shadow-[0_0_20px_rgba(255,255,255,0.3)] animate-fade-in-down"
         />
-        {/* 2. MUHIM O'ZGARISH: Bu yerdagi matnlar ham endi 't' funksiyasidan olinadi! */}
-        <h2 className="text-[10px] md:text-sm font-bold text-amber-500 uppercase tracking-[0.2em] mb-1">
+        <h2 className="text-[10px] md:text-sm font-bold text-amber-500 uppercase tracking-[0.2em] mb-1 drop-shadow-md">
           {t('country_name')}
         </h2>
-        <h1 className="text-xl md:text-4xl font-black text-white uppercase tracking-wider mb-2 px-2 leading-tight max-w-5xl drop-shadow-lg">
+        <h1 className="text-xl md:text-4xl font-black text-white uppercase tracking-wider mb-2 px-2 leading-tight max-w-5xl drop-shadow-[0_5px_15px_rgba(0,0,0,0.8)]">
           {t('app_name')}
         </h1>
         <div className="w-24 md:w-32 h-0.5 md:h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent mt-2 mb-2 opacity-80"></div>
-        <p className="text-blue-200/60 text-[8px] md:text-xs font-bold tracking-[0.3em] uppercase">
+        <p className="text-blue-200 text-[8px] md:text-xs font-bold tracking-[0.3em] uppercase drop-shadow-md">
           {t('subtitle')}
         </p>
       </div>
 
+      {/* ASOSIY MENYU */}
       <div className="relative z-10 flex-1 px-4 md:px-8 w-full flex justify-center overflow-y-auto custom-scrollbar touch-pan-y pb-24">
         <div className="grid grid-cols-2 gap-4 md:gap-8 w-full max-w-4xl mt-4 h-fit">
           {menuItems.map((item) => (
             <button
               key={item.id}
               onClick={() => handleNavigation(item.path)}
-              className="group relative overflow-hidden rounded-2xl md:rounded-3xl bg-slate-800/40 backdrop-blur-sm border border-white/10 hover:bg-slate-700/60 hover:border-blue-500/50 transition-all duration-300 flex flex-col items-center justify-center text-center p-6 md:p-8 active:scale-95 shadow-lg min-h-[160px] md:min-h-[240px] cursor-pointer"
+              className="group relative overflow-hidden rounded-2xl md:rounded-[2rem] bg-slate-900/60 backdrop-blur-xl border border-white/20 hover:bg-slate-800/80 hover:border-blue-400 transition-all duration-300 flex flex-col items-center justify-center text-center p-6 md:p-8 active:scale-95 shadow-[0_10px_30px_rgba(0,0,0,0.5)] min-h-[160px] md:min-h-[240px] cursor-pointer"
             >
               {item.isComingSoon && (
-                <div className="absolute top-4 right-4 bg-amber-500/20 border border-amber-500/50 text-amber-400 text-[10px] md:text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg animate-pulse z-20">
+                <div className="absolute top-4 right-4 bg-amber-500 text-slate-900 text-[10px] md:text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg animate-pulse z-20">
                   Jarayonda
                 </div>
               )}
 
-              <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-20 transition-opacity duration-500 rounded-2xl"></div>
+              <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
               
-              <div className="text-5xl md:text-7xl text-blue-400 mb-4 md:mb-6 group-hover:scale-110 group-hover:text-white transition-transform duration-300 drop-shadow-md relative z-10">
+              <div className="text-5xl md:text-7xl text-blue-400 mb-4 md:mb-6 group-hover:scale-110 group-hover:text-white transition-transform duration-300 drop-shadow-[0_0_15px_rgba(96,165,250,0.4)] relative z-10">
                 {item.icon}
               </div>
               
-              <span className="text-base md:text-2xl font-black text-white uppercase tracking-wider mb-2 leading-tight relative z-10 group-hover:text-blue-300 transition-colors">
+              <span className="text-base md:text-2xl font-black text-white uppercase tracking-wider mb-2 leading-tight relative z-10 group-hover:text-blue-300 transition-colors drop-shadow-md">
                 {item.label}
               </span>
               
-              <span className="text-xs md:text-base text-gray-400 group-hover:text-gray-200 line-clamp-2 px-2 font-medium relative z-10">
+              <span className="text-xs md:text-base text-gray-300 group-hover:text-gray-100 line-clamp-2 px-2 font-medium relative z-10">
                 {item.desc}
               </span>
             </button>
@@ -132,7 +152,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="relative z-20 text-center py-4 bg-black/40 text-white/20 text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] shrink-0 backdrop-blur-sm border-t border-white/5">
+      <div className="relative z-20 text-center py-4 bg-black/60 text-white/40 text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] shrink-0 backdrop-blur-md border-t border-white/10">
         {t('footer_text')}
       </div>
 

@@ -24,7 +24,7 @@ const Screensaver = () => {
         {/* Asosiy chiroyli fon (Video o'rnida turadi) */}
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-black"></div>
 
-        {/* === VIDEO KODI (Vercel uchun vaqtincha izohga olindi) === 
+        === VIDEO KODI (Vercel uchun vaqtincha izohga olindi) === 
         <video 
           src="/reklama.mp4" 
           autoPlay 
@@ -33,7 +33,7 @@ const Screensaver = () => {
           playsInline
           className="w-full h-full object-cover opacity-80" 
         />
-        ========================================================= */}
+        =========================================================
         
         <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
       </div>

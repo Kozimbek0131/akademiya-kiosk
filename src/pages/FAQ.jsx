@@ -12,17 +12,17 @@ const FAQ = () => {
     {
       id: 1,
       question: { uz: "Akademiya ish vaqti qanday?", ru: "Каков режим работы Академии?", en: "What are the Academy's working hours?" },
-      answer:   { uz: "Akademiya dushanbadan shanbagacha soat 08:00 dan 18:00 gacha ishlaydi. Tushlik vaqti: 13:00 dan 14:00 gacha. Yakshanba — dam olish kuni.", ru: "Академия работает с понедельника по субботу с 08:00 до 18:00. Обед: 13:00–14:00. Воскресенье — выходной.", en: "The Academy works Monday–Saturday from 08:00 to 18:00. Lunch: 13:00–14:00. Sunday is a day off." }
+      answer:   { uz: "Akademiya dushanbadan jumagacha soat 09:00 dan 18:00 gacha ishlaydi. Tushlik vaqti: 13:00 dan 14:00 gacha. Shanba va Yakshanba — dam olish kuni.", ru: "Академия работает с понедельника по пятницу с 09:00 до 18:00. Время обеда: с 13:00 до 14:00. Суббота и Воскресенье — выходные дни.", en: "The Academy works from Monday to Friday from 09:00 to 18:00. Lunch time: from 13:00 to 14:00. Saturday and Sunday — days off." }
     },
     {
       id: 2,
       question: { uz: "Rahbariyat qabuliga qanday yozilish mumkin?", ru: "Как записаться на приём к руководству?", en: "How to schedule an appointment with management?" },
-      answer:   { uz: "Boshliq va o'rinbosarlar qabuli har hafta Chorshanba kuni 10:00 da o'tkaziladi. Ro'yxatdan o'tish uchun Devonxonaga (1-qavat, 105-xona) murojaat qiling yoki +998 71 200-00-00 raqamiga qo'ng'iroq qiling.", ru: "Приём у начальника и заместителей — каждую среду в 10:00. Для записи обратитесь в Канцелярию (1-й этаж, каб. 105) или позвоните: +998 71 200-00-00.", en: "Reception is held every Wednesday at 10:00. Contact the Secretariat (1st floor, room 105) or call +998 71 200-00-00." }
+      answer:   { uz: "Boshliq va o'rinbosarlar qabuli har hafta Chorshanba kuni 10:00 da o'tkaziladi. Ro'yxatdan o'tish uchun Devonxonaga (5-qavat, 105-xona) murojaat qiling yoki +998712020496 raqamiga qo'ng'iroq qiling.", ru: "Приём у начальника и заместителей — каждую среду в 10:00. Для записи обратитесь в Канцелярию (5-й этаж, каб. 105) или позвоните: +998712020496.", en: "Reception is held every Wednesday at 10:00. Contact the Secretariat (5st floor, room 105) or call +998712020496." }
     },
     {
       id: 3,
       question: { uz: "Oshxona va Tibbiyot punkti qayerda?", ru: "Где находится столовая и медпункт?", en: "Where is the canteen and medical point?" },
-      answer:   { uz: "Oshxona 1-qavatning chap qanotida joylashgan. Tibbiyot punkti esa 1-qavat, 112-xonada joylashgan (Sport zal yonida).", ru: "Столовая — в левом крыле 1-го этажа. Медпункт — 1-й этаж, каб. 112 (рядом со спортзалом).", en: "The canteen is in the left wing of the 1st floor. The medical point is on the 1st floor, room 112 (next to the gym)." }
+      answer:   { uz: "Oshxona binoning chap qanotida joylashgan. Tibbiyot punkti esa B-block da, .", ru: "Столовая расположена в левом крыле здания. Медицинский пункт находится в блоке Б.", en: "The canteen is located in the left wing of the building. The medical station is located in block B." }
     },
     {
       id: 4,
@@ -32,7 +32,7 @@ const FAQ = () => {
     {
       id: 5,
       question: { uz: "Sport zali kimlar uchun?", ru: "Для кого предназначен спортзал?", en: "Who is the gym for?" },
-      answer:   { uz: "Sport majmuasi xodimlar va kursantlar uchun har kuni 18:00 dan 21:00 gacha ochiq. Mehmonlar ruxsatnoma bilan kirishi mumkin.", ru: "Спортивный комплекс открыт для сотрудников и курсантов ежедневно с 18:00 до 21:00. Гости — с пропуском.", en: "The sports complex is open for staff and cadets daily from 18:00 to 21:00. Guests may enter with a pass." }
+      answer:   { uz: "Sport majmuasi xodimlar va talabalar uchun har kuni 18:00 dan 21:00 gacha ochiq. Mehmonlar ruxsatnoma bilan kirishi mumkin.", ru: "Спортивный комплекс открыт для Студенты и курсантов ежедневно с 18:00 до 21:00. Гости — с пропуском.", en: "The sports complex is open for staff and students daily from 18:00 to 21:00. Guests may enter with a pass." }
     },
     {
       id: 6,

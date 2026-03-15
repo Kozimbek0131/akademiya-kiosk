@@ -30,6 +30,7 @@ const EmployeeModal = ({ employee, onClose, language }) => {
         style={{ zIndex: 10000 }}
         onClick={e => e.stopPropagation()}
       >
+        {/* Yopish */}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 w-10 h-10 bg-white/10 hover:bg-red-500/30 border border-white/10 rounded-xl flex items-center justify-center transition-all cursor-pointer"
@@ -38,6 +39,7 @@ const EmployeeModal = ({ employee, onClose, language }) => {
           <FaTimes className="text-white" />
         </button>
 
+        {/* Yuqori — rasm + ism */}
         <div className="bg-gradient-to-br from-blue-900/50 to-slate-900 px-6 pt-8 pb-6 flex flex-col items-center text-center border-b border-white/10">
           <div className="w-24 h-24 rounded-full border-2 border-blue-500/40 overflow-hidden bg-slate-700 flex items-center justify-center shadow-xl mb-4">
             {employee.image
@@ -49,6 +51,7 @@ const EmployeeModal = ({ employee, onClose, language }) => {
           <p className="text-sm text-blue-300 font-semibold leading-snug max-w-xs">{pos}</p>
         </div>
 
+        {/* Pastki — ma'lumotlar */}
         <div className="px-6 py-5 space-y-3">
           {deptName && (
             <div className="flex items-center gap-3 bg-slate-700/50 border border-white/5 rounded-2xl px-4 py-3">
@@ -113,6 +116,9 @@ const EmployeeModal = ({ employee, onClose, language }) => {
   );
 };
 
+// ─────────────────────────────────────────────
+// ASOSIY EMPLOYEES
+// ─────────────────────────────────────────────
 const Employees = () => {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
@@ -125,6 +131,7 @@ const Employees = () => {
   const [selectedFloor, setSelectedFloor] = useState('all');
   const [selectedDept,  setSelectedDept]  = useState('all');
 
+  // Til o'zgarganda hammasini reset
   useEffect(() => {
     setSelectedFloor('all');
     setSelectedDept('all');
@@ -163,23 +170,22 @@ const Employees = () => {
 
   const deptsOnFloor = departments;
 
-  const filteredEmployees = employees
-    .filter(emp => {
-      const floorOk = selectedFloor === 'all' || String(emp.floor) === String(selectedFloor);
-      const deptOk  = selectedDept  === 'all' || emp.department_name === selectedDept || String(emp.department) === String(selectedDept);
-      
-      if (searchTerm) {
-        const term = searchTerm.toLowerCase();
-        const textOk = (
-          (emp.full_name       || '').toLowerCase().includes(term) ||
-          (emp.position         || '').toLowerCase().includes(term) ||
-          (emp.department_name || '').toLowerCase().includes(term) ||
-          (emp.room && String(emp.room).includes(term))
-        );
-        return floorOk && deptOk && textOk;
-      }
-      return floorOk && deptOk;
-    });
+  const filteredEmployees = employees.filter(emp => {
+    const floorOk = selectedFloor === 'all' || String(emp.floor) === String(selectedFloor);
+    const deptOk  = selectedDept  === 'all' || emp.department_name === selectedDept || String(emp.department) === String(selectedDept);
+    
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      const textOk = (
+        (emp.full_name       || '').toLowerCase().includes(term) ||
+        (emp.position         || '').toLowerCase().includes(term) ||
+        (emp.department_name || '').toLowerCase().includes(term) ||
+        (emp.room && String(emp.room).includes(term))
+      );
+      return floorOk && deptOk && textOk;
+    }
+    return floorOk && deptOk;
+  });
 
   const handleFloorClick = (floor) => {
     setSelectedFloor(floor);
@@ -317,7 +323,7 @@ const Employees = () => {
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-10">
                 {filteredEmployees
-                  .sort((a, b) => (a.order || 0) - (b.order || 0)) // TARTIBLASH SHU YERGA KO'CHIRILDI
+                  .sort((a, b) => Number(a.order || 0) - Number(b.order || 0)) // TARTIBLASH MUAMMOSI TO'LIQ HAL QILINDI
                   .map((e, i) => (
                     <div
                       key={e.id || i}
@@ -357,4 +363,3 @@ const Employees = () => {
 };
 
 export default Employees;
-//f//

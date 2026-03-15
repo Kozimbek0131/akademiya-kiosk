@@ -149,9 +149,12 @@ const Employees = () => {
         ]);
         if (!eRes.ok || !dRes.ok) throw new Error("Server xatosi");
         const eData = await eRes.json();
+        
+        // MANA SHU YERGA TARTIBLASH QO'SHILDI (XAVFSIZ):
         const rawEmployees = Array.isArray(eData) ? eData : (eData.results || []);
-const sortedByOrder = [...rawEmployees].sort((a, b) => (a.order || 0) - (b.order || 0));
-setEmployees(sortedByOrder);
+        const sortedByOrder = [...rawEmployees].sort((a, b) => (a.order || 0) - (b.order || 0));
+        setEmployees(sortedByOrder);
+        
         setDepartments(Array.isArray(dData) ? dData : (dData.results || []));
       } catch (err) {
         console.error("API xatoligi:", err);
@@ -169,7 +172,7 @@ setEmployees(sortedByOrder);
       : employees.some(e =>
           String(e.floor) === String(selectedFloor) &&
           (e.department_name === dept.name ||
-           String(e.department) === String(dept.id))
+            String(e.department) === String(dept.id))
         )
   );
 
@@ -181,7 +184,7 @@ setEmployees(sortedByOrder);
       const deptOk  = selectedDept  === 'all' || emp.department_name === selectedDept || String(emp.department) === String(selectedDept);
       const textOk  = (
         (emp.full_name       || '').toLowerCase().includes(term) ||
-        (emp.position        || '').toLowerCase().includes(term) ||
+        (emp.position         || '').toLowerCase().includes(term) ||
         (emp.department_name || '').toLowerCase().includes(term) ||
         (emp.room && String(emp.room).includes(term))
       );

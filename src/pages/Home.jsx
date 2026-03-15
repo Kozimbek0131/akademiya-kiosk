@@ -56,18 +56,9 @@ const Home = () => {
       
       {/* 1. DINAMIK ORQA FON VIDEOSI */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        {/* Public papkasidagi videoni chaqirish */}
-        <video 
-          autoPlay 
-          loop 
-          muted 
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover scale-105"
-        >
+        <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover scale-105">
           <source src="/bg_video.mp4" type="video/mp4" />
         </video>
-        
-        {/* Matnlar o'qilishi uchun qoramtir shisha effekt (Overlay) */}
         <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-[2px]"></div>
       </div>
       
@@ -92,14 +83,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* 3. TEST SINOVIDA BILDIRISHNOMASI */}
-      <div className="relative z-20 w-full bg-amber-500 text-slate-950 py-1.5 md:py-2 flex items-center justify-center gap-3 shadow-[0_5px_15px_rgba(245,158,11,0.2)]">
-         <FaExclamationTriangle className="text-lg md:text-xl animate-pulse" />
-         <span className="font-black uppercase tracking-widest text-[10px] md:text-sm">
-           {t('test_mode_warning')}
-         </span>
-      </div>
-
       {/* HEADER LOGO */}
       <div className="relative z-10 flex flex-col items-center justify-center pt-4 md:pt-6 pb-2 text-center shrink-0 px-4">
         <img 
@@ -120,7 +103,7 @@ const Home = () => {
       </div>
 
       {/* ASOSIY MENYU */}
-      <div className="relative z-10 flex-1 px-4 md:px-8 w-full flex justify-center overflow-y-auto custom-scrollbar touch-pan-y pb-24">
+      <div className="relative z-10 flex-1 px-4 md:px-8 w-full flex justify-center overflow-y-auto custom-scrollbar touch-pan-y pb-6">
         <div className="grid grid-cols-2 gap-4 md:gap-8 w-full max-w-4xl mt-4 h-fit">
           {menuItems.map((item) => (
             <button
@@ -133,7 +116,6 @@ const Home = () => {
                   Jarayonda
                 </div>
               )}
-
               <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
               
               <div className="text-5xl md:text-7xl text-blue-400 mb-4 md:mb-6 group-hover:scale-110 group-hover:text-white transition-transform duration-300 drop-shadow-[0_0_15px_rgba(96,165,250,0.4)] relative z-10">
@@ -152,8 +134,30 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="relative z-20 text-center py-4 bg-black/60 text-white/40 text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] shrink-0 backdrop-blur-md border-t border-white/10">
-        {t('footer_text')}
+      {/* ========================================================= */}
+      {/* YANGI: YUGURUVCHI QATOR VA FOOTER (Ekran eng pastida) */}
+      {/* ========================================================= */}
+      <div className="relative z-20 w-full flex flex-col shrink-0">
+        
+        {/* Yuguruvchi qator (Marquee) */}
+        <div className="w-full bg-amber-500/90 backdrop-blur-md text-slate-950 overflow-hidden flex items-center py-2 border-t border-amber-400 shadow-[0_-5px_20px_rgba(245,158,11,0.2)]">
+          <div className="whitespace-nowrap animate-marquee flex items-center gap-6 text-[10px] md:text-sm font-black uppercase tracking-widest px-4">
+            <FaExclamationTriangle className="text-lg md:text-xl animate-pulse text-red-700" />
+            <span>{t('test_mode_warning')}</span>
+            <span className="text-black/30 mx-4">///</span>
+            <span>{t('suggestions_text')}</span>
+            <span className="text-black/30 mx-4">///</span>
+            <span>{t('test_mode_warning')}</span>
+            <span className="text-black/30 mx-4">///</span>
+            <span>{t('suggestions_text')}</span>
+          </div>
+        </div>
+
+        {/* Copyright (C) */}
+        <div className="text-center py-3 bg-black/80 text-white/40 text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] backdrop-blur-md">
+          {t('footer_text')}
+        </div>
+
       </div>
 
     </div>

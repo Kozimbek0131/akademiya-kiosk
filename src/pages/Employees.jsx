@@ -142,7 +142,7 @@ const Employees = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const base = "https://web-production-ba75.up.railway.app";
+        const base = "https://web-production-8dce.up.railway.app";
         const [eRes, dRes] = await Promise.all([
           fetch(`${base}/api/employees/?lang=${language}`),
           fetch(`${base}/api/departments/?lang=${language}`)

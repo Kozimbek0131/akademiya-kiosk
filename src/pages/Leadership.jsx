@@ -13,7 +13,7 @@ const Leadership = () => {
     const fetchLeaders = async () => {
       setIsLoading(true);
       try {
-        const res = await fetch(`https://web-production-ba75.up.railway.app/api/leadership/?lang=${language}`);
+        const res = await fetch(`https://web-production-8dce.up.railway.app/api/leadership/?lang=${language}`);
         if (!res.ok) throw new Error("Server xatosi");
         const data = await res.json();
         setLeaders(Array.isArray(data) ? data : (data.results || []));

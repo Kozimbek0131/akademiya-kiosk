@@ -10,9 +10,9 @@ const Wifi = () => {
 
   // t() har render da qayta chaqiriladi — til o'zgarganda to'g'ri ishlaydi
   const wifiNetworks = [
-    { id: 'staff',      name: t('wifi_staff'),   desc: t('wifi_staff_desc'),   icon: <FaUserTie />,     password: 'staff_password_1',   qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=WIFI:S:Akademiya_Xodim;T:WPA;P:staff_password_1;;' },
-    { id: 'conference', name: t('wifi_guest'),   desc: t('wifi_guest_desc'),   icon: <FaUsers />,       password: 'guest_password_2',   qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=WIFI:S:Conference;T:WPA;P:guest_password_2;;' },
-    { id: 'students',   name: t('wifi_student'), desc: t('wifi_student_desc'), icon: <FaUserGraduate />, password: 'student_password_3', qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=WIFI:S:Talabalar;T:WPA;P:student_password_3;;' },
+    // { id: 'staff',      name: t('wifi_staff'),   desc: t('wifi_staff_desc'),   icon: <FaUserTie />,     password: 'staff_password_1',   qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=WIFI:S:Akademiya_Xodim;T:WPA;P:staff_password_1;;' },
+    { id: 'conference', name: t('wifi_guest'),   desc: t('wifi_guest_desc'),   icon: <FaUsers />,       password: 'Academy2025',   qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=WIFI:S:Conference;T:WPA;P:guest_password_2;;' },
+    { id: 'students',   name: t('wifi_student'), desc: t('wifi_student_desc'), icon: <FaUserGraduate />, password: 'talaba// Academy2026', qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=WIFI:S:Talabalar;T:WPA;P:student_password_3;;' },
   ];
 
   const activeWifi = wifiNetworks.find(w => w.id === activeWifiId) || wifiNetworks[0];

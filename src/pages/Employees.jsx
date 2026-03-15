@@ -116,9 +116,6 @@ const EmployeeModal = ({ employee, onClose, language }) => {
   );
 };
 
-// ─────────────────────────────────────────────
-// ASOSIY EMPLOYEES
-// ─────────────────────────────────────────────
 const Employees = () => {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
@@ -131,22 +128,20 @@ const Employees = () => {
   const [selectedFloor, setSelectedFloor] = useState('all');
   const [selectedDept,  setSelectedDept]  = useState('all');
 
-  // Til o'zgarganda hammasini reset
   useEffect(() => {
     setSelectedFloor('all');
     setSelectedDept('all');
     setSearchTerm('');
   }, [language]);
 
- useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
         const base = "https://web-production-8dce.up.railway.app";
-        // Har ikkala so'rovni yuboramiz
         const [eRes, dRes] = await Promise.all([
           fetch(`${base}/api/employees/?lang=${language}`),
-          fetch(`${base}/api/departments/`) // Bo'limlarga til filtri shart emas, barchasini olamiz
+          fetch(`${base}/api/departments/`)
         ]);
 
         if (!eRes.ok || !dRes.ok) throw new Error("Server xatosi");
@@ -154,12 +149,10 @@ const Employees = () => {
         const eData = await eRes.json();
         const dData = await dRes.json();
 
-        // XODIMLARNI TARTIBLASH
         const rawEmployees = Array.isArray(eData) ? eData : (eData.results || []);
         const sortedEmployees = [...rawEmployees].sort((a, b) => (a.order || 0) - (b.order || 0));
         setEmployees(sortedEmployees);
 
-        // BO'LIMLARNI QABUL QILISH (Strukturani tekshirgan holda)
         const rawDepts = Array.isArray(dData) ? dData : (dData.results || []);
         setDepartments(rawDepts);
 
@@ -172,24 +165,16 @@ const Employees = () => {
     fetchData();
   }, [language]);
 
-  // Tanlangan qavatda mavjud bo'limlar (department_name orqali)
- const deptsOnFloor = departments;
-    selectedFloor === 'all'
-      ? true
-      : employees.some(e =>
-          String(e.floor) === String(selectedFloor) &&
-          (e.department_name === dept.name ||
-            String(e.department) === String(dept.id))
-        )
-  );
+  // BO'LIMLARNI TO'G'RI CHIQARISH (SINTAKSIS TO'G'IRLANDI)
+  const deptsOnFloor = departments;
 
-  // Asosiy filter
   const filteredEmployees = employees.filter(emp => {
+    const floorOk = selectedFloor === 'all' || String(emp.floor) === String(selectedFloor);
+    const deptOk  = selectedDept  === 'all' || emp.department_name === selectedDept || String(emp.department) === String(selectedDept);
+    
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      const floorOk = selectedFloor === 'all' || String(emp.floor) === String(selectedFloor);
-      const deptOk  = selectedDept  === 'all' || emp.department_name === selectedDept || String(emp.department) === String(selectedDept);
-      const textOk  = (
+      const textOk = (
         (emp.full_name       || '').toLowerCase().includes(term) ||
         (emp.position         || '').toLowerCase().includes(term) ||
         (emp.department_name || '').toLowerCase().includes(term) ||
@@ -197,16 +182,12 @@ const Employees = () => {
       );
       return floorOk && deptOk && textOk;
     }
-    const floorOk = selectedFloor === 'all' || String(emp.floor) === String(selectedFloor);
-    const deptOk  = selectedDept  === 'all' ||
-                    emp.department_name === selectedDept ||
-                    String(emp.department) === String(selectedDept);
     return floorOk && deptOk;
   });
 
   const handleFloorClick = (floor) => {
     setSelectedFloor(floor);
-    setSelectedDept('all'); // qavat o'zgarganda bo'limni reset qil
+    setSelectedDept('all');
   };
 
   const floorLabel = (f) => {
@@ -227,7 +208,6 @@ const Employees = () => {
     <div className="h-screen flex flex-col bg-slate-900 relative overflow-hidden select-none text-white font-sans">
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 z-0 pointer-events-none" />
 
-      {/* MODAL */}
       {selectedEmployee && (
         <EmployeeModal
           employee={selectedEmployee}
@@ -236,7 +216,6 @@ const Employees = () => {
         />
       )}
 
-      {/* HEADER */}
       <div className="relative z-10 flex items-center justify-between p-4 md:p-5 bg-slate-800/80 backdrop-blur-md border-b border-white/10 shadow-lg shrink-0">
         <button
           onClick={() => navigate('/')}
@@ -261,13 +240,8 @@ const Employees = () => {
         </h1>
       </div>
 
-      {/* ASOSIY QISM */}
       <div className="relative z-10 flex-1 flex gap-4 p-4 md:p-5 overflow-hidden">
-
-        {/* ── YON PANEL ── */}
         <div className="w-60 md:w-68 flex flex-col bg-slate-800/50 border border-white/10 rounded-2xl shrink-0 overflow-hidden h-full">
-
-          {/* QAVATLAR — gorizontal tugmalar */}
           <div className="p-3 border-b border-white/10 shrink-0">
             <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-2 flex items-center gap-1.5">
               <FaBuilding className="text-blue-400" />
@@ -292,7 +266,6 @@ const Employees = () => {
             </div>
           </div>
 
-          {/* BO'LIMLAR ro'yxati */}
           <div className="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-1">
             <div className="flex items-center justify-between px-2 py-1.5 sticky top-0 bg-slate-800/80">
               <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold flex items-center gap-1.5">
@@ -311,21 +284,23 @@ const Employees = () => {
               {language === 'ru' ? 'Все отделы' : language === 'en' ? 'All depts' : "Barchasi"}
             </button>
 
-            {deptsOnFloor.map(dept => (
-              <button
-                key={dept.id}
-                onClick={() => setSelectedDept(dept.name)}
-                className={`w-full px-3 py-2.5 rounded-xl text-left text-xs leading-snug transition-all cursor-pointer ${selectedDept === dept.name ? 'bg-amber-500 text-black font-bold' : 'bg-white/5 text-slate-300 hover:bg-white/10 font-medium'}`}
-              >
-                {dept.name}
-              </button>
-            ))}
+            {deptsOnFloor.map(dept => {
+              // DINAMIK NOM TANLASH
+              const deptName = language === 'ru' ? dept.name_ru : language === 'en' ? dept.name_en : dept.name_uz;
+              return (
+                <button
+                  key={dept.id}
+                  onClick={() => setSelectedDept(deptName)}
+                  className={`w-full px-3 py-2.5 rounded-xl text-left text-xs leading-snug transition-all cursor-pointer ${selectedDept === deptName ? 'bg-amber-500 text-black font-bold' : 'bg-white/5 text-slate-300 hover:bg-white/10 font-medium'}`}
+                >
+                  {deptName}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* ── XODIMLAR ── */}
         <div className="flex-1 bg-white/5 border border-white/10 rounded-2xl overflow-hidden flex flex-col h-full">
-          {/* Sarlavha */}
           <div className="p-4 border-b border-white/10 bg-slate-800/80 shrink-0 flex items-center justify-between">
             <h2 className="text-base md:text-lg text-white font-bold truncate max-w-xs">{getTitle()}</h2>
             <span className="text-xs font-black text-blue-300 bg-blue-900/50 border border-blue-500/30 px-3 py-1.5 rounded-full shrink-0 ml-2">
@@ -333,7 +308,6 @@ const Employees = () => {
             </span>
           </div>
 
-          {/* Kartochkalar */}
           <div className="flex-1 overflow-y-auto custom-scrollbar p-4">
             {isLoading ? (
               <div className="h-full flex flex-col items-center justify-center text-blue-400">
@@ -347,43 +321,35 @@ const Employees = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-10">
-                {filteredEmployees.map((e, i) => {
-                  const name     = e.full_name      || "Noma'lum xodim";
-                  const pos      = e.position       || '';
-                  const deptName = e.department_name || '';
-                  return (
-                    <div
-                      key={e.id || i}
-                      onClick={() => setSelectedEmployee(e)}
-                      className="bg-slate-800/90 p-4 rounded-2xl border border-white/10 hover:border-blue-500/50 hover:bg-slate-700/80 transition-all shadow-lg flex flex-col justify-between cursor-pointer active:scale-95"
-                    >
-                      <div className="flex items-start gap-3 mb-3">
-                        <div className="w-14 h-14 rounded-xl bg-slate-700 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden">
-                          {e.image
-                            ? <img src={e.image} alt={name} className="w-full h-full object-cover" />
-                            : <FaUserTie className="text-2xl text-slate-500" />
-                          }
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="text-sm font-black text-white leading-tight mb-1 line-clamp-2">{name}</h3>
-                          <p className="text-xs text-blue-400 font-semibold line-clamp-2 leading-snug mb-1.5">{pos}</p>
-                          <span className="text-[10px] text-slate-400 bg-white/5 border border-white/5 px-2 py-0.5 rounded-md line-clamp-1">{deptName}</span>
-                        </div>
+                {filteredEmployees.map((e, i) => (
+                  <div
+                    key={e.id || i}
+                    onClick={() => setSelectedEmployee(e)}
+                    className="bg-slate-800/90 p-4 rounded-2xl border border-white/10 hover:border-blue-500/50 hover:bg-slate-700/80 transition-all shadow-lg flex flex-col justify-between cursor-pointer active:scale-95"
+                  >
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className="w-14 h-14 rounded-xl bg-slate-700 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden">
+                        {e.image ? <img src={e.image} alt={e.full_name} className="w-full h-full object-cover" /> : <FaUserTie className="text-2xl text-slate-500" />}
                       </div>
-                      <div className="pt-2.5 border-t border-white/10 flex items-center justify-between">
-                        <div className="flex items-center gap-1 text-slate-400 text-xs font-bold">
-                          {e.floor && <><FaBuilding className="text-slate-500 text-[10px]" /> {e.floor}{t('floor')}</>}
-                          {e.room  && <><span className="mx-1 opacity-30">·</span><FaDoorOpen className="text-slate-500 text-[10px]" /> {e.room}</>}
-                        </div>
-                        {e.phone && (
-                          <div className="flex items-center gap-1 text-emerald-400 font-mono font-black text-sm">
-                            <FaPhoneAlt className="text-[10px] text-emerald-500" /> {e.phone}
-                          </div>
-                        )}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-sm font-black text-white leading-tight mb-1 line-clamp-2">{e.full_name || "Noma'lum"}</h3>
+                        <p className="text-xs text-blue-400 font-semibold line-clamp-2 leading-snug mb-1.5">{e.position || ''}</p>
+                        <span className="text-[10px] text-slate-400 bg-white/5 border border-white/5 px-2 py-0.5 rounded-md line-clamp-1">{e.department_name || ''}</span>
                       </div>
                     </div>
-                  );
-                })}
+                    <div className="pt-2.5 border-t border-white/10 flex items-center justify-between">
+                      <div className="flex items-center gap-1 text-slate-400 text-xs font-bold">
+                        {e.floor && <><FaBuilding className="text-slate-500 text-[10px]" /> {e.floor}{t('floor')}</>}
+                        {e.room  && <><span className="mx-1 opacity-30">·</span><FaDoorOpen className="text-slate-500 text-[10px]" /> {e.room}</>}
+                      </div>
+                      {e.phone && (
+                        <div className="flex items-center gap-1 text-emerald-400 font-mono font-black text-sm">
+                          <FaPhoneAlt className="text-[10px] text-emerald-500" /> {e.phone}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>

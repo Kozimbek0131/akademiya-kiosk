@@ -44,5 +44,6 @@ img, video {
 }
 
 .animate-marquee {
-  animation: marquee 20s linear infinite;
+  /* 20s o'rniga 40s (yoki xohlasangiz 60s) qildik. Raqam qancha katta bo'lsa, shuncha sekin va silliq yuradi */
+  animation: marquee 60s linear infinite;
 }

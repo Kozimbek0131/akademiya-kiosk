@@ -30,7 +30,6 @@ const EmployeeModal = ({ employee, onClose, language }) => {
         style={{ zIndex: 10000 }}
         onClick={e => e.stopPropagation()}
       >
-        {/* Yopish */}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 w-10 h-10 bg-white/10 hover:bg-red-500/30 border border-white/10 rounded-xl flex items-center justify-center transition-all cursor-pointer"
@@ -39,7 +38,6 @@ const EmployeeModal = ({ employee, onClose, language }) => {
           <FaTimes className="text-white" />
         </button>
 
-        {/* Yuqori — rasm + ism */}
         <div className="bg-gradient-to-br from-blue-900/50 to-slate-900 px-6 pt-8 pb-6 flex flex-col items-center text-center border-b border-white/10">
           <div className="w-24 h-24 rounded-full border-2 border-blue-500/40 overflow-hidden bg-slate-700 flex items-center justify-center shadow-xl mb-4">
             {employee.image
@@ -51,7 +49,6 @@ const EmployeeModal = ({ employee, onClose, language }) => {
           <p className="text-sm text-blue-300 font-semibold leading-snug max-w-xs">{pos}</p>
         </div>
 
-        {/* Pastki — ma'lumotlar */}
         <div className="px-6 py-5 space-y-3">
           {deptName && (
             <div className="flex items-center gap-3 bg-slate-700/50 border border-white/5 rounded-2xl px-4 py-3">
@@ -116,9 +113,6 @@ const EmployeeModal = ({ employee, onClose, language }) => {
   );
 };
 
-// ─────────────────────────────────────────────
-// ASOSIY EMPLOYEES
-// ─────────────────────────────────────────────
 const Employees = () => {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
@@ -131,7 +125,6 @@ const Employees = () => {
   const [selectedFloor, setSelectedFloor] = useState('all');
   const [selectedDept,  setSelectedDept]  = useState('all');
 
-  // Til o'zgarganda hammasini reset
   useEffect(() => {
     setSelectedFloor('all');
     setSelectedDept('all');
@@ -153,11 +146,9 @@ const Employees = () => {
         const eData = await eRes.json();
         const dData = await dRes.json();
 
-        // XODIMLARNI TARTIBLASH (Original tartibni saqlash uchun)
         const rawEmployees = Array.isArray(eData) ? eData : (eData.results || []);
         setEmployees(rawEmployees);
 
-        // BO'LIMLARNI QABUL QILISH
         const rawDepts = Array.isArray(dData) ? dData : (dData.results || []);
         setDepartments(rawDepts);
 
@@ -170,10 +161,8 @@ const Employees = () => {
     fetchData();
   }, [language]);
 
-  // BO'LIMLARNI DOIMIY KO'RSATISH
   const deptsOnFloor = departments;
 
-  // ASOSIY FILTER VA TARTIBLASH (ORDER BO'YICHA)
   const filteredEmployees = employees
     .filter(emp => {
       const floorOk = selectedFloor === 'all' || String(emp.floor) === String(selectedFloor);
@@ -190,8 +179,7 @@ const Employees = () => {
         return floorOk && deptOk && textOk;
       }
       return floorOk && deptOk;
-    })
-    .sort((a, b) => (a.order || 0) - (b.order || 0)); // ADMIN PANEL TARTIBI SHU YERDA
+    });
 
   const handleFloorClick = (floor) => {
     setSelectedFloor(floor);
@@ -329,36 +317,36 @@ const Employees = () => {
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-10">
                 {filteredEmployees
-  .sort((a, b) => (a.order || 0) - (b.order || 0)) // Admin paneldagi 'order' bo'yicha tizish
-  .map((e, i) => (
-    <div
-      key={e.id || i}
-      onClick={() => setSelectedEmployee(e)}
-      className="bg-slate-800/90 p-4 rounded-2xl border border-white/10 hover:border-blue-500/50 hover:bg-slate-700/80 transition-all shadow-lg flex flex-col justify-between cursor-pointer active:scale-95"
-    >
-                    <div className="flex items-start gap-3 mb-3">
-                      <div className="w-14 h-14 rounded-xl bg-slate-700 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden">
-                        {e.image ? <img src={e.image} alt={e.full_name} className="w-full h-full object-cover" /> : <FaUserTie className="text-2xl text-slate-500" />}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-black text-white leading-tight mb-1 line-clamp-2">{e.full_name || "Noma'lum"}</h3>
-                        <p className="text-xs text-blue-400 font-semibold line-clamp-2 leading-snug mb-1.5">{e.position || ''}</p>
-                        <span className="text-[10px] text-slate-400 bg-white/5 border border-white/5 px-2 py-0.5 rounded-md line-clamp-1">{e.department_name || ''}</span>
-                      </div>
-                    </div>
-                    <div className="pt-2.5 border-t border-white/10 flex items-center justify-between">
-                      <div className="flex items-center gap-1 text-slate-400 text-xs font-bold">
-                        {e.floor && <><FaBuilding className="text-slate-500 text-[10px]" /> {e.floor}{t('floor')}</>}
-                        {e.room  && <><span className="mx-1 opacity-30">·</span><FaDoorOpen className="text-slate-500 text-[10px]" /> {e.room}</>}
-                      </div>
-                      {e.phone && (
-                        <div className="flex items-center gap-1 text-emerald-400 font-mono font-black text-sm">
-                          <FaPhoneAlt className="text-[10px] text-emerald-500" /> {e.phone}
+                  .sort((a, b) => (a.order || 0) - (b.order || 0)) // TARTIBLASH SHU YERGA KO'CHIRILDI
+                  .map((e, i) => (
+                    <div
+                      key={e.id || i}
+                      onClick={() => setSelectedEmployee(e)}
+                      className="bg-slate-800/90 p-4 rounded-2xl border border-white/10 hover:border-blue-500/50 hover:bg-slate-700/80 transition-all shadow-lg flex flex-col justify-between cursor-pointer active:scale-95"
+                    >
+                      <div className="flex items-start gap-3 mb-3">
+                        <div className="w-14 h-14 rounded-xl bg-slate-700 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden">
+                          {e.image ? <img src={e.image} alt={e.full_name} className="w-full h-full object-cover" /> : <FaUserTie className="text-2xl text-slate-500" />}
                         </div>
-                      )}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-sm font-black text-white leading-tight mb-1 line-clamp-2">{e.full_name || "Noma'lum"}</h3>
+                          <p className="text-xs text-blue-400 font-semibold line-clamp-2 leading-snug mb-1.5">{e.position || ''}</p>
+                          <span className="text-[10px] text-slate-400 bg-white/5 border border-white/5 px-2 py-0.5 rounded-md line-clamp-1">{e.department_name || ''}</span>
+                        </div>
+                      </div>
+                      <div className="pt-2.5 border-t border-white/10 flex items-center justify-between">
+                        <div className="flex items-center gap-1 text-slate-400 text-xs font-bold">
+                          {e.floor && <><FaBuilding className="text-slate-500 text-[10px]" /> {e.floor}{t('floor')}</>}
+                          {e.room  && <><span className="mx-1 opacity-30">·</span><FaDoorOpen className="text-slate-500 text-[10px]" /> {e.room}</>}
+                        </div>
+                        {e.phone && (
+                          <div className="flex items-center gap-1 text-emerald-400 font-mono font-black text-sm">
+                            <FaPhoneAlt className="text-[10px] text-emerald-500" /> {e.phone}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             )}
           </div>
@@ -369,3 +357,4 @@ const Employees = () => {
 };
 
 export default Employees;
+//f//

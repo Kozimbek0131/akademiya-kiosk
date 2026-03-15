@@ -167,21 +167,23 @@ const Employees = () => {
         String(emp.department) === String(dept.id)
       )
     );
-  });
+  }).sort((a, b) => Number(a.order || 0) - Number(b.order || 0));
 
+  // YAXSHILANGAN QIDIRUV VA FILTRLASH
   const filteredEmployees = employees.filter(emp => {
     const floorOk = selectedFloor === 'all' || String(emp.floor) === String(selectedFloor);
     const deptOk  = selectedDept  === 'all' || emp.department_name === selectedDept || String(emp.department) === String(selectedDept);
     
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      const textOk = (
-        (emp.full_name       || '').toLowerCase().includes(term) ||
-        (emp.position         || '').toLowerCase().includes(term) ||
+      // Ism, lavozim, bo'lim nomi yoki xona/tel bo'yicha kengaytirilgan qidiruv
+      return floorOk && (
+        (emp.full_name || '').toLowerCase().includes(term) ||
+        (emp.position || '').toLowerCase().includes(term) ||
         (emp.department_name || '').toLowerCase().includes(term) ||
-        (emp.room && String(emp.room).includes(term))
+        (emp.room && String(emp.room).includes(term)) ||
+        (emp.phone && String(emp.phone).includes(term))
       );
-      return floorOk && deptOk && textOk;
     }
     return floorOk && deptOk;
   });
@@ -322,7 +324,19 @@ const Employees = () => {
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-10">
                 {filteredEmployees
-                  .sort((a, b) => Number(a.order || 0) - Number(b.order || 0))
+                  .sort((a, b) => {
+                    // 1. Avval Bo'lim tartibi (order) bo'yicha
+                    const deptA = departments.find(d => d.id === a.department || (language === 'uz' ? d.name_uz : language === 'ru' ? d.name_ru : d.name_en) === a.department_name);
+                    const deptB = departments.find(d => d.id === b.department || (language === 'uz' ? d.name_uz : language === 'ru' ? d.name_ru : d.name_en) === b.department_name);
+                    
+                    const deptOrderA = deptA ? (deptA.order || 999) : 999;
+                    const deptOrderB = deptB ? (deptB.order || 999) : 999;
+
+                    if (deptOrderA !== deptOrderB) return deptOrderA - deptOrderB;
+
+                    // 2. Bo'lim ichida xodim tartibi (order) bo'yicha
+                    return Number(a.order || 0) - Number(b.order || 0);
+                  })
                   .map((e, i) => (
                     <div
                       key={e.id || i}

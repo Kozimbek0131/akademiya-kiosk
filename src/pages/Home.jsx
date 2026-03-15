@@ -134,30 +134,32 @@ const Home = () => {
         </div>
       </div>
 
-      {/* ========================================================= */}
+     {/* ========================================================= */}
       {/* YANGI FOOTER: FAQAT YUGURUVCHI QATOR QOLDI */}
       {/* ========================================================= */}
       <div className="relative z-20 w-full bg-black/80 backdrop-blur-md text-amber-500 overflow-hidden flex items-center py-3 border-t border-white/10 shrink-0">
-        <div className="whitespace-nowrap animate-marquee flex items-center gap-6 text-[10px] md:text-sm font-black uppercase tracking-widest px-4">
+        {/* DIQQAT: Bu yerdan 'uppercase' olib tashlandi */}
+        <div className="whitespace-nowrap animate-marquee flex items-center gap-6 text-[10px] md:text-sm tracking-widest px-4">
           
           <FaExclamationTriangle className="text-lg md:text-xl animate-pulse text-amber-500" />
-          <span>{t('test_mode_warning')}</span>
-          <span className="text-white/20 mx-2">///</span>
-          <span>{t('suggestions_text')}</span>
+          <span className="uppercase font-black">{t('test_mode_warning')}</span>
+          <span className="text-white/20 mx-2 font-black">///</span>
+          {/* Telegram yozuvi endi normal holatda va biroz ingichkaroq harfda chiqadi */}
+          <span className="normal-case font-medium text-amber-200">{t('suggestions_text')}</span>
           
-          <span className="text-white/20 mx-2">///</span>
+          <span className="text-white/20 mx-2 font-black">///</span>
           
           <FaExclamationTriangle className="text-lg md:text-xl animate-pulse text-amber-500" />
-          <span>{t('test_mode_warning')}</span>
-          <span className="text-white/20 mx-2">///</span>
-          <span>{t('suggestions_text')}</span>
+          <span className="uppercase font-black">{t('test_mode_warning')}</span>
+          <span className="text-white/20 mx-2 font-black">///</span>
+          <span className="normal-case font-medium text-amber-200">{t('suggestions_text')}</span>
 
-          <span className="text-white/20 mx-2">///</span>
+          <span className="text-white/20 mx-2 font-black">///</span>
           
           <FaExclamationTriangle className="text-lg md:text-xl animate-pulse text-amber-500" />
-          <span>{t('test_mode_warning')}</span>
-          <span className="text-white/20 mx-2">///</span>
-          <span>{t('suggestions_text')}</span>
+          <span className="uppercase font-black">{t('test_mode_warning')}</span>
+          <span className="text-white/20 mx-2 font-black">///</span>
+          <span className="normal-case font-medium text-amber-200">{t('suggestions_text')}</span>
           
         </div>
       </div>

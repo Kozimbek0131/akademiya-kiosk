@@ -149,8 +149,9 @@ const Employees = () => {
         ]);
         if (!eRes.ok || !dRes.ok) throw new Error("Server xatosi");
         const eData = await eRes.json();
-        const dData = await dRes.json();
-        setEmployees(  Array.isArray(eData) ? eData : (eData.results  || []));
+        const rawEmployees = Array.isArray(eData) ? eData : (eData.results || []);
+const sortedByOrder = [...rawEmployees].sort((a, b) => (a.order || 0) - (b.order || 0));
+setEmployees(sortedByOrder);
         setDepartments(Array.isArray(dData) ? dData : (dData.results || []));
       } catch (err) {
         console.error("API xatoligi:", err);

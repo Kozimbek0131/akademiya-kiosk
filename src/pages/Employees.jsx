@@ -166,7 +166,7 @@ const Employees = () => {
   }, [language]);
 
   // Tanlangan qavatda mavjud bo'limlar (department_name orqali)
-  const deptsOnFloor = departments.filter(dept =>
+ const deptsOnFloor = departments;
     selectedFloor === 'all'
       ? true
       : employees.some(e =>

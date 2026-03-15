@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { 
   FaUserTie, FaTrophy, FaFileAlt, FaBus, FaWifi, 
   FaMapMarkedAlt, FaQuestionCircle, FaStar, FaExclamationTriangle, FaExpand 
-} from 'react-icons/fa'; // FaExpand ni qo'shdik
+} from 'react-icons/fa'; 
 import logoImg from '../assets/logo.png';
 
 const Home = () => {
@@ -67,7 +67,6 @@ const Home = () => {
   return (
     <div className="h-screen flex flex-col bg-[#0f172a] relative overflow-hidden select-none font-sans text-white">
       
-      {/* DINAMIK ORQA FON VIDEOSI */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover scale-105">
           <source src="/bg_video.mp4" type="video/mp4" />
@@ -75,7 +74,6 @@ const Home = () => {
         <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-[2px]"></div>
       </div>
       
-      {/* STATUS BAR VA TILLAR */}
       <div className="relative z-20 bg-white/5 backdrop-blur-md border-b border-white/10 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between shadow-lg shrink-0">
         <div className="flex flex-col">
            <span className="text-xl md:text-3xl font-bold text-white tracking-widest drop-shadow-lg">{formattedTime}</span>
@@ -96,7 +94,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* HEADER LOGO */}
       <div className="relative z-10 flex flex-col items-center justify-center pt-4 md:pt-6 pb-2 text-center shrink-0 px-4">
         <img 
           src={logoImg} 
@@ -115,7 +112,6 @@ const Home = () => {
         </p>
       </div>
 
-      {/* ASOSIY MENYU */}
       <div className="relative z-10 flex-1 px-4 md:px-8 w-full flex justify-center overflow-y-auto custom-scrollbar touch-pan-y pb-6">
         <div className="grid grid-cols-2 gap-4 md:gap-8 w-full max-w-4xl mt-4 h-fit">
           {menuItems.map((item) => (
@@ -147,38 +143,49 @@ const Home = () => {
         </div>
       </div>
 
-     {/* YANGI: YUGURUVCHI QATOR (Copyright olib tashlandi) */}
-      {/* ========================================================= */}
-      <div className="relative z-20 w-full flex flex-col shrink-0 mt-auto">
+      <div className="relative z-20 w-full flex items-center bg-black/80 backdrop-blur-md border-t border-white/10 shrink-0 mt-auto">
         
-        {/* Yuguruvchi qator (Marquee) */}
-        <div className="w-full bg-amber-500/90 backdrop-blur-md text-slate-950 overflow-hidden flex items-center py-3 md:py-4 border-t border-amber-400 shadow-[0_-5px_20px_rgba(245,158,11,0.2)]">
-          <div className="whitespace-nowrap animate-marquee flex items-center gap-6 text-[10px] md:text-sm font-black uppercase tracking-widest px-4">
-            <FaExclamationTriangle className="text-lg md:text-xl animate-pulse text-red-700" />
-            <span>{t('test_mode_warning')}</span>
-            <span className="text-black/30 mx-4">///</span>
-            <span>{t('suggestions_text')}</span>
-            <span className="text-black/30 mx-4">///</span>
-            <span>{t('test_mode_warning')}</span>
-            <span className="text-black/30 mx-4">///</span>
-            <span>{t('suggestions_text')}</span>
+        <div className="flex-1 overflow-hidden py-3 md:py-4">
+          <div className="whitespace-nowrap animate-marquee flex items-center gap-6 text-[10px] md:text-sm tracking-widest px-4">
+            
+            <FaExclamationTriangle className="text-lg md:text-xl animate-pulse text-amber-500" />
+            <span className="uppercase font-black text-amber-500">{t('test_mode_warning')}</span>
+            <span className="text-white/20 mx-2 font-black">///</span>
+            <div className="flex items-center">
+               <span className="uppercase font-bold text-amber-200">{t('suggestions_text').split('@')[0]}</span>
+               <span className="lowercase font-black text-amber-400">@akhatov0131</span>
+            </div>
+            
+            <span className="text-white/20 mx-2 font-black">///</span>
+            
+            <FaExclamationTriangle className="text-lg md:text-xl animate-pulse text-amber-500" />
+            <span className="uppercase font-black text-amber-500">{t('test_mode_warning')}</span>
+            <span className="text-white/20 mx-2 font-black">///</span>
+            <div className="flex items-center">
+               <span className="uppercase font-bold text-amber-200">{t('suggestions_text').split('@')[0]}</span>
+               <span className="lowercase font-black text-amber-400">@akhatov0131</span>
+            </div>
+
+            <span className="text-white/20 mx-2 font-black">///</span>
+            
+            <FaExclamationTriangle className="text-lg md:text-xl animate-pulse text-amber-500" />
+            <span className="uppercase font-black text-amber-500">{t('test_mode_warning')}</span>
+            <span className="text-white/20 mx-2 font-black">///</span>
+            <div className="flex items-center">
+               <span className="uppercase font-bold text-amber-200">{t('suggestions_text').split('@')[0]}</span>
+               <span className="lowercase font-black text-amber-400">@akhatov0131</span>
+            </div>
+            
           </div>
         </div>
-        </div>
 
-        {/* Copyright qismi va YASHIRIN FULLSCREEN TUGMASI */}
-        <div className="relative text-center py-3 bg-[#0a0f1c] text-white/30 text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] z-30 flex items-center justify-center">
-          {t('footer_text')}
-          
-          {/* Uncha sezilmaydigan FULLSCREEN tugmasi (Eng o'ng burchakda) */}
-          <button 
-            onClick={toggleFullScreen}
-            className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 p-3 opacity-10 hover:opacity-100 transition-opacity cursor-pointer text-white"
-            title="To'liq ekranga o'tish"
-          >
-            <FaExpand className="text-base md:text-xl" />
-          </button>
-        </div>
+        <button 
+          onClick={toggleFullScreen}
+          className="absolute right-0 top-0 bottom-0 z-50 px-4 md:px-6 bg-black/50 opacity-10 hover:opacity-100 transition-opacity cursor-pointer text-white flex items-center justify-center"
+          title="To'liq ekranga o'tish"
+        >
+          <FaExpand className="text-base md:text-xl" />
+        </button>
 
       </div>
 
@@ -187,4 +194,3 @@ const Home = () => {
 };
 
 export default Home;
-//d//

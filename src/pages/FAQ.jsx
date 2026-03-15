@@ -17,7 +17,7 @@ const FAQ = () => {
     {
       id: 2,
       question: { uz: "Rahbariyat qabuliga qanday yozilish mumkin?", ru: "Как записаться на приём к руководству?", en: "How to schedule an appointment with management?" },
-      answer:   { uz: "Boshliq va o'rinbosarlar qabuli har hafta Chorshanba kuni 10:00 da o'tkaziladi. Ro'yxatdan o'tish uchun Devonxonaga (5-qavat, 105-xona) murojaat qiling yoki +998712020496 raqamiga qo'ng'iroq qiling.", ru: "Приём у начальника и заместителей — каждую среду в 10:00. Для записи обратитесь в Канцелярию (5-й этаж, каб. 105) или позвоните: +998712020496.", en: "Reception is held every Wednesday at 10:00. Contact the Secretariat (5st floor, room 105) or call +998712020496." }
+      answer:   { uz: "Boshliq va o'rinbosarlar qabuli har hafta Chorshanba kuni 10:00 da o'tkaziladi. Ro'yxatdan o'tish uchun Qabulxonaga (5-qavat, 105-xona) murojaat qiling yoki +998712020496 raqamiga qo'ng'iroq qiling.", ru: "Приём у начальника и заместителей — каждую среду в 10:00. Для записи обратитесь в Приёмная (5-й этаж, каб. 105) или позвоните: +998712020496.", en: "Reception is held every Wednesday at 10:00. Contact the Secretariat (5st floor, room 105) or call +998712020496." }
     },
     {
       id: 3,

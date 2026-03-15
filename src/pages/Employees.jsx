@@ -138,24 +138,31 @@ const Employees = () => {
     setSearchTerm('');
   }, [language]);
 
-  useEffect(() => {
+ useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
         const base = "https://web-production-8dce.up.railway.app";
+        // Har ikkala so'rovni yuboramiz
         const [eRes, dRes] = await Promise.all([
           fetch(`${base}/api/employees/?lang=${language}`),
-          fetch(`${base}/api/departments/?lang=${language}`)
+          fetch(`${base}/api/departments/`) // Bo'limlarga til filtri shart emas, barchasini olamiz
         ]);
+
         if (!eRes.ok || !dRes.ok) throw new Error("Server xatosi");
+
         const eData = await eRes.json();
-        
-        // MANA SHU YERGA TARTIBLASH QO'SHILDI (XAVFSIZ):
+        const dData = await dRes.json();
+
+        // XODIMLARNI TARTIBLASH
         const rawEmployees = Array.isArray(eData) ? eData : (eData.results || []);
-        const sortedByOrder = [...rawEmployees].sort((a, b) => (a.order || 0) - (b.order || 0));
-        setEmployees(sortedByOrder);
-        
-        setDepartments(Array.isArray(dData) ? dData : (dData.results || []));
+        const sortedEmployees = [...rawEmployees].sort((a, b) => (a.order || 0) - (b.order || 0));
+        setEmployees(sortedEmployees);
+
+        // BO'LIMLARNI QABUL QILISH (Strukturani tekshirgan holda)
+        const rawDepts = Array.isArray(dData) ? dData : (dData.results || []);
+        setDepartments(rawDepts);
+
       } catch (err) {
         console.error("API xatoligi:", err);
       } finally {

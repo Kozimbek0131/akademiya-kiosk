@@ -135,29 +135,31 @@ const Home = () => {
       </div>
 
       {/* ========================================================= */}
-      {/* YANGI: YUGURUVCHI QATOR VA FOOTER (Ekran eng pastida) */}
+      {/* YANGI FOOTER: FAQAT YUGURUVCHI QATOR QOLDI */}
       {/* ========================================================= */}
-      <div className="relative z-20 w-full flex flex-col shrink-0">
-        
-        {/* Yuguruvchi qator (Marquee) */}
-        <div className="w-full bg-amber-500/90 backdrop-blur-md text-slate-950 overflow-hidden flex items-center py-2 border-t border-amber-400 shadow-[0_-5px_20px_rgba(245,158,11,0.2)]">
-          <div className="whitespace-nowrap animate-marquee flex items-center gap-6 text-[10px] md:text-sm font-black uppercase tracking-widest px-4">
-            <FaExclamationTriangle className="text-lg md:text-xl animate-pulse text-red-700" />
-            <span>{t('test_mode_warning')}</span>
-            <span className="text-black/30 mx-4">///</span>
-            <span>{t('suggestions_text')}</span>
-            <span className="text-black/30 mx-4">///</span>
-            <span>{t('test_mode_warning')}</span>
-            <span className="text-black/30 mx-4">///</span>
-            <span>{t('suggestions_text')}</span>
-          </div>
-        </div>
+      <div className="relative z-20 w-full bg-black/80 backdrop-blur-md text-amber-500 overflow-hidden flex items-center py-3 border-t border-white/10 shrink-0">
+        <div className="whitespace-nowrap animate-marquee flex items-center gap-6 text-[10px] md:text-sm font-black uppercase tracking-widest px-4">
+          
+          <FaExclamationTriangle className="text-lg md:text-xl animate-pulse text-amber-500" />
+          <span>{t('test_mode_warning')}</span>
+          <span className="text-white/20 mx-2">///</span>
+          <span>{t('suggestions_text')}</span>
+          
+          <span className="text-white/20 mx-2">///</span>
+          
+          <FaExclamationTriangle className="text-lg md:text-xl animate-pulse text-amber-500" />
+          <span>{t('test_mode_warning')}</span>
+          <span className="text-white/20 mx-2">///</span>
+          <span>{t('suggestions_text')}</span>
 
-        {/* Copyright (C) */}
-        <div className="text-center py-3 bg-black/80 text-white/40 text-[8px] md:text-[10px] uppercase font-bold tracking-[0.2em] backdrop-blur-md">
-          {t('footer_text')}
+          <span className="text-white/20 mx-2">///</span>
+          
+          <FaExclamationTriangle className="text-lg md:text-xl animate-pulse text-amber-500" />
+          <span>{t('test_mode_warning')}</span>
+          <span className="text-white/20 mx-2">///</span>
+          <span>{t('suggestions_text')}</span>
+          
         </div>
-
       </div>
 
     </div>

@@ -19,6 +19,8 @@ export const LanguageProvider = ({ children }) => {
       loading: "Yuklanmoqda...",
       select_network: "Tarmoqni tanlang",
       scan_to_connect: "Ulanish uchun kamerani qarating",
+      test_mode_warning: "Ushbu axborot kioski hozirda test sinovida ishlamoqda",
+suggestions_text: "Taklif va mulohazalar uchun Telegram: @akhatov0131",
 
       // --- ASOSIY MENYU (HOME) ---
       menu_employees: "XODIMLAR",
@@ -103,6 +105,8 @@ export const LanguageProvider = ({ children }) => {
       loading: "Загрузка...",
       select_network: "Выберите сеть",
       scan_to_connect: "Наведите камеру для подключения",
+      test_mode_warning: "Данный информационный киоск работает в тестовом режиме",
+suggestions_text: "Для предложений и замечаний Telegram: @akhatov0131",
 
       menu_employees: "СОТРУДНИКИ",
       menu_leadership: "РУКОВОДСТВО",
@@ -179,6 +183,8 @@ export const LanguageProvider = ({ children }) => {
       loading: "Loading...",
       select_network: "Select network",
       scan_to_connect: "Point camera to connect",
+      test_mode_warning: "This information kiosk is currently operating in test mode",
+suggestions_text: "For suggestions and feedback Telegram: @akhatov0131",
 
       menu_employees: "EMPLOYEES",
       menu_leadership: "LEADERSHIP",

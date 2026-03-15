@@ -16,7 +16,12 @@ const Leadership = () => {
         const res = await fetch(`https://web-production-8dce.up.railway.app/api/leadership/?lang=${language}`);
         if (!res.ok) throw new Error("Server xatosi");
         const data = await res.json();
-        setLeaders(Array.isArray(data) ? data : (data.results || []));
+        
+        // TARTIBLASH QISMI (XAVFSIZ):
+        const rawData = Array.isArray(data) ? data : (data.results || []);
+        const sortedLeaders = [...rawData].sort((a, b) => (a.order || 0) - (b.order || 0));
+        setLeaders(sortedLeaders);
+        
       } catch (error) {
         console.error("API xatoligi:", error);
       } finally {
@@ -26,8 +31,9 @@ const Leadership = () => {
     fetchLeaders();
   }, [language]);
 
-  const chief = leaders.find(l => l.order === 0) || leaders[0];
-  const deputies = leaders.filter(l => l !== chief);
+  // Tartiblangan ro'yxatdan birinchisini boshliq, qolganini o'rinbosar deb olamiz
+  const chief = leaders[0];
+  const deputies = leaders.slice(1);
 
   return (
     <div className="h-screen flex flex-col bg-slate-900 relative overflow-hidden select-none text-white font-sans">

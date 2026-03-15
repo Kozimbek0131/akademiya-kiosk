@@ -30,7 +30,6 @@ const EmployeeModal = ({ employee, onClose, language }) => {
         style={{ zIndex: 10000 }}
         onClick={e => e.stopPropagation()}
       >
-        {/* Yopish */}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 w-10 h-10 bg-white/10 hover:bg-red-500/30 border border-white/10 rounded-xl flex items-center justify-center transition-all cursor-pointer"
@@ -39,7 +38,6 @@ const EmployeeModal = ({ employee, onClose, language }) => {
           <FaTimes className="text-white" />
         </button>
 
-        {/* Yuqori — rasm + ism */}
         <div className="bg-gradient-to-br from-blue-900/50 to-slate-900 px-6 pt-8 pb-6 flex flex-col items-center text-center border-b border-white/10">
           <div className="w-24 h-24 rounded-full border-2 border-blue-500/40 overflow-hidden bg-slate-700 flex items-center justify-center shadow-xl mb-4">
             {employee.image
@@ -51,7 +49,6 @@ const EmployeeModal = ({ employee, onClose, language }) => {
           <p className="text-sm text-blue-300 font-semibold leading-snug max-w-xs">{pos}</p>
         </div>
 
-        {/* Pastki — ma'lumotlar */}
         <div className="px-6 py-5 space-y-3">
           {deptName && (
             <div className="flex items-center gap-3 bg-slate-700/50 border border-white/5 rounded-2xl px-4 py-3">
@@ -116,9 +113,6 @@ const EmployeeModal = ({ employee, onClose, language }) => {
   );
 };
 
-// ─────────────────────────────────────────────
-// ASOSIY EMPLOYEES
-// ─────────────────────────────────────────────
 const Employees = () => {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
@@ -131,7 +125,6 @@ const Employees = () => {
   const [selectedFloor, setSelectedFloor] = useState('all');
   const [selectedDept,  setSelectedDept]  = useState('all');
 
-  // Til o'zgarganda hammasini reset
   useEffect(() => {
     setSelectedFloor('all');
     setSelectedDept('all');
@@ -153,11 +146,8 @@ const Employees = () => {
         const eData = await eRes.json();
         const dData = await dRes.json();
 
-        const rawEmployees = Array.isArray(eData) ? eData : (eData.results || []);
-        setEmployees(rawEmployees);
-
-        const rawDepts = Array.isArray(dData) ? dData : (dData.results || []);
-        setDepartments(rawDepts);
+        setEmployees(Array.isArray(eData) ? eData : (eData.results || []));
+        setDepartments(Array.isArray(dData) ? dData : (dData.results || []));
 
       } catch (err) {
         console.error("API xatoligi:", err);
@@ -168,7 +158,16 @@ const Employees = () => {
     fetchData();
   }, [language]);
 
-  const deptsOnFloor = departments;
+  // BO'LIMLARNI QAVATGA QARAB FILTRLASH
+  const deptsOnFloor = departments.filter(dept => {
+    if (selectedFloor === 'all') return true;
+    return employees.some(emp => 
+      String(emp.floor) === String(selectedFloor) && (
+        emp.department_name === (language === 'ru' ? dept.name_ru : language === 'en' ? dept.name_en : dept.name_uz) ||
+        String(emp.department) === String(dept.id)
+      )
+    );
+  });
 
   const filteredEmployees = employees.filter(emp => {
     const floorOk = selectedFloor === 'all' || String(emp.floor) === String(selectedFloor);
@@ -323,7 +322,7 @@ const Employees = () => {
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-10">
                 {filteredEmployees
-                  .sort((a, b) => Number(a.order || 0) - Number(b.order || 0)) // TARTIBLASH MUAMMOSI TO'LIQ HAL QILINDI
+                  .sort((a, b) => Number(a.order || 0) - Number(b.order || 0))
                   .map((e, i) => (
                     <div
                       key={e.id || i}

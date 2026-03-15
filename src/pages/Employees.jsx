@@ -176,7 +176,7 @@ const Employees = () => {
     
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      // Ism, lavozim, bo'lim nomi yoki xona/tel bo'yicha kengaytirilgan qidiruv
+      // Ism, lavozim, bo'lim nomi, xona yoki tel bo'yicha qidiruv
       return floorOk && (
         (emp.full_name || '').toLowerCase().includes(term) ||
         (emp.position || '').toLowerCase().includes(term) ||
@@ -325,16 +325,26 @@ const Employees = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-10">
                 {filteredEmployees
                   .sort((a, b) => {
-                    // 1. Avval Bo'lim tartibi (order) bo'yicha
-                    const deptA = departments.find(d => d.id === a.department || (language === 'uz' ? d.name_uz : language === 'ru' ? d.name_ru : d.name_en) === a.department_name);
-                    const deptB = departments.find(d => d.id === b.department || (language === 'uz' ? d.name_uz : language === 'ru' ? d.name_ru : d.name_en) === b.department_name);
-                    
-                    const deptOrderA = deptA ? (deptA.order || 999) : 999;
-                    const deptOrderB = deptB ? (deptB.order || 999) : 999;
+                    // 1. Bo'lim tartibi (order) bo'yicha bog'lash
+                    // Xodimning bo'limini uning nomi yoki ID-si orqali topamiz
+                    const deptA = departments.find(d => 
+                      String(d.id) === String(a.department) || 
+                      d.name_uz === a.department_name || 
+                      d.name_ru === a.department_name
+                    );
+                    const deptB = departments.find(d => 
+                      String(d.id) === String(b.department) || 
+                      d.name_uz === b.department_name || 
+                      d.name_ru === b.department_name
+                    );
 
-                    if (deptOrderA !== deptOrderB) return deptOrderA - deptOrderB;
+                    const orderA = deptA ? (deptA.order || 999) : 999;
+                    const orderB = deptB ? (deptB.order || 999) : 999;
 
-                    // 2. Bo'lim ichida xodim tartibi (order) bo'yicha
+                    // Agar bo'limlar har xil bo'lsa, bo'lim tartibi bo'yicha saralaymiz
+                    if (orderA !== orderB) return orderA - orderB;
+
+                    // 2. Bo'limlari bir xil bo'lsa, xodimning o'zini tartibi (order) bo'yicha
                     return Number(a.order || 0) - Number(b.order || 0);
                   })
                   .map((e, i) => (

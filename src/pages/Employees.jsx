@@ -39,12 +39,21 @@ const EmployeeModal = ({ employee, onClose, language }) => {
         </button>
 
         <div className="bg-gradient-to-br from-blue-900/50 to-slate-900 px-6 pt-8 pb-6 flex flex-col items-center text-center border-b border-white/10">
-          <div className="w-24 h-24 rounded-full border-2 border-blue-500/40 overflow-hidden bg-slate-700 flex items-center justify-center shadow-xl mb-4">
-            {employee.image
-              ? <img src={employee.image} alt={name} className="w-full h-full object-cover" />
-              : <FaUserTie className="text-5xl text-slate-400" />
-            }
-          </div>
+          <div className="w-40 h-40 md:w-52 md:h-52 rounded-full border-4 border-blue-500/30 overflow-hidden bg-slate-700 flex items-center justify-center shadow-2xl mb-8 relative">
+  {employee.image ? (
+    <img 
+      src={employee.image} 
+      alt={name} 
+      // object-cover qo'shildi, h-full va w-full bilan birga
+      className="w-full h-full object-cover rounded-full" 
+      style={{ 
+        imageRendering: 'auto', // Sifatni saqlash
+      }}
+    />
+  ) : (
+    <FaUserTie className="text-8xl text-slate-500" />
+  )}
+</div>
           <h2 className="text-xl font-black text-white leading-tight mb-2">{name}</h2>
           <p className="text-sm text-blue-300 font-semibold leading-snug max-w-xs">{pos}</p>
         </div>

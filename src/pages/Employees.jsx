@@ -45,8 +45,7 @@ const EmployeeModal = ({ employee, onClose, language }) => {
         {/* CHAP TOMON: KATTA RASM */}
         <div className="w-full md:w-5/12 h-80 md:h-auto bg-slate-800 relative">
           {employee.image ? (
-            <img src={employee.image} alt={name} className="w-full h-full object-cover" />
-          ) : (
+<img src={employee.image} className="w-full h-full object-contain p-4" />          ) : (
             <div className="w-full h-full flex items-center justify-center bg-slate-800">
               <FaUserTie className="text-9xl text-slate-600" />
             </div>

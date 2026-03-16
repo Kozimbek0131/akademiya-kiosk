@@ -8,120 +8,110 @@ import {
 } from 'react-icons/fa';
 
 // ─────────────────────────────────────────────
-/// ... (importlar o'zgarishsiz qoladi)
-
-// ─────────────────────────────────────────────
-// YANGILANGAN MODAL — KATTAROQ VA INTERAKTIV
+// MODAL — createPortal (overflow:hidden muammosi hal qilindi)
 // ─────────────────────────────────────────────
 const EmployeeModal = ({ employee, onClose, language }) => {
   if (!employee) return null;
 
-  const name     = employee.full_name     || employee.full_name_uz || "Noma'lum";
-  const pos      = employee.position      || employee.position_uz  || '';
+  const name     = employee.full_name      || employee.full_name_uz || "Noma'lum";
+  const pos      = employee.position       || employee.position_uz  || '';
   const deptName = employee.department_name || '';
 
   return createPortal(
     <div
-      className="fixed inset-0 flex items-center justify-center p-4 md:p-10"
+      className="fixed inset-0 flex items-center justify-center p-4"
       style={{ zIndex: 9999 }}
+      onClick={onClose}
     >
-      {/* Orqa fon */}
-      <div className="absolute inset-0 bg-black/90 backdrop-blur-md" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/75 backdrop-blur-sm" />
 
       <div
-        className="relative w-full max-w-4xl bg-slate-900 border border-white/20 rounded-[2.5rem] shadow-[0_0_100px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col md:flex-row animate-in zoom-in duration-300"
+        className="relative w-full max-w-md bg-slate-800 border border-white/10 rounded-3xl shadow-2xl overflow-hidden"
         style={{ zIndex: 10000 }}
         onClick={e => e.stopPropagation()}
       >
-        {/* Yopish tugmasi */}
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 w-12 h-12 bg-white/10 hover:bg-red-500 text-white rounded-full flex items-center justify-center transition-all cursor-pointer shadow-lg border border-white/10"
+          className="absolute top-4 right-4 w-10 h-10 bg-white/10 hover:bg-red-500/30 border border-white/10 rounded-xl flex items-center justify-center transition-all cursor-pointer"
           style={{ zIndex: 10001 }}
         >
-          <FaTimes className="text-2xl" />
+          <FaTimes className="text-white" />
         </button>
 
-        {/* CHAP TOMON: KATTA RASM */}
-        <div className="w-full md:w-5/12 h-80 md:h-auto bg-slate-800 relative">
-          {employee.image ? (
-<img src={employee.image} className="w-full h-full object-contain p-4" />          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-slate-800">
-              <FaUserTie className="text-9xl text-slate-600" />
-            </div>
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent md:hidden"></div>
+        <div className="bg-gradient-to-br from-blue-900/50 to-slate-900 px-6 pt-8 pb-6 flex flex-col items-center text-center border-b border-white/10">
+          <div className="w-24 h-24 rounded-full border-2 border-blue-500/40 overflow-hidden bg-slate-700 flex items-center justify-center shadow-xl mb-4">
+            {employee.image
+              ? <img src={employee.image} alt={name} className="w-full h-full object-cover" />
+              : <FaUserTie className="text-5xl text-slate-400" />
+            }
+          </div>
+          <h2 className="text-xl font-black text-white leading-tight mb-2">{name}</h2>
+          <p className="text-sm text-blue-300 font-semibold leading-snug max-w-xs">{pos}</p>
         </div>
 
-        {/* O'NG TOMON: MA'LUMOTLAR */}
-        <div className="w-full md:w-7/12 p-8 md:p-12 flex flex-col justify-center bg-slate-900">
-          <div className="mb-8">
-            <span className="text-blue-400 font-black uppercase tracking-[0.2em] text-xs md:text-sm mb-2 block">
-               {language === 'ru' ? 'Сотрудник' : language === 'en' ? 'Employee' : 'Akademiya xodimi'}
-            </span>
-            <h1 className="text-3xl md:text-5xl font-black text-white mb-4 leading-tight">
-              {name}
-            </h1>
-            <p className="text-blue-300 text-lg md:text-2xl font-bold uppercase border-l-4 border-blue-500 pl-4">
-              {pos}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Bo'lim */}
-            <div className="col-span-1 md:col-span-2 flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/10">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0">
-                <FaLayerGroup className="text-amber-400 text-xl" />
+        <div className="px-6 py-5 space-y-3">
+          {deptName && (
+            <div className="flex items-center gap-3 bg-slate-700/50 border border-white/5 rounded-2xl px-4 py-3">
+              <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                <FaLayerGroup className="text-amber-400 text-sm" />
               </div>
               <div>
-                <p className="text-[10px] text-slate-500 uppercase font-bold">{language === 'ru' ? 'Отдел' : language === 'en' ? 'Department' : "Bo'lim"}</p>
-                <p className="text-white font-bold text-base md:text-lg">{deptName}</p>
-              </div>
-            </div>
-
-            {/* Qavat */}
-            <div className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/10">
-              <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0">
-                <FaBuilding className="text-blue-400 text-xl" />
-              </div>
-              <div>
-                <p className="text-[10px] text-slate-500 uppercase font-bold">{language === 'ru' ? 'Этаж' : language === 'en' ? 'Floor' : 'Qavat'}</p>
-                <p className="text-white font-black text-2xl">{employee.floor || '—'}</p>
-              </div>
-            </div>
-
-            {/* Xona */}
-            <div className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/10">
-              <div className="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center shrink-0">
-                <FaDoorOpen className="text-green-400 text-xl" />
-              </div>
-              <div>
-                <p className="text-[10px] text-slate-500 uppercase font-bold">{language === 'ru' ? 'Кабинет' : language === 'en' ? 'Room' : 'Xona'}</p>
-                <p className="text-white font-black text-2xl">{employee.room || '—'}</p>
-              </div>
-            </div>
-
-            {/* Telefon */}
-            <div className="col-span-1 md:col-span-2 flex items-center gap-4 bg-emerald-500/10 p-5 rounded-2xl border border-emerald-500/20">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-500/20 flex items-center justify-center shrink-0 shadow-lg">
-                <FaPhoneAlt className="text-emerald-400 text-2xl" />
-              </div>
-              <div>
-                <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">{language === 'ru' ? 'Внутренний номер' : language === 'en' ? 'Extension' : 'Ichki raqam'}</p>
-                <p className="text-emerald-400 font-black text-3xl md:text-4xl font-mono leading-none mt-1">
-                  {employee.phone || '—'}
+                <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">
+                  {language === 'ru' ? 'Отдел' : language === 'en' ? 'Department' : "Bo'lim"}
                 </p>
+                <p className="text-white font-bold text-sm leading-snug">{deptName}</p>
               </div>
             </div>
+          )}
+
+          <div className="grid grid-cols-2 gap-3">
+            {employee.floor && (
+              <div className="flex items-center gap-3 bg-slate-700/50 border border-white/5 rounded-2xl px-4 py-3">
+                <div className="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
+                  <FaBuilding className="text-blue-400 text-sm" />
+                </div>
+                <div>
+                  <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">
+                    {language === 'ru' ? 'Этаж' : language === 'en' ? 'Floor' : 'Qavat'}
+                  </p>
+                  <p className="text-white font-black text-lg">{employee.floor}</p>
+                </div>
+              </div>
+            )}
+            {employee.room && (
+              <div className="flex items-center gap-3 bg-slate-700/50 border border-white/5 rounded-2xl px-4 py-3">
+                <div className="w-9 h-9 rounded-xl bg-green-500/10 border border-green-500/20 flex items-center justify-center shrink-0">
+                  <FaDoorOpen className="text-green-400 text-sm" />
+                </div>
+                <div>
+                  <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">
+                    {language === 'ru' ? 'Кабинет' : language === 'en' ? 'Room' : 'Xona'}
+                  </p>
+                  <p className="text-white font-black text-lg">{employee.room}</p>
+                </div>
+              </div>
+            )}
           </div>
+
+          {employee.phone && (
+            <div className="flex items-center gap-3 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl px-4 py-3">
+              <div className="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center shrink-0">
+                <FaPhoneAlt className="text-emerald-400 text-sm" />
+              </div>
+              <div>
+                <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">
+                  {language === 'ru' ? 'Внутренний номер' : language === 'en' ? 'Extension' : 'Ichki raqam'}
+                </p>
+                <p className="text-emerald-400 font-black text-2xl font-mono">{employee.phone}</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>,
     document.body
   );
 };
-
-// ... (Employees komponentining qolgan qismi o'zgarishsiz qoladi)
 
 const Employees = () => {
   const navigate = useNavigate();

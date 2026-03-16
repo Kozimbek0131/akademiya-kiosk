@@ -47,3 +47,7 @@ img, video {
   /* 20s o'rniga 40s (yoki xohlasangiz 60s) qildik. Raqam qancha katta bo'lsa, shuncha sekin va silliq yuradi */
   animation: marquee 60s linear infinite;
 }
+img {
+  image-rendering: -webkit-optimize-contrast; /* Tiniqlikni oshiradi */
+  image-rendering: crisp-edges;
+}

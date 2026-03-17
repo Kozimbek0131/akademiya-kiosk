@@ -41,23 +41,25 @@ const EmployeeModal = ({ employee, onClose, language }) => {
         <div className="bg-gradient-to-br from-blue-900/50 to-slate-900 px-6 pt-8 pb-6 flex flex-col items-center text-center border-b border-white/10">
           
           {/* 100% ISHLAYDIGAN RASM KODI (KATTA RASM) */}
-          <div className="w-40 h-40 md:w-52 md:h-52 rounded-full border-4 border-blue-500/30 overflow-hidden bg-slate-700 flex items-center justify-center shadow-2xl mb-8 shrink-0">
-            {employee.image ? (
-              <img 
-                src={employee.image} 
-                alt={name} 
-                style={{ 
-                  width: '100%', 
-                  height: '100%', 
-                  objectFit: 'cover', 
-                  objectPosition: 'center',
-                  display: 'block' 
-                }} 
-              />
-            ) : (
-              <FaUserTie className="text-8xl text-slate-500" />
-            )}
-          </div>
+         <div className="w-40 h-40 md:w-52 md:h-52 rounded-full border-4 border-blue-500/30 overflow-hidden bg-slate-700 flex items-center justify-center shadow-2xl mb-8 shrink-0 relative">
+  {employee.image ? (
+    <img 
+      src={employee.image} 
+      alt={name} 
+      style={{ 
+        width: '100%', 
+        height: '100%', 
+        minWidth: '100%',
+        minHeight: '100%',
+        objectFit: 'cover', // Bu rasmni qirqib, doirani to'ldiradi
+        objectPosition: 'center top', // Yuz qismi teparoqda bo'lsa, markazning tepasini ko'rsatadi
+        display: 'block' 
+      }} 
+    />
+  ) : (
+    <FaUserTie className="text-8xl text-slate-500" />
+  )}
+</div>
 
           <h2 className="text-xl font-black text-white leading-tight mb-2">{name}</h2>
           <p className="text-sm text-blue-300 font-semibold leading-snug max-w-xs">{pos}</p>

@@ -364,23 +364,22 @@ const Employees = () => {
                       <div className="flex items-start gap-3 mb-3">
                         
                         {/* 100% ISHLAYDIGAN RASM KODI (KICHIK RASM) */}
-                        <div className="w-14 h-14 rounded-xl bg-slate-700 border border-white/10 overflow-hidden flex items-center justify-center shrink-0">
-                          {e.image ? (
-                            <img 
-                              src={e.image} 
-                              alt={e.full_name} 
-                              style={{ 
-                                width: '100%', 
-                                height: '100%', 
-                                objectFit: 'cover', 
-                                objectPosition: 'center',
-                                display: 'block' 
-                              }} 
-                            />
-                          ) : (
-                            <FaUserTie className="text-2xl text-slate-500" />
-                          )}
-                        </div>
+                       {/* Rasm konteyneri */}
+<div className="w-14 h-14 md:w-16 md:h-16 rounded-xl bg-slate-700 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden relative">
+  {e.image ? (
+    <img 
+      src={e.image} 
+      alt={e.full_name} 
+      className="w-full h-full object-cover" 
+      style={{ 
+        display: 'block',
+        objectPosition: 'center top' // Yuz qismi teparoqda bo'lsa, markaz-tepa qismini ko'rsatadi
+      }} 
+    />
+  ) : (
+    <FaUserTie className="text-2xl text-slate-500" />
+  )}
+</div>
 
                         <div className="flex-1 min-w-0">
                           <h3 className="text-sm font-black text-white leading-tight mb-1 line-clamp-2">{e.full_name || "Noma'lum"}</h3>

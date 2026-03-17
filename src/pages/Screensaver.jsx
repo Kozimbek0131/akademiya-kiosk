@@ -25,13 +25,13 @@ const Screensaver = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-black"></div>
 
         {/* === VIDEO KODI YONILDI === */} 
-        {/* <video 
+        <video 
           src="/reklama.mp4" 
           autoPlay 
           loop 
           muted 
           playsInline
-          className="w-full h-full object-cover opacity-80"  */}
+          className="w-full h-full object-cover opacity-80" 
         />
         {/* ========================== */}
         

@@ -66,7 +66,11 @@ const Home = () => {
   return (
     <div className="h-screen flex flex-col bg-[#0f172a] relative overflow-hidden select-none font-sans text-white">
       
+      {/* VIDEO IZOHDAN CHIQARILDI */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover scale-105">
+          <source src="/bg_video.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-[2px]"></div>
       </div>
       

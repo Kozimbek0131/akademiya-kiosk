@@ -364,8 +364,7 @@ const Employees = () => {
                       <div className="flex items-start gap-3 mb-3">
                         
                         {/* 100% ISHLAYDIGAN RASM KODI (KICHIK RASM) */}
-                       {/* Rasm konteyneri */}
-<div className="w-14 h-14 md:w-16 md:h-16 rounded-xl bg-slate-700 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden relative">
+                       <div className="w-14 h-14 md:w-16 md:h-16 rounded-xl bg-slate-700 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden relative">
   {e.image ? (
     <img 
       src={e.image} 
@@ -373,7 +372,8 @@ const Employees = () => {
       className="w-full h-full object-cover" 
       style={{ 
         display: 'block',
-        objectPosition: 'center top' // Yuz qismi teparoqda bo'lsa, markaz-tepa qismini ko'rsatadi
+        /* MUHIM O'ZGARISH: Rasmni tepa qismidan (boshidan) tekislash */
+        objectPosition: 'top' 
       }} 
     />
   ) : (

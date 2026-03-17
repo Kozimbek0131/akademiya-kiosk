@@ -38,23 +38,27 @@ const EmployeeModal = ({ employee, onClose, language }) => {
           <FaTimes className="text-white" />
         </button>
 
-        <div className="bg-gradient-to-br from-blue-900/50 to-slate-900 px-6 pt-8 pb-6 flex flex-col items-center text-center border-b border-white/10">
-          
-          {/* TO'G'RILANGAN KATTA RASM QISMI */}
-          <div className="w-40 h-40 md:w-52 md:h-52 rounded-full border-4 border-blue-500/30 overflow-hidden bg-slate-700 shadow-2xl mb-8 relative">
-            {employee.image ? (
-              <img 
-                src={employee.image} 
-                alt={name} 
-                className="absolute inset-0 w-full h-full object-cover" 
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <FaUserTie className="text-8xl text-slate-500" />
-              </div>
-            )}
-          </div>
-
+        <div
+  className="w-40 h-40 md:w-52 md:h-52 rounded-full border-4 border-blue-500/30 bg-slate-700 flex items-center justify-center shadow-2xl mb-8"
+  style={{ overflow: 'hidden', flexShrink: 0 }}
+>
+  {employee.image ? (
+    <img
+      src={employee.image}
+      alt={name}
+      style={{
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        objectPosition: 'center top',
+        display: 'block',
+        borderRadius: '50%',
+      }}
+    />
+  ) : (
+    <FaUserTie className="text-8xl text-slate-500" />
+  )}
+</div>
           <h2 className="text-xl font-black text-white leading-tight mb-2">{name}</h2>
           <p className="text-sm text-blue-300 font-semibold leading-snug max-w-xs">{pos}</p>
         </div>
@@ -168,6 +172,7 @@ const Employees = () => {
     fetchData();
   }, [language]);
 
+  // BO'LIMLARNI QAVATGA QARAB FILTRLASH
   const deptsOnFloor = departments.filter(dept => {
     if (selectedFloor === 'all') return true;
     return employees.some(emp => 
@@ -178,12 +183,14 @@ const Employees = () => {
     );
   }).sort((a, b) => Number(a.order || 0) - Number(b.order || 0));
 
+  // YAXSHILANGAN QIDIRUV VA FILTRLASH
   const filteredEmployees = employees.filter(emp => {
     const floorOk = selectedFloor === 'all' || String(emp.floor) === String(selectedFloor);
     const deptOk  = selectedDept  === 'all' || emp.department_name === selectedDept || String(emp.department) === String(selectedDept);
     
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
+      // Ism, lavozim, bo'lim nomi, xona yoki tel bo'yicha qidiruv
       return floorOk && (
         (emp.full_name || '').toLowerCase().includes(term) ||
         (emp.position || '').toLowerCase().includes(term) ||
@@ -332,6 +339,8 @@ const Employees = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pb-10">
                 {filteredEmployees
                   .sort((a, b) => {
+                    // 1. Bo'lim tartibi (order) bo'yicha bog'lash
+                    // Xodimning bo'limini uning nomi yoki ID-si orqali topamiz
                     const deptA = departments.find(d => 
                       String(d.id) === String(a.department) || 
                       d.name_uz === a.department_name || 
@@ -346,7 +355,10 @@ const Employees = () => {
                     const orderA = deptA ? (deptA.order || 999) : 999;
                     const orderB = deptB ? (deptB.order || 999) : 999;
 
+                    // Agar bo'limlar har xil bo'lsa, bo'lim tartibi bo'yicha saralaymiz
                     if (orderA !== orderB) return orderA - orderB;
+
+                    // 2. Bo'limlari bir xil bo'lsa, xodimning o'zini tartibi (order) bo'yicha
                     return Number(a.order || 0) - Number(b.order || 0);
                   })
                   .map((e, i) => (
@@ -356,22 +368,9 @@ const Employees = () => {
                       className="bg-slate-800/90 p-4 rounded-2xl border border-white/10 hover:border-blue-500/50 hover:bg-slate-700/80 transition-all shadow-lg flex flex-col justify-between cursor-pointer active:scale-95"
                     >
                       <div className="flex items-start gap-3 mb-3">
-                        
-                        {/* TO'G'RILANGAN KICHIK RASM QISMI */}
-                        <div className="w-14 h-14 rounded-xl bg-slate-700 border border-white/10 shrink-0 overflow-hidden relative">
-                          {e.image ? (
-                            <img 
-                              src={e.image} 
-                              alt={e.full_name} 
-                              className="absolute inset-0 w-full h-full object-cover" 
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <FaUserTie className="text-2xl text-slate-500" />
-                            </div>
-                          )}
+                        <div className="w-14 h-14 rounded-xl bg-slate-700 border border-white/10 flex items-center justify-center shrink-0 overflow-hidden">
+                          {e.image ? <img src={e.image} alt={e.full_name} className="w-full h-full object-cover" /> : <FaUserTie className="text-2xl text-slate-500" />}
                         </div>
-
                         <div className="flex-1 min-w-0">
                           <h3 className="text-sm font-black text-white leading-tight mb-1 line-clamp-2">{e.full_name || "Noma'lum"}</h3>
                           <p className="text-xs text-blue-400 font-semibold line-clamp-2 leading-snug mb-1.5">{e.position || ''}</p>

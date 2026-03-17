@@ -8,7 +8,7 @@ import {
 } from 'react-icons/fa';
 
 // ─────────────────────────────────────────────
-// MODAL — createPortal (overflow:hidden muammosi hal qilindi)
+// MODAL — KATTA RASM UCHUN
 // ─────────────────────────────────────────────
 const EmployeeModal = ({ employee, onClose, language }) => {
   if (!employee) return null;
@@ -40,18 +40,22 @@ const EmployeeModal = ({ employee, onClose, language }) => {
 
         <div className="bg-gradient-to-br from-blue-900/50 to-slate-900 px-6 pt-8 pb-6 flex flex-col items-center text-center border-b border-white/10">
           
-          {/* TO'G'RILANGAN KATTA RASM QISMI */}
-          <div className="w-40 h-40 md:w-52 md:h-52 rounded-full border-4 border-blue-500/30 overflow-hidden bg-slate-700 shadow-2xl mb-8 relative">
+          {/* 100% ISHLAYDIGAN RASM KODI (KATTA RASM) */}
+          <div className="w-40 h-40 md:w-52 md:h-52 rounded-full border-4 border-blue-500/30 overflow-hidden bg-slate-700 flex items-center justify-center shadow-2xl mb-8 shrink-0">
             {employee.image ? (
               <img 
                 src={employee.image} 
                 alt={name} 
-                className="absolute inset-0 w-full h-full object-cover" 
+                style={{ 
+                  width: '100%', 
+                  height: '100%', 
+                  objectFit: 'cover', 
+                  objectPosition: 'center',
+                  display: 'block' 
+                }} 
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <FaUserTie className="text-8xl text-slate-500" />
-              </div>
+              <FaUserTie className="text-8xl text-slate-500" />
             )}
           </div>
 
@@ -357,18 +361,22 @@ const Employees = () => {
                     >
                       <div className="flex items-start gap-3 mb-3">
                         
-                        {/* TO'G'RILANGAN KICHIK RASM QISMI */}
-                        <div className="w-14 h-14 rounded-xl bg-slate-700 border border-white/10 shrink-0 overflow-hidden relative">
+                        {/* 100% ISHLAYDIGAN RASM KODI (KICHIK RASM) */}
+                        <div className="w-14 h-14 rounded-xl bg-slate-700 border border-white/10 overflow-hidden flex items-center justify-center shrink-0">
                           {e.image ? (
                             <img 
                               src={e.image} 
                               alt={e.full_name} 
-                              className="absolute inset-0 w-full h-full object-cover" 
+                              style={{ 
+                                width: '100%', 
+                                height: '100%', 
+                                objectFit: 'cover', 
+                                objectPosition: 'center',
+                                display: 'block' 
+                              }} 
                             />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <FaUserTie className="text-2xl text-slate-500" />
-                            </div>
+                            <FaUserTie className="text-2xl text-slate-500" />
                           )}
                         </div>
 

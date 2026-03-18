@@ -54,7 +54,7 @@ const Screensaver = () => {
          </h1>
 
          <div className="text-white text-xl md:text-2xl font-bold border-2 border-white/40 px-10 py-4 rounded-full bg-black/40 backdrop-blur-md shadow-[0_0_30px_rgba(255,255,255,0.1)] animate-pulse">
-            👆 {t('touch_to_start') || "BOSHLASH UCHUN EKRANGA TEGING"}
+            👆 {t('boshlash') || "BOSHLASH UCHUN EKRANGA TEGING"}
          </div>
       </div>
     </div>

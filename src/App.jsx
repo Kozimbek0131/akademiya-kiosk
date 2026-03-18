@@ -4,7 +4,7 @@ import { LanguageProvider } from './context/LanguageContext';
 
 // KOMPONENTLAR
 import ActivityMonitor from './components/ActivityMonitor'; 
-import Screensaver from './pages/Screensaver'; 
+// import Screensaver from './pages/Screensaver'; 
 
 // SAHIFALARNI IMPORT QILISH (Mana shu yerda qolib ketgan bo'lishi mumkin)
 import Home from './pages/Home';

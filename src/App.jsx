@@ -4,7 +4,7 @@ import { LanguageProvider } from './context/LanguageContext';
 
 // KOMPONENTLAR
 import ActivityMonitor from './components/ActivityMonitor'; 
-// import Screensaver from './pages/Screensaver'; 
+import Screensaver from './pages/Screensaver'; 
 
 // SAHIFALARNI IMPORT QILISH (Mana shu yerda qolib ketgan bo'lishi mumkin)
 import Home from './pages/Home';
@@ -30,7 +30,7 @@ function App() {
         <ActivityMonitor>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/screensaver" element={<Screensaver />} />
+            {/* <Route path="/screensaver" element={<Screensaver />} /> */}
             <Route path="/employees" element={<Employees />} />
             <Route path="/leadership" element={<Leadership />} />
             <Route path="/map" element={<Map />} />

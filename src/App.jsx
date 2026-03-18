@@ -30,7 +30,7 @@ function App() {
         <ActivityMonitor>
           <Routes>
             <Route path="/" element={<Home />} />
-            {/* <Route path="/screensaver" element={<Screensaver />} /> */}
+            <Route path="/screensaver" element={<Screensaver />} />
             <Route path="/employees" element={<Employees />} />
             <Route path="/leadership" element={<Leadership />} />
             <Route path="/map" element={<Map />} />

@@ -10,6 +10,60 @@ import {
 } from 'react-icons/fa';
 
 // ─────────────────────────────────────────────
+// ICHKI TARJIMON (Xarita qismidagi matnlar uchun)
+// ─────────────────────────────────────────────
+const localT = (key, lang = 'uz') => {
+  const dict = {
+    uz: {
+      no_image: "Rasm mavjud emas",
+      bldg_info: "Bino haqida ma'lumot",
+      show_route: "Yo'nalishni ko'rsatish",
+      cancel: "Bekor qilish",
+      cancel_route: "Yo'nalishni bekor qilish",
+      you_are_here: "Siz shu yerdasiz",
+      legend: "Shartli belgilar",
+      study_bldg: "O'quv binolari",
+      dorms: "Yotoqxonalar",
+      canteen: "Oshxona",
+      staff: "Xodimlar binosi",
+      tashkent: "Toshkent",
+      route_prefix: "Yo'nalish:"
+    },
+    ru: {
+      no_image: "Нет изображения",
+      bldg_info: "Информация о здании",
+      show_route: "Показать маршрут",
+      cancel: "Отменить",
+      cancel_route: "Отменить маршрут",
+      you_are_here: "Вы здесь",
+      legend: "Условные обозначения",
+      study_bldg: "Учебные корпуса",
+      dorms: "Общежития",
+      canteen: "Столовая",
+      staff: "Здание сотрудников",
+      tashkent: "Ташкент",
+      route_prefix: "Маршрут:"
+    },
+    en: {
+      no_image: "No image available",
+      bldg_info: "Building Information",
+      show_route: "Show Route",
+      cancel: "Cancel",
+      cancel_route: "Cancel Route",
+      you_are_here: "You are here",
+      legend: "Legend",
+      study_bldg: "Study Buildings",
+      dorms: "Dormitories",
+      canteen: "Canteen",
+      staff: "Staff Building",
+      tashkent: "Tashkent",
+      route_prefix: "Route to:"
+    }
+  };
+  return dict[lang]?.[key] || dict['uz'][key];
+};
+
+// ─────────────────────────────────────────────
 // 1. KIOSK LOKATSIYASI VA BINOLAR BAZASI
 // ─────────────────────────────────────────────
 const KIOSK_LOCATION = { top: '56%', left: '28%' }; 
@@ -31,7 +85,6 @@ const academyBuildings = [
     desc_uz: "Amaliy mashg'ulotlar va laboratoriya xonalari.",
     images: [sampleImages[0]],
     top: '74%', left: '14%',
-    // Marshrut (X, Y foizlarda). 28,56 bu Kiosk. Yo'l asfalt bo'ylab chapga va pastga ketadi.
     route: "28,56 21,56 21,74 14,74" 
   },
   {
@@ -68,7 +121,6 @@ const academyBuildings = [
     desc_uz: "Akademiya xodimlari va talabalari uchun markaziy oshxona.",
     images: [sampleImages[2], sampleImages[0]],
     top: '33%', left: '49%',
-    // O'ng tomonga asosiy yo'lakdan yurib, tepaga buriladi
     route: "28,56 28,45 49,45 49,33"
   },
   {
@@ -105,7 +157,6 @@ const academyBuildings = [
     desc_uz: "Tinglovchilar va talabalar uchun asosiy yashash binosi.",
     images: [sampleImages[1], sampleImages[2]],
     top: '24%', left: '81%',
-    // Eng uzun yo'l, markaziy yo'lakdan yurib oxirida buriladi
     route: "28,56 28,45 71,45 71,24 81,24"
   },
 ];
@@ -192,7 +243,7 @@ const BuildingModal = ({ building, onClose, language, onDrawRoute }) => {
           ) : (
             <div className="flex-1 rounded-2xl bg-slate-800 flex items-center justify-center text-slate-500 flex-col gap-4 border border-white/5">
               {getBuildingIcon(building.type)}
-              <span className="font-bold text-sm uppercase tracking-widest text-slate-400">Rasm mavjud emas</span>
+              <span className="font-bold text-sm uppercase tracking-widest text-slate-400">{localT('no_image', language)}</span>
             </div>
           )}
         </div>
@@ -212,7 +263,7 @@ const BuildingModal = ({ building, onClose, language, onDrawRoute }) => {
             </div>
           </div>
           <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-6"></div>
-          <h3 className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-3">Bino haqida ma'lumot</h3>
+          <h3 className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-3">{localT('bldg_info', language)}</h3>
           <p className="text-base text-gray-200 leading-relaxed font-medium mb-6">{desc}</p>
           
           <div className="mt-auto pt-4">
@@ -220,7 +271,7 @@ const BuildingModal = ({ building, onClose, language, onDrawRoute }) => {
                 onClick={() => onDrawRoute(building)}
                 className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black uppercase tracking-widest py-4 rounded-2xl flex items-center justify-center gap-3 shadow-[0_10px_20px_rgba(37,99,235,0.3)] transition-all active:scale-95 cursor-pointer"
              >
-                <FaRoute className="text-2xl" /> Yo'nalishni ko'rsatish
+                <FaRoute className="text-2xl" /> {localT('show_route', language)}
              </button>
           </div>
         </div>
@@ -232,7 +283,7 @@ const BuildingModal = ({ building, onClose, language, onDrawRoute }) => {
 };
 
 // ─────────────────────────────────────────────
-// 3. ASOSIY XARITA COMPONENTI (ZOOM, PAN)
+// 3. ASOSIY XARITA COMPONENTI
 // ─────────────────────────────────────────────
 const Map = () => {
   const navigate = useNavigate();
@@ -241,7 +292,6 @@ const Map = () => {
   const [selectedBuilding, setSelectedBuilding] = useState(null);
   const [destination, setDestination] = useState(null);
 
-  // Transform-based Pan & Zoom states
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -251,7 +301,6 @@ const Map = () => {
 
   useEffect(() => {
     const style = document.createElement('style');
-    // Yangi animasiya (yurish effekti uchun kichik qadamlar)
     style.innerHTML = `
       @keyframes march { to { stroke-dashoffset: -8; } }
       .route-line { stroke-dasharray: 2 2; animation: march 1s linear infinite; }
@@ -310,7 +359,7 @@ const Map = () => {
         onDrawRoute={drawRoute}
       />
 
-      {/* OVERLAYS (Tugmalar va Vidjetlar) */}
+      {/* OVERLAYS */}
       <div className="absolute top-0 left-0 right-0 p-5 md:p-8 flex justify-between items-start z-50 pointer-events-none">
         <button onClick={() => navigate('/')} className="pointer-events-auto flex items-center gap-2.5 bg-slate-900/80 backdrop-blur-md border border-white/20 text-white px-5 py-3.5 rounded-2xl hover:bg-white/20 active:scale-95 transition-all font-bold uppercase text-sm cursor-pointer shadow-xl">
           <FaArrowLeft className="text-base" /> {t('back_btn')}
@@ -320,10 +369,12 @@ const Map = () => {
            <div className="pointer-events-auto absolute left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-fade-in-down">
              <div className="bg-blue-600/90 backdrop-blur-md border border-blue-400 text-white px-6 py-2 rounded-xl flex items-center gap-3 shadow-[0_0_20px_rgba(37,99,235,0.5)]">
                 <FaWalking className="text-2xl animate-bounce" /> 
-                <span className="font-black tracking-widest uppercase text-sm">{destination[`name_${language}`] || destination.name_uz}ga yo'nalish</span>
+                <span className="font-black tracking-widest uppercase text-sm">
+                   {localT('route_prefix', language)} {destination[`name_${language}`] || destination.name_uz}
+                </span>
              </div>
              <button onClick={() => setDestination(null)} className="bg-slate-900/90 hover:bg-red-600 border border-white/20 text-white px-4 py-2 rounded-xl active:scale-95 transition-all font-bold uppercase text-[10px] cursor-pointer">
-               <FaTimesCircle className="inline mr-1" /> Bekor qilish
+               <FaTimesCircle className="inline mr-1" /> {localT('cancel', language)}
              </button>
            </div>
         )}
@@ -332,20 +383,20 @@ const Map = () => {
       <div className="absolute top-5 md:top-8 right-5 md:right-8 z-50 pointer-events-auto bg-slate-900/80 backdrop-blur-md border border-white/20 px-5 py-3 rounded-2xl flex items-center gap-4 shadow-xl">
          <FaCloudSun className="text-amber-400 text-3xl md:text-4xl drop-shadow-md" />
          <div className="flex flex-col">
-            <span className="text-[10px] md:text-xs text-slate-300 font-bold uppercase tracking-wider">Toshkent</span>
+            <span className="text-[10px] md:text-xs text-slate-300 font-bold uppercase tracking-wider">{localT('tashkent', language)}</span>
             <span className="text-base md:text-lg font-black text-white">+18°C</span>
          </div>
       </div>
 
       <div className="absolute bottom-5 md:bottom-8 left-5 md:left-8 z-50 pointer-events-auto bg-slate-900/80 backdrop-blur-md border border-white/20 p-4 md:p-5 rounded-2xl shadow-xl flex flex-col gap-3 w-48 md:w-56">
-         <p className="text-[10px] md:text-xs text-slate-400 font-bold uppercase tracking-widest mb-1 border-b border-white/10 pb-2">Shartli belgilar</p>
-         <div className="flex items-center gap-3 text-xs md:text-sm font-bold text-gray-300"><FaBuilding className="text-amber-400 text-lg" /> O'quv binolari</div>
-         <div className="flex items-center gap-3 text-xs md:text-sm font-bold text-gray-300"><FaBed className="text-blue-400 text-lg" /> Yotoqxonalar</div>
-         <div className="flex items-center gap-3 text-xs md:text-sm font-bold text-gray-300"><FaUtensils className="text-emerald-400 text-lg" /> Oshxona</div>
-         <div className="flex items-center gap-3 text-xs md:text-sm font-bold text-gray-300"><FaUserTie className="text-purple-400 text-lg" /> Xodimlar</div>
+         <p className="text-[10px] md:text-xs text-slate-400 font-bold uppercase tracking-widest mb-1 border-b border-white/10 pb-2">{localT('legend', language)}</p>
+         <div className="flex items-center gap-3 text-xs md:text-sm font-bold text-gray-300"><FaBuilding className="text-amber-400 text-lg" /> {localT('study_bldg', language)}</div>
+         <div className="flex items-center gap-3 text-xs md:text-sm font-bold text-gray-300"><FaBed className="text-blue-400 text-lg" /> {localT('dorms', language)}</div>
+         <div className="flex items-center gap-3 text-xs md:text-sm font-bold text-gray-300"><FaUtensils className="text-emerald-400 text-lg" /> {localT('canteen', language)}</div>
+         <div className="flex items-center gap-3 text-xs md:text-sm font-bold text-gray-300"><FaUserTie className="text-purple-400 text-lg" /> {localT('staff', language)}</div>
       </div>
 
-      {/* Zoom va Reset tugmalari */}
+      {/* Zoom va Reset */}
       <div className="absolute bottom-5 md:bottom-8 right-5 md:right-8 z-50 pointer-events-auto flex flex-col gap-2">
          <button onClick={handleReset} className="w-12 h-12 md:w-14 md:h-14 bg-slate-900/80 backdrop-blur-md border border-white/20 rounded-2xl flex items-center justify-center text-white hover:bg-amber-500 hover:border-amber-400 transition-all shadow-xl cursor-pointer active:scale-95" title="Markazga qaytish">
             <FaCrosshairs className="text-xl" />
@@ -357,7 +408,6 @@ const Map = () => {
             <FaMinus className="text-xl" />
          </button>
       </div>
-
 
       {/* ─────────────────────────────────────────────
           HAQIQIY "PAN AND ZOOM" KANVASI
@@ -390,17 +440,18 @@ const Map = () => {
              <div className="relative bg-gradient-to-b from-red-500 to-red-700 border-2 border-white w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(220,38,38,0.8)]">
                 <FaMapMarkerAlt className="text-white text-sm md:text-lg drop-shadow-md" />
              </div>
+             <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-red-600 text-white text-[10px] md:text-xs font-black uppercase px-3 py-1.5 rounded-lg shadow-xl whitespace-nowrap">
+                {localT('you_are_here', language)}
+             </div>
           </div>
 
-          {/* 🚶‍♂️ YANGI: ANIMATSION YURISH YO'LAGI (SVG Polyline) */}
+          {/* 🚶‍♂️ ANIMATSION YURISH YO'LAGI (SVG Polyline) */}
           {destination && destination.route && (
             <svg 
                className="absolute inset-0 w-full h-full pointer-events-none z-30" 
-               // viewbox yordamida SVG 100% o'lchamga va koordinatalar foizga tushadi
                viewBox="0 0 100 100" 
                preserveAspectRatio="none"
             >
-              {/* Orqa fonga qalinroq soya */}
               <polyline 
                 points={destination.route} 
                 fill="none" 
@@ -410,7 +461,6 @@ const Map = () => {
                 strokeLinejoin="round"
                 className="opacity-50"
               />
-              {/* Yuguruvchi nuqtalar (qadamlar) effekti */}
               <polyline 
                 points={destination.route} 
                 fill="none" 
@@ -448,7 +498,7 @@ const Map = () => {
                 </p>
                 {building.floors > 0 && (
                   <p className="text-[10px] md:text-xs text-blue-300 font-bold text-center mt-1">
-                    {building.floors} qavat
+                    {building.floors} {language === 'ru' ? 'этажей' : language === 'en' ? 'floors' : 'qavat'}
                   </p>
                 )}
                 <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px] border-x-6 border-x-transparent border-t-6 border-t-white/20"></div>

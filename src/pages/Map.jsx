@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { createPortal } from 'react-dom';
@@ -12,7 +12,8 @@ import {
 // ─────────────────────────────────────────────
 // 1. KIOSK LOKATSIYASI VA BINOLAR BAZASI
 // ─────────────────────────────────────────────
-const KIOSK_LOCATION = { top: '85%', left: '40%' }; // "Siz shu yerdasiz" koordinatasi
+// Diqqat: Siz ko'rsatgan qizil aylanaga asosan joylandi!
+const KIOSK_LOCATION = { top: '59%', left: '28%' }; 
 
 const sampleImages = [
   "https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=600",
@@ -246,13 +247,18 @@ const BuildingModal = ({ building, onClose, language, onDrawRoute }) => {
 const Map = () => {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
+  
   const [selectedBuilding, setSelectedBuilding] = useState(null);
   const [zoom, setZoom] = useState(1);
-  const [destination, setDestination] = useState(null); // Marshrut uchun
+  const [destination, setDestination] = useState(null);
+
+  // Drag-to-pan (sudrash) uchun state va ref'lar
+  const containerRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startPos, setStartPos] = useState({ x: 0, y: 0, scrollLeft: 0, scrollTop: 0 });
 
   const mapTitle = language === 'ru' ? 'Интерактивная карта' : language === 'en' ? 'Interactive Map' : 'Interaktiv xarita';
 
-  // Animatsiyali yo'nalish chizig'i uchun CSS
   useEffect(() => {
     const style = document.createElement('style');
     style.innerHTML = `
@@ -268,16 +274,44 @@ const Map = () => {
 
   const drawRoute = (building) => {
     setDestination(building);
-    setSelectedBuilding(null); // Modalni yopish
+    setSelectedBuilding(null); 
+  };
+
+  // ──────── SUDRASH (PAN) FUNKSIYALARI ────────
+  const startDrag = (e) => {
+    setIsDragging(true);
+    const pageX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+    const pageY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
+    setStartPos({
+      x: pageX,
+      y: pageY,
+      scrollLeft: containerRef.current.scrollLeft,
+      scrollTop: containerRef.current.scrollTop,
+    });
+  };
+
+  const stopDrag = () => {
+    setIsDragging(false);
+  };
+
+  const onDrag = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const pageX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+    const pageY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
+    
+    const walkX = (pageX - startPos.x) * 1.5; // Sudrash tezligi
+    const walkY = (pageY - startPos.y) * 1.5;
+    
+    containerRef.current.scrollLeft = startPos.scrollLeft - walkX;
+    containerRef.current.scrollTop = startPos.scrollTop - walkY;
   };
 
   return (
     <div className="w-screen h-screen relative bg-slate-950 overflow-hidden select-none text-white font-sans">
       
-      {/* Orqa fon gradenti */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a] via-[#111827] to-[#010309] z-0 pointer-events-none" />
 
-      {/* MODAL OYNASI */}
       <BuildingModal 
         building={selectedBuilding}
         onClose={() => setSelectedBuilding(null)}
@@ -285,9 +319,7 @@ const Map = () => {
         onDrawRoute={drawRoute}
       />
 
-      {/* FIX QILINGAN UI ELEMENTLAR (OVERLAYS) */}
-      
-      {/* 1. Header qismi */}
+      {/* OVERLAYS (Tugmalar va Vidjetlar) - Z-index baland tushishi uchun tepada turibdi */}
       <div className="absolute top-0 left-0 right-0 p-5 md:p-8 flex justify-between items-start z-50 pointer-events-none">
         <button
           onClick={() => navigate('/')}
@@ -306,7 +338,6 @@ const Map = () => {
         )}
       </div>
 
-      {/* 2. Ob-havo Vidjeti */}
       <div className="absolute top-5 md:top-8 right-5 md:right-8 z-50 pointer-events-auto bg-slate-900/80 backdrop-blur-md border border-white/20 px-5 py-3 rounded-2xl flex items-center gap-4 shadow-xl">
          <FaCloudSun className="text-amber-400 text-3xl md:text-4xl drop-shadow-md" />
          <div className="flex flex-col">
@@ -315,7 +346,6 @@ const Map = () => {
          </div>
       </div>
 
-      {/* 3. Shartli belgilar (Legenda) */}
       <div className="absolute bottom-5 md:bottom-8 left-5 md:left-8 z-50 pointer-events-auto bg-slate-900/80 backdrop-blur-md border border-white/20 p-4 md:p-5 rounded-2xl shadow-xl flex flex-col gap-3 w-48 md:w-56">
          <p className="text-[10px] md:text-xs text-slate-400 font-bold uppercase tracking-widest mb-1 border-b border-white/10 pb-2">Shartli belgilar</p>
          <div className="flex items-center gap-3 text-xs md:text-sm font-bold text-gray-300"><FaBuilding className="text-amber-400 text-lg" /> O'quv binolari</div>
@@ -324,7 +354,6 @@ const Map = () => {
          <div className="flex items-center gap-3 text-xs md:text-sm font-bold text-gray-300"><FaUserTie className="text-purple-400 text-lg" /> Xodimlar binosi</div>
       </div>
 
-      {/* 4. Zoom boshqaruvi */}
       <div className="absolute bottom-5 md:bottom-8 right-5 md:right-8 z-50 pointer-events-auto flex flex-col gap-2">
          <button onClick={handleZoomIn} className="w-12 h-12 md:w-14 md:h-14 bg-slate-900/80 backdrop-blur-md border border-white/20 rounded-2xl flex items-center justify-center text-white hover:bg-blue-600 hover:border-blue-400 transition-all shadow-xl cursor-pointer active:scale-95">
             <FaPlus className="text-xl" />
@@ -336,24 +365,36 @@ const Map = () => {
 
 
       {/* ─────────────────────────────────────────────
-          HARAKATLANUVCHI XARITA KONTEYNERI (PAN & ZOOM)
+          SUDRALADIGAN (DRAG/PAN) XARITA KONTEYNERI
           ───────────────────────────────────────────── */}
-      <div className="absolute inset-0 overflow-auto custom-scrollbar z-10 flex items-center justify-center">
-        
-        {/* Rasm qutisi. O'lchami kattalashganda scroll chiqadi */}
+      <div 
+        ref={containerRef}
+        className={`absolute inset-0 z-10 overflow-auto custom-scrollbar flex items-center justify-center ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+        onMouseDown={startDrag}
+        onMouseLeave={stopDrag}
+        onMouseUp={stopDrag}
+        onMouseMove={onDrag}
+        onTouchStart={startDrag}
+        onTouchEnd={stopDrag}
+        onTouchMove={onDrag}
+      >
+        {/* Rasmni haqiqiy o'lchami bo'yicha kattalashtiruvchi div */}
         <div 
-          className="relative w-[1200px] md:w-[1400px] xl:w-[1600px] max-w-none aspect-[16/10] shrink-0 rounded-3xl border-4 border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden bg-slate-800 transition-transform duration-300 origin-center"
-          style={{ transform: `scale(${zoom})` }}
+          className="relative transition-all duration-300 shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden bg-slate-800 rounded-3xl shrink-0"
+          style={{
+            width: `${100 * zoom}%`,      // Zoom bo'yicha foizda kattalashadi
+            minWidth: `${1400 * zoom}px`, // Eng kamida 1400px bo'ladi
+            aspectRatio: '16/10',
+          }}
         >
-          {/* Asosiy Xarita */}
           <img 
             src="/academy_map.jpg" 
             alt="Academy Map"
-            className="absolute inset-0 w-full h-full object-cover" 
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none" 
           />
           <div className="absolute inset-0 bg-slate-950/20 backdrop-blur-[0px] pointer-events-none"></div>
 
-          {/* SIZ SHU YERDASIZ PINI (Miltillovchi) */}
+          {/* 📍 "SIZ SHU YERDASIZ" PINI */}
           <div className="absolute -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-none" style={KIOSK_LOCATION}>
              <div className="absolute inset-0 rounded-full bg-red-500/60 animate-ping"></div>
              <div className="relative bg-gradient-to-b from-red-500 to-red-700 border-2 border-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(220,38,38,0.8)]">
@@ -364,7 +405,7 @@ const Map = () => {
              </div>
           </div>
 
-          {/* YO'NALISH CHIZIG'I (Marshrut) */}
+          {/* 🚶‍♂️ YO'NALISH CHIZIG'I (Marshrut) */}
           {destination && (
             <svg className="absolute inset-0 w-full h-full pointer-events-none z-30 opacity-80">
               <line 
@@ -380,17 +421,19 @@ const Map = () => {
             </svg>
           )}
 
-          {/* BINOLAR IKONKALARI */}
+          {/* BINOLAR IKONKALARI (Hotspots) */}
           {academyBuildings.map(building => (
             <div
               key={building.id}
               className="absolute -translate-x-1/2 -translate-y-1/2 group z-50 pointer-events-auto"
               style={{ top: building.top, left: building.left }}
+              // Drag qilinayotganda tasodifiy bosilib ketmasligi uchun:
+              onClick={(e) => { if (isDragging) e.stopPropagation(); }} 
             >
               <div className="absolute inset-0 rounded-full bg-blue-500/50 animate-ping opacity-0 group-hover:opacity-100 transition-opacity"></div>
               
               <button
-                onClick={() => setSelectedBuilding(building)}
+                onClick={() => !isDragging && setSelectedBuilding(building)}
                 className={`relative w-10 h-10 md:w-14 md:h-14 rounded-full bg-slate-900/90 border-2 hover:bg-blue-600/90 transition-all duration-300 flex items-center justify-center shadow-[0_5px_15px_rgba(0,0,0,0.6)] group-hover:scale-110 active:scale-95 cursor-pointer ${destination?.id === building.id ? 'border-blue-400 bg-blue-700 animate-pulse' : 'border-white/30 hover:border-blue-400'}`}
               >
                 <div className="text-lg md:text-2xl group-hover:text-white transition-colors">

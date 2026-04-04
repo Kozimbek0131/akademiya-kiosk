@@ -6,7 +6,7 @@ import {
   FaArrowLeft, FaMapMarkedAlt, FaBuilding, FaBed, 
   FaUtensils, FaUserTie, FaTimes, FaLayerGroup, FaTools,
   FaExpand, FaChevronLeft, FaChevronRight, FaMapMarkerAlt,
-  FaPlus, FaMinus, FaCloudSun, FaRoute, FaTimesCircle, FaCrosshairs
+  FaPlus, FaMinus, FaCloudSun, FaRoute, FaTimesCircle, FaCrosshairs, FaWalking
 } from 'react-icons/fa';
 
 // ─────────────────────────────────────────────
@@ -30,7 +30,9 @@ const academyBuildings = [
     floors: 2,
     desc_uz: "Amaliy mashg'ulotlar va laboratoriya xonalari.",
     images: [sampleImages[0]],
-    top: '74%', left: '14%'  
+    top: '74%', left: '14%',
+    // Marshrut (X, Y foizlarda). 28,56 bu Kiosk. Yo'l asfalt bo'ylab chapga va pastga ketadi.
+    route: "28,56 21,56 21,74 14,74" 
   },
   {
     id: 'study_a',
@@ -41,7 +43,8 @@ const academyBuildings = [
     floors: 4,
     desc_uz: "Asosiy ma'ruzalar zallari va kafedralar joylashgan bino.",
     images: [sampleImages[0], sampleImages[1], sampleImages[2]], 
-    top: '68%', left: '30%'  
+    top: '68%', left: '30%',
+    route: "28,56 28,68 30,68"
   },
   {
     id: 'staff',
@@ -52,7 +55,8 @@ const academyBuildings = [
     floors: 5,
     desc_uz: "Ma'muriy xodimlar va o'qituvchilar uchun xizmat binosi.",
     images: [sampleImages[0]],
-    top: '51%', left: '25%'  
+    top: '51%', left: '25%',
+    route: "28,56 28,51 25,51"
   },
   {
     id: 'canteen',
@@ -63,7 +67,9 @@ const academyBuildings = [
     floors: 1,
     desc_uz: "Akademiya xodimlari va talabalari uchun markaziy oshxona.",
     images: [sampleImages[2], sampleImages[0]],
-    top: '33%', left: '49%'  
+    top: '33%', left: '49%',
+    // O'ng tomonga asosiy yo'lakdan yurib, tepaga buriladi
+    route: "28,56 28,45 49,45 49,33"
   },
   {
     id: 'construction',
@@ -74,7 +80,8 @@ const academyBuildings = [
     floors: 0,
     desc_uz: "Ushbu hududda yangi o'quv va sport majmuasi qurilishi olib borilmoqda.",
     images: [], 
-    top: '50%', left: '57%'  
+    top: '50%', left: '57%',
+    route: "28,56 28,45 57,45 57,50"
   },
   {
     id: 'dorm_2',
@@ -85,7 +92,8 @@ const academyBuildings = [
     floors: 4,
     desc_uz: "Tinglovchilar va talabalar uchun qo'shimcha yashash binosi.",
     images: [sampleImages[1]],
-    top: '37%', left: '71%'  
+    top: '37%', left: '71%',
+    route: "28,56 28,45 71,45 71,37"
   },
   {
     id: 'dorm_1',
@@ -96,7 +104,9 @@ const academyBuildings = [
     floors: 4,
     desc_uz: "Tinglovchilar va talabalar uchun asosiy yashash binosi.",
     images: [sampleImages[1], sampleImages[2]],
-    top: '24%', left: '81%'  
+    top: '24%', left: '81%',
+    // Eng uzun yo'l, markaziy yo'lakdan yurib oxirida buriladi
+    route: "28,56 28,45 71,45 71,24 81,24"
   },
 ];
 
@@ -222,7 +232,7 @@ const BuildingModal = ({ building, onClose, language, onDrawRoute }) => {
 };
 
 // ─────────────────────────────────────────────
-// 3. ASOSIY XARITA COMPONENTI (ZOOM, PAN & LIMITS)
+// 3. ASOSIY XARITA COMPONENTI (ZOOM, PAN)
 // ─────────────────────────────────────────────
 const Map = () => {
   const navigate = useNavigate();
@@ -231,59 +241,31 @@ const Map = () => {
   const [selectedBuilding, setSelectedBuilding] = useState(null);
   const [destination, setDestination] = useState(null);
 
+  // Transform-based Pan & Zoom states
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const dragStart = useRef({ x: 0, y: 0 });
 
-  // Xarita konteyneri ref-i va oynaning o'lchamlari (chegara hisoblash uchun)
-  const containerRef = useRef(null);
-  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+  const mapTitle = language === 'ru' ? 'Интерактивная карта' : language === 'en' ? 'Interactive Map' : 'Interaktiv xarita';
 
   useEffect(() => {
-    // Animatsiya chizig'i uslublari
     const style = document.createElement('style');
+    // Yangi animasiya (yurish effekti uchun kichik qadamlar)
     style.innerHTML = `
-      @keyframes dash { to { stroke-dashoffset: -20; } }
-      .route-line { stroke-dasharray: 10; animation: dash 1s linear infinite; }
-      
-      @keyframes pulse-route {
-        0% { opacity: 0.6; filter: drop-shadow(0 0 5px rgba(59,130,246,0.5)); }
-        50% { opacity: 1; filter: drop-shadow(0 0 15px rgba(59,130,246,0.9)); }
-        100% { opacity: 0.6; filter: drop-shadow(0 0 5px rgba(59,130,246,0.5)); }
-      }
-      .animated-route { animation: pulse-route 2s ease-in-out infinite; }
+      @keyframes march { to { stroke-dashoffset: -8; } }
+      .route-line { stroke-dasharray: 2 2; animation: march 1s linear infinite; }
     `;
     document.head.appendChild(style);
-
-    // Oyna o'lchamini kuzatish
-    const updateSize = () => {
-      if (containerRef.current) {
-        setContainerSize({
-          width: containerRef.current.offsetWidth,
-          height: containerRef.current.offsetHeight
-        });
-      }
-    };
-    
-    updateSize();
-    window.addEventListener('resize', updateSize);
-
-    return () => {
-      document.head.removeChild(style);
-      window.removeEventListener('resize', updateSize);
-    };
+    return () => document.head.removeChild(style);
   }, []);
 
   const handleZoomIn = () => setZoom(prev => Math.min(prev + 0.4, 3));
-  const handleZoomOut = () => {
-    setZoom(prev => {
-      const newZoom = Math.max(prev - 0.4, 1);
-      // Agar zoom 1 bo'lsa, xarita markazga qaytishi kerak
-      if (newZoom === 1) setPan({ x: 0, y: 0 });
-      return newZoom;
-    });
-  };
+  const handleZoomOut = () => setZoom(prev => {
+     const newZoom = Math.max(prev - 0.4, 1);
+     if (newZoom === 1) setPan({ x: 0, y: 0 });
+     return newZoom;
+  });
   
   const handleReset = () => {
      setZoom(1);
@@ -295,37 +277,7 @@ const Map = () => {
     setSelectedBuilding(null); 
   };
 
-  // ──────── CHEGARALANGAN SUDRASH (PAN) MANTIQI ────────
-  const calculatePanLimits = (currentZoom) => {
-     if (!containerRef.current || currentZoom <= 1) return { xMax: 0, yMax: 0 };
-     
-     // Qutining o'lchamini zoomga qarab qancha kattalashganini hisoblash
-     const scaledWidth = containerSize.width * currentZoom;
-     const scaledHeight = containerSize.height * currentZoom;
-     
-     // Qancha masofaga surish mumkinligini (chegarani) hisoblash
-     const xMax = (scaledWidth - containerSize.width) / 2;
-     const yMax = (scaledHeight - containerSize.height) / 2;
-
-     return { xMax, yMax };
-  };
-
-  const constrainPan = (newX, newY, currentZoom) => {
-    const limits = calculatePanLimits(currentZoom);
-    
-    // Agar rasm asl o'lchamida bo'lsa (zoom=1), u umuman surilmaydi.
-    if (currentZoom === 1) return { x: 0, y: 0 };
-
-    // Chegaradan o'tib ketsa, shu joyda to'xtatib qolish
-    const constrainedX = Math.min(Math.max(newX, -limits.xMax), limits.xMax);
-    const constrainedY = Math.min(Math.max(newY, -limits.yMax), limits.yMax);
-
-    return { x: constrainedX, y: constrainedY };
-  };
-
-
   const onPointerDown = (e) => {
-    if (zoom === 1) return; // Agar zoom qilinmagan bo'lsa, drag qilishning keragi yo'q
     setIsDragging(true);
     dragStart.current = { x: e.clientX - pan.x, y: e.clientY - pan.y };
     e.target.setPointerCapture(e.pointerId);
@@ -333,13 +285,10 @@ const Map = () => {
 
   const onPointerMove = (e) => {
     if (!isDragging) return;
-    
-    const newX = e.clientX - dragStart.current.x;
-    const newY = e.clientY - dragStart.current.y;
-
-    // Yangi pozitsiyani chegaralar bilan tekshirish
-    const constrainedPan = constrainPan(newX, newY, zoom);
-    setPan(constrainedPan);
+    setPan({
+      x: e.clientX - dragStart.current.x,
+      y: e.clientY - dragStart.current.y
+    });
   };
 
   const onPointerUp = (e) => {
@@ -347,17 +296,6 @@ const Map = () => {
     if(e.target.hasPointerCapture(e.pointerId)) {
         e.target.releasePointerCapture(e.pointerId);
     }
-  };
-
-  // Zoom o'zgarganda pan (surish) pozitsiyasini qayta hisoblash (xato zonaga chiqib ketmaslik uchun)
-  useEffect(() => {
-     setPan(prev => constrainPan(prev.x, prev.y, zoom));
-  }, [zoom]);
-
-  // SVG uchun koordinatalarni to'g'rilash yordamchi funksiyasi
-  const getCoordinate = (percentStr, isX) => {
-     const val = parseFloat(percentStr);
-     return isX ? val : val;
   };
 
   return (
@@ -379,9 +317,15 @@ const Map = () => {
         </button>
 
         {destination && (
-           <button onClick={() => setDestination(null)} className="pointer-events-auto absolute left-1/2 -translate-x-1/2 flex items-center gap-2 bg-red-600/90 backdrop-blur-md border border-red-400 text-white px-6 py-3.5 rounded-2xl hover:bg-red-500 active:scale-95 transition-all font-black uppercase text-sm cursor-pointer shadow-[0_0_20px_rgba(220,38,38,0.5)] animate-fade-in-down">
-             <FaTimesCircle className="text-lg" /> Yo'nalishni bekor qilish
-           </button>
+           <div className="pointer-events-auto absolute left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-fade-in-down">
+             <div className="bg-blue-600/90 backdrop-blur-md border border-blue-400 text-white px-6 py-2 rounded-xl flex items-center gap-3 shadow-[0_0_20px_rgba(37,99,235,0.5)]">
+                <FaWalking className="text-2xl animate-bounce" /> 
+                <span className="font-black tracking-widest uppercase text-sm">{destination[`name_${language}`] || destination.name_uz}ga yo'nalish</span>
+             </div>
+             <button onClick={() => setDestination(null)} className="bg-slate-900/90 hover:bg-red-600 border border-white/20 text-white px-4 py-2 rounded-xl active:scale-95 transition-all font-bold uppercase text-[10px] cursor-pointer">
+               <FaTimesCircle className="inline mr-1" /> Bekor qilish
+             </button>
+           </div>
         )}
       </div>
 
@@ -418,10 +362,7 @@ const Map = () => {
       {/* ─────────────────────────────────────────────
           HAQIQIY "PAN AND ZOOM" KANVASI
           ───────────────────────────────────────────── */}
-      <div 
-        ref={containerRef}
-        className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"
-      >
+      <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
         <div 
           className={`relative w-full h-full max-w-none transition-transform pointer-events-auto ${isDragging ? 'duration-0 cursor-grabbing' : 'duration-300 cursor-grab'}`}
           style={{ 
@@ -441,45 +382,43 @@ const Map = () => {
             draggable="false" 
           />
           
-          <div className="absolute inset-0 bg-slate-950/10 pointer-events-none rounded-3xl"></div>
+          <div className="absolute inset-0 bg-slate-950/10 pointer-events-none"></div>
 
           {/* 📍 "SIZ SHU YERDASIZ" PINI */}
           <div className="absolute -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-none" style={KIOSK_LOCATION}>
              <div className="absolute inset-0 rounded-full bg-red-500/60 animate-ping"></div>
-             <div className="relative bg-gradient-to-b from-red-500 to-red-700 border-2 border-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(220,38,38,0.8)]">
-                <FaMapMarkerAlt className="text-white text-xl md:text-2xl drop-shadow-md" />
-             </div>
-             <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-red-600 text-white text-[10px] md:text-xs font-black uppercase px-3 py-1.5 rounded-lg shadow-xl whitespace-nowrap">
-                Siz shu yerdasiz
+             <div className="relative bg-gradient-to-b from-red-500 to-red-700 border-2 border-white w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(220,38,38,0.8)]">
+                <FaMapMarkerAlt className="text-white text-sm md:text-lg drop-shadow-md" />
              </div>
           </div>
 
-          {/* 🚶‍♂️ YAXSHILANGAN YO'NALISH CHIZIG'I (Marshrut) */}
-          {destination && (
-            <svg className="absolute inset-0 w-full h-full pointer-events-none z-30">
-              {/* Asosiy chiziq */}
-              <path 
-                d={`M ${getCoordinate(KIOSK_LOCATION.left, true)}% ${getCoordinate(KIOSK_LOCATION.top, false)}% 
-                    Q ${(getCoordinate(KIOSK_LOCATION.left, true) + getCoordinate(destination.left, true)) / 2}% 
-                      ${Math.min(getCoordinate(KIOSK_LOCATION.top, false), getCoordinate(destination.top, false)) - 10}% 
-                    ${getCoordinate(destination.left, true)}% ${getCoordinate(destination.top, false)}%`}
-                fill="none"
-                stroke="#3b82f6" 
-                strokeWidth="6" 
-                strokeLinecap="round"
-                className="animated-route route-line" 
-              />
-              {/* Orqa fon chizig'i (chiroyliroq ko'rinishi uchun) */}
-              <path 
-                d={`M ${getCoordinate(KIOSK_LOCATION.left, true)}% ${getCoordinate(KIOSK_LOCATION.top, false)}% 
-                    Q ${(getCoordinate(KIOSK_LOCATION.left, true) + getCoordinate(destination.left, true)) / 2}% 
-                      ${Math.min(getCoordinate(KIOSK_LOCATION.top, false), getCoordinate(destination.top, false)) - 10}% 
-                    ${getCoordinate(destination.left, true)}% ${getCoordinate(destination.top, false)}%`}
-                fill="none"
+          {/* 🚶‍♂️ YANGI: ANIMATSION YURISH YO'LAGI (SVG Polyline) */}
+          {destination && destination.route && (
+            <svg 
+               className="absolute inset-0 w-full h-full pointer-events-none z-30" 
+               // viewbox yordamida SVG 100% o'lchamga va koordinatalar foizga tushadi
+               viewBox="0 0 100 100" 
+               preserveAspectRatio="none"
+            >
+              {/* Orqa fonga qalinroq soya */}
+              <polyline 
+                points={destination.route} 
+                fill="none" 
                 stroke="#1e3a8a" 
-                strokeWidth="10" 
-                strokeLinecap="round"
+                strokeWidth="1.2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
                 className="opacity-50"
+              />
+              {/* Yuguruvchi nuqtalar (qadamlar) effekti */}
+              <polyline 
+                points={destination.route} 
+                fill="none" 
+                stroke="#3b82f6" 
+                strokeWidth="0.8" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+                className="route-line drop-shadow-[0_0_5px_rgba(59,130,246,0.8)]" 
               />
             </svg>
           )}

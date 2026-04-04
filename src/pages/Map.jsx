@@ -29,8 +29,8 @@ const academyBuildings = [
     desc_ru: "Помещения для практических занятий и лабораторий.",
     desc_en: "Rooms for practical classes and laboratories.",
     images: [sampleImages[0]],
-    top: '62%', 
-    left: '15%'
+    top: '67%', // B-block tepadan
+    left: '26%'  // B-block chapdan
   },
   {
     id: 'study_a',
@@ -42,10 +42,9 @@ const academyBuildings = [
     desc_uz: "Asosiy ma'ruzalar zallari va kafedralar joylashgan bino.",
     desc_ru: "Здание, где расположены основные лекционные залы и кафедры.",
     desc_en: "Building housing main lecture halls and departments.",
-    // DIQQAT: Sinab ko'rish uchun bu yerga 5 ta rasm kiritildi
     images: [sampleImages[0], sampleImages[1], sampleImages[2], sampleImages[0], sampleImages[1]], 
-    top: '60%', 
-    left: '32%'
+    top: '66%', // A-block tepadan
+    left: '38%'  // A-block chapdan
   },
   {
     id: 'staff',
@@ -58,8 +57,8 @@ const academyBuildings = [
     desc_ru: "Служебное здание для административного персонала и преподавателей.",
     desc_en: "Service building for administrative staff and teachers.",
     images: [sampleImages[0]],
-    top: '48%', 
-    left: '28%'
+    top: '55%', // Xodimlar binosi tepadan
+    left: '35%'  // Xodimlar binosi chapdan
   },
   {
     id: 'canteen',
@@ -72,8 +71,8 @@ const academyBuildings = [
     desc_ru: "Центральная столовая для сотрудников и студентов академии.",
     desc_en: "Central canteen for academy staff and students.",
     images: [sampleImages[2], sampleImages[0]],
-    top: '32%', 
-    left: '50%'
+    top: '43%', // Oshxona tepadan
+    left: '50%'  // Oshxona chapdan
   },
   {
     id: 'construction',
@@ -86,8 +85,8 @@ const academyBuildings = [
     desc_ru: "На этой территории ведется строительство нового учебного и спортивного комплекса.",
     desc_en: "Construction of a new educational and sports complex is underway in this area.",
     images: [], 
-    top: '48%', 
-    left: '58%'
+    top: '56%', // Qurilish tepadan
+    left: '56%'  // Qurilish chapdan
   },
   {
     id: 'dorm_2',
@@ -100,8 +99,8 @@ const academyBuildings = [
     desc_ru: "Дополнительное жилое здание для слушателей и студентов.",
     desc_en: "Additional residential building for trainees and students.",
     images: [sampleImages[1]],
-    top: '32%', 
-    left: '74%'
+    top: '44%', // 2-yotoqxona tepadan
+    left: '65%'  // 2-yotoqxona chapdan
   },
   {
     id: 'dorm_1',
@@ -114,8 +113,8 @@ const academyBuildings = [
     desc_ru: "Основное жилое здание для слушателей и студентов.",
     desc_en: "Main residential building for trainees and students.",
     images: [sampleImages[1], sampleImages[2]],
-    top: '22%', 
-    left: '82%'
+    top: '36%', // 1-yotoqxona tepadan
+    left: '70%'  // 1-yotoqxona chapdan
   },
 ];
 

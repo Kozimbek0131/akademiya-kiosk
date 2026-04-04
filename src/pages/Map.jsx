@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { createPortal } from 'react-dom';
 import { 
   FaArrowLeft, FaMapMarkedAlt, FaBuilding, FaBed, 
-  FaUtensils, FaUserTie, FaTimes, FaLayerGroup, FaTools
+  FaUtensils, FaUserTie, FaTimes, FaLayerGroup, FaTools,
+  FaExpand, FaChevronLeft, FaChevronRight
 } from 'react-icons/fa';
 
 // ─────────────────────────────────────────────
-// 1. STATIC MA'LUMOTLAR (Rasmingiz asosida to'g'rilandi)
+// 1. STATIC MA'LUMOTLAR
 // ─────────────────────────────────────────────
 const sampleImages = [
   "https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=600",
@@ -28,7 +29,7 @@ const academyBuildings = [
     desc_ru: "Помещения для практических занятий и лабораторий.",
     desc_en: "Rooms for practical classes and laboratories.",
     images: [sampleImages[0]],
-    top: '62%', // Rasmdagi B-block joylashuvi
+    top: '62%', 
     left: '15%'
   },
   {
@@ -41,8 +42,9 @@ const academyBuildings = [
     desc_uz: "Asosiy ma'ruzalar zallari va kafedralar joylashgan bino.",
     desc_ru: "Здание, где расположены основные лекционные залы и кафедры.",
     desc_en: "Building housing main lecture halls and departments.",
-    images: [sampleImages[0], sampleImages[1]], 
-    top: '60%', // Rasmdagi A-block joylashuvi
+    // DIQQAT: Sinab ko'rish uchun bu yerga 5 ta rasm kiritildi
+    images: [sampleImages[0], sampleImages[1], sampleImages[2], sampleImages[0], sampleImages[1]], 
+    top: '60%', 
     left: '32%'
   },
   {
@@ -56,7 +58,7 @@ const academyBuildings = [
     desc_ru: "Служебное здание для административного персонала и преподавателей.",
     desc_en: "Service building for administrative staff and teachers.",
     images: [sampleImages[0]],
-    top: '48%', // Rasmdagi xodimlar binosi joylashuvi
+    top: '48%', 
     left: '28%'
   },
   {
@@ -70,7 +72,7 @@ const academyBuildings = [
     desc_ru: "Центральная столовая для сотрудников и студентов академии.",
     desc_en: "Central canteen for academy staff and students.",
     images: [sampleImages[2], sampleImages[0]],
-    top: '32%', // Rasmdagi oshxona joylashuvi
+    top: '32%', 
     left: '50%'
   },
   {
@@ -83,8 +85,8 @@ const academyBuildings = [
     desc_uz: "Ushbu hududda yangi o'quv va sport majmuasi qurilishi olib borilmoqda.",
     desc_ru: "На этой территории ведется строительство нового учебного и спортивного комплекса.",
     desc_en: "Construction of a new educational and sports complex is underway in this area.",
-    images: [], // Qurilishda rasm yo'q deb faraz qilamiz
-    top: '48%', // Rasmdagi qurilish jarayonida joylashuvi
+    images: [], 
+    top: '48%', 
     left: '58%'
   },
   {
@@ -98,7 +100,7 @@ const academyBuildings = [
     desc_ru: "Дополнительное жилое здание для слушателей и студентов.",
     desc_en: "Additional residential building for trainees and students.",
     images: [sampleImages[1]],
-    top: '32%', // Rasmdagi 2-yotoqxona joylashuvi
+    top: '32%', 
     left: '74%'
   },
   {
@@ -112,7 +114,7 @@ const academyBuildings = [
     desc_ru: "Основное жилое здание для слушателей и студентов.",
     desc_en: "Main residential building for trainees and students.",
     images: [sampleImages[1], sampleImages[2]],
-    top: '22%', // Rasmdagi 1-yotoqxona joylashuvi
+    top: '22%', 
     left: '82%'
   },
 ];
@@ -123,20 +125,34 @@ const getBuildingIcon = (type) => {
     case 'dorm': return <FaBed className="text-blue-400" />;
     case 'canteen': return <FaUtensils className="text-emerald-400" />;
     case 'staff': return <FaUserTie className="text-purple-400" />;
-    case 'construction': return <FaTools className="text-slate-400" />; // Qurilish uchun maxsus ikonka
+    case 'construction': return <FaTools className="text-slate-400" />;
     default: return <FaBuilding className="text-gray-400" />;
   }
 };
 
 // ─────────────────────────────────────────────
-// 2. MODAL OYNASI
+// 2. MODAL OYNASI (MUKAMMAL GALEREYA BILAN)
 // ─────────────────────────────────────────────
 const BuildingModal = ({ building, onClose, language }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Boshqa binoga o'tilganda rasm indeksini nolga tushirish
+  useEffect(() => {
+    setActiveIndex(0);
+    setIsFullscreen(false);
+  }, [building]);
+
   if (!building) return null;
 
   const name = building[`name_${language}`] || building.name_uz;
   const desc = building[`desc_${language}`] || building.desc_uz;
   const floorText = language === 'ru' ? 'этажей' : language === 'en' ? 'floors' : 'qavat';
+  const images = building.images || [];
+
+  // Keyingi va oldingi rasmga o'tish funksiyalari
+  const nextImage = () => setActiveIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  const prevImage = () => setActiveIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
 
   return createPortal(
     <div 
@@ -145,6 +161,56 @@ const BuildingModal = ({ building, onClose, language }) => {
     >
       <div className="absolute inset-0 bg-black/80 backdrop-blur-md" />
 
+      {/* TO'LIQ EKRAN (FULLSCREEN) RASM REJIMI */}
+      {isFullscreen ? (
+        <div 
+          className="fixed inset-0 z-[10001] bg-black flex items-center justify-center"
+          onClick={() => setIsFullscreen(false)} // Ekranni bosganda yopiladi
+        >
+          {/* Yopish tugmasi */}
+          <button 
+            className="absolute top-6 right-6 w-14 h-14 bg-white/10 hover:bg-red-500/50 rounded-2xl flex items-center justify-center transition-all text-white z-50 cursor-pointer"
+            onClick={(e) => { e.stopPropagation(); setIsFullscreen(false); }}
+          >
+            <FaTimes className="text-2xl" />
+          </button>
+
+          {/* Chapga o'tish */}
+          {images.length > 1 && (
+            <button 
+              onClick={(e) => { e.stopPropagation(); prevImage(); }}
+              className="absolute left-6 top-1/2 -translate-y-1/2 w-16 h-16 bg-black/50 hover:bg-white/20 border border-white/10 rounded-full flex items-center justify-center text-white transition-all cursor-pointer z-50"
+            >
+              <FaChevronLeft className="text-3xl pr-1" />
+            </button>
+          )}
+
+          {/* Asosiy Rasm (Kesilmasligi uchun object-contain qilingan) */}
+          <img 
+            src={images[activeIndex]} 
+            alt={name} 
+            className="w-full h-full object-contain p-4 md:p-12 animate-fade-in"
+            onClick={(e) => e.stopPropagation()} // Rasmni o'zini bosganda yopilib ketmasligi uchun
+          />
+
+          {/* O'ngga o'tish */}
+          {images.length > 1 && (
+            <button 
+              onClick={(e) => { e.stopPropagation(); nextImage(); }}
+              className="absolute right-6 top-1/2 -translate-y-1/2 w-16 h-16 bg-black/50 hover:bg-white/20 border border-white/10 rounded-full flex items-center justify-center text-white transition-all cursor-pointer z-50"
+            >
+              <FaChevronRight className="text-3xl pl-1" />
+            </button>
+          )}
+          
+          {/* Rasm sanog'i */}
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/60 px-6 py-2 rounded-full text-white font-bold tracking-widest">
+            {activeIndex + 1} / {images.length}
+          </div>
+        </div>
+      ) : (
+
+      /* STANDART MODAL OYNASI */
       <div 
         className="relative w-full max-w-6xl bg-slate-900 border border-white/10 rounded-3xl shadow-2xl flex flex-col md:flex-row overflow-hidden max-h-[90vh]"
         onClick={e => e.stopPropagation()}
@@ -156,24 +222,45 @@ const BuildingModal = ({ building, onClose, language }) => {
           <FaTimes className="text-white text-xl" />
         </button>
 
-        <div className="w-full md:w-2/3 p-3 flex flex-col gap-3 h-[40vh] md:h-auto overflow-hidden">
-          {building.images && building.images.length > 0 ? (
+        {/* CHAP QISM: Rasmlar galereyasi */}
+        <div className="w-full md:w-2/3 p-3 flex flex-col gap-3 h-[45vh] md:h-auto overflow-hidden">
+          {images.length > 0 ? (
             <>
-              <div className="flex-1 rounded-2xl overflow-hidden relative bg-slate-800">
+              {/* Asosiy ko'rinib turgan rasm */}
+              <div 
+                className="flex-1 rounded-2xl overflow-hidden relative bg-slate-800 cursor-pointer group"
+                onClick={() => setIsFullscreen(true)}
+              >
                 <img 
-                  src={building.images[0]} 
+                  src={images[activeIndex]} 
                   alt={name}
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
+                {/* Kattalashtirish effekti (Hover bo'lganda) */}
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+                  <div className="bg-blue-600/90 p-4 rounded-full shadow-2xl scale-75 group-hover:scale-100 transition-transform">
+                    <FaExpand className="text-white text-3xl" />
+                  </div>
+                </div>
               </div>
-              {building.images.length > 1 && (
-                <div className="grid grid-cols-4 gap-2 h-20 md:h-28 shrink-0">
-                  {building.images.slice(1).map((img, idx) => (
-                    <div key={idx} className="rounded-lg overflow-hidden relative bg-slate-800">
+
+              {/* Gorizontal skroll bo'ladigan kichik rasmlar ro'yxati */}
+              {images.length > 1 && (
+                <div className="flex gap-2.5 h-24 md:h-28 shrink-0 overflow-x-auto custom-scrollbar pb-2 px-1">
+                  {images.map((img, idx) => (
+                    <div 
+                      key={idx} 
+                      onClick={() => setActiveIndex(idx)}
+                      className={`rounded-xl overflow-hidden relative bg-slate-800 cursor-pointer shrink-0 w-32 md:w-40 border-2 transition-all duration-300 ${
+                        activeIndex === idx 
+                        ? 'border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.6)] scale-105' 
+                        : 'border-transparent opacity-50 hover:opacity-100'
+                      }`}
+                    >
                        <img 
                         src={img} 
-                        alt={`${name} thumbnail`}
-                        className="absolute inset-0 w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity cursor-pointer"
+                        alt={`thumbnail ${idx}`}
+                        className="absolute inset-0 w-full h-full object-cover"
                       />
                     </div>
                   ))}
@@ -188,6 +275,7 @@ const BuildingModal = ({ building, onClose, language }) => {
           )}
         </div>
 
+        {/* O'NG QISM: Ma'lumotlar */}
         <div className="flex-1 p-6 md:p-8 flex flex-col overflow-y-auto custom-scrollbar border-t md:border-t-0 md:border-l border-white/10 bg-slate-950/30">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-3xl shadow-inner">
@@ -209,6 +297,7 @@ const BuildingModal = ({ building, onClose, language }) => {
           <p className="text-base text-gray-200 leading-relaxed font-medium">{desc}</p>
         </div>
       </div>
+      )}
     </div>,
     document.body
   );

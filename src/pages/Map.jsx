@@ -4,11 +4,11 @@ import { useLanguage } from '../context/LanguageContext';
 import { createPortal } from 'react-dom';
 import { 
   FaArrowLeft, FaMapMarkedAlt, FaBuilding, FaBed, 
-  FaUtensils, FaUserTie, FaTimes, FaLayerGroup 
+  FaUtensils, FaUserTie, FaTimes, FaLayerGroup, FaTools
 } from 'react-icons/fa';
 
 // ─────────────────────────────────────────────
-// 1. STATIC MA'LUMOTLAR
+// 1. STATIC MA'LUMOTLAR (Rasmingiz asosida to'g'rilandi)
 // ─────────────────────────────────────────────
 const sampleImages = [
   "https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=600",
@@ -18,22 +18,8 @@ const sampleImages = [
 
 const academyBuildings = [
   {
-    id: 'study_a',
-    name_uz: "O'quv binosi (A blok)",
-    name_ru: "Учебный корпус (Блок А)",
-    name_en: "Study Building (Block A)",
-    type: 'study',
-    floors: 4,
-    desc_uz: "Asosiy ma'ruzalar zallari va kafedralar joylashgan bino.",
-    desc_ru: "Здание, где расположены основные лекционные залы и кафедры.",
-    desc_en: "Building housing main lecture halls and departments.",
-    images: [sampleImages[0], sampleImages[1]], 
-    top: '48%', 
-    left: '32%'
-  },
-  {
     id: 'study_b',
-    name_uz: "O'quv binosi (B blok)",
+    name_uz: "O'quv binosi (B-blok)",
     name_ru: "Учебный корпус (Блок Б)",
     name_en: "Study Building (Block B)",
     type: 'study',
@@ -42,50 +28,22 @@ const academyBuildings = [
     desc_ru: "Помещения для практических занятий и лабораторий.",
     desc_en: "Rooms for practical classes and laboratories.",
     images: [sampleImages[0]],
-    top: '48%', 
-    left: '60%'
+    top: '62%', // Rasmdagi B-block joylashuvi
+    left: '15%'
   },
   {
-    id: 'dorm_1',
-    name_uz: "Yotoqxona №1",
-    name_ru: "Общежитие №1",
-    name_en: "Dormitory №1",
-    type: 'dorm',
+    id: 'study_a',
+    name_uz: "O'quv binosi (A-blok)",
+    name_ru: "Учебный корпус (Блок А)",
+    name_en: "Study Building (Block A)",
+    type: 'study',
     floors: 4,
-    desc_uz: "Tinglovchilar va talabalar uchun yashash binosi.",
-    desc_ru: "Жилое здание для слушателей и студентов.",
-    desc_en: "Residential building for trainees and students.",
-    images: [sampleImages[1], sampleImages[2]],
-    top: '30%', 
-    left: '80%'
-  },
-  {
-    id: 'dorm_2',
-    name_uz: "Yotoqxona №2",
-    name_ru: "Общежитие №2",
-    name_en: "Dormitory №2",
-    type: 'dorm',
-    floors: 4,
-    desc_uz: "Qo'shimcha turar-joy binosi.",
-    desc_ru: "Дополнительное жилое здание.",
-    desc_en: "Additional residential building.",
-    images: [sampleImages[1]],
-    top: '40%', 
-    left: '73%'
-  },
-  {
-    id: 'canteen',
-    name_uz: "Oshxona",
-    name_ru: "Столовая",
-    name_en: "Canteen",
-    type: 'canteen',
-    floors: 1,
-    desc_uz: "Akademiya xodimlari va talabalari uchun markaziy oshxona.",
-    desc_ru: "Центральная столовая для сотрудников и студентов академии.",
-    desc_en: "Central canteen for academy staff and students.",
-    images: [sampleImages[2], sampleImages[0]],
-    top: '44%', 
-    left: '52%'
+    desc_uz: "Asosiy ma'ruzalar zallari va kafedralar joylashgan bino.",
+    desc_ru: "Здание, где расположены основные лекционные залы и кафедры.",
+    desc_en: "Building housing main lecture halls and departments.",
+    images: [sampleImages[0], sampleImages[1]], 
+    top: '60%', // Rasmdagi A-block joylashuvi
+    left: '32%'
   },
   {
     id: 'staff',
@@ -98,8 +56,64 @@ const academyBuildings = [
     desc_ru: "Служебное здание для административного персонала и преподавателей.",
     desc_en: "Service building for administrative staff and teachers.",
     images: [sampleImages[0]],
-    top: '65%', 
-    left: '20%'
+    top: '48%', // Rasmdagi xodimlar binosi joylashuvi
+    left: '28%'
+  },
+  {
+    id: 'canteen',
+    name_uz: "Oshxona binosi",
+    name_ru: "Столовая",
+    name_en: "Canteen",
+    type: 'canteen',
+    floors: 1,
+    desc_uz: "Akademiya xodimlari va talabalari uchun markaziy oshxona.",
+    desc_ru: "Центральная столовая для сотрудников и студентов академии.",
+    desc_en: "Central canteen for academy staff and students.",
+    images: [sampleImages[2], sampleImages[0]],
+    top: '32%', // Rasmdagi oshxona joylashuvi
+    left: '50%'
+  },
+  {
+    id: 'construction',
+    name_uz: "Qurilish jarayonida",
+    name_ru: "В процессе строительства",
+    name_en: "Under Construction",
+    type: 'construction',
+    floors: 0,
+    desc_uz: "Ushbu hududda yangi o'quv va sport majmuasi qurilishi olib borilmoqda.",
+    desc_ru: "На этой территории ведется строительство нового учебного и спортивного комплекса.",
+    desc_en: "Construction of a new educational and sports complex is underway in this area.",
+    images: [], // Qurilishda rasm yo'q deb faraz qilamiz
+    top: '48%', // Rasmdagi qurilish jarayonida joylashuvi
+    left: '58%'
+  },
+  {
+    id: 'dorm_2',
+    name_uz: "2-yotoqxona",
+    name_ru: "Общежитие №2",
+    name_en: "Dormitory №2",
+    type: 'dorm',
+    floors: 4,
+    desc_uz: "Tinglovchilar va talabalar uchun qo'shimcha yashash binosi.",
+    desc_ru: "Дополнительное жилое здание для слушателей и студентов.",
+    desc_en: "Additional residential building for trainees and students.",
+    images: [sampleImages[1]],
+    top: '32%', // Rasmdagi 2-yotoqxona joylashuvi
+    left: '74%'
+  },
+  {
+    id: 'dorm_1',
+    name_uz: "1-yotoqxona",
+    name_ru: "Общежитие №1",
+    name_en: "Dormitory №1",
+    type: 'dorm',
+    floors: 4,
+    desc_uz: "Tinglovchilar va talabalar uchun asosiy yashash binosi.",
+    desc_ru: "Основное жилое здание для слушателей и студентов.",
+    desc_en: "Main residential building for trainees and students.",
+    images: [sampleImages[1], sampleImages[2]],
+    top: '22%', // Rasmdagi 1-yotoqxona joylashuvi
+    left: '82%'
   },
 ];
 
@@ -109,6 +123,7 @@ const getBuildingIcon = (type) => {
     case 'dorm': return <FaBed className="text-blue-400" />;
     case 'canteen': return <FaUtensils className="text-emerald-400" />;
     case 'staff': return <FaUserTie className="text-purple-400" />;
+    case 'construction': return <FaTools className="text-slate-400" />; // Qurilish uchun maxsus ikonka
     default: return <FaBuilding className="text-gray-400" />;
   }
 };
@@ -144,7 +159,7 @@ const BuildingModal = ({ building, onClose, language }) => {
         <div className="w-full md:w-2/3 p-3 flex flex-col gap-3 h-[40vh] md:h-auto overflow-hidden">
           {building.images && building.images.length > 0 ? (
             <>
-              <div className="flex-1 rounded-2xl overflow-hidden relative">
+              <div className="flex-1 rounded-2xl overflow-hidden relative bg-slate-800">
                 <img 
                   src={building.images[0]} 
                   alt={name}
@@ -154,7 +169,7 @@ const BuildingModal = ({ building, onClose, language }) => {
               {building.images.length > 1 && (
                 <div className="grid grid-cols-4 gap-2 h-20 md:h-28 shrink-0">
                   {building.images.slice(1).map((img, idx) => (
-                    <div key={idx} className="rounded-lg overflow-hidden relative">
+                    <div key={idx} className="rounded-lg overflow-hidden relative bg-slate-800">
                        <img 
                         src={img} 
                         alt={`${name} thumbnail`}
@@ -166,29 +181,31 @@ const BuildingModal = ({ building, onClose, language }) => {
               )}
             </>
           ) : (
-            <div className="flex-1 rounded-2xl bg-slate-800 flex items-center justify-center text-slate-600 flex-col gap-4">
-              <FaBuilding className="text-9xl" />
-              <span className="font-bold text-sm uppercase tracking-widest">Rasm mavjud emas</span>
+            <div className="flex-1 rounded-2xl bg-slate-800 flex items-center justify-center text-slate-500 flex-col gap-4 border border-white/5">
+              {getBuildingIcon(building.type)}
+              <span className="font-bold text-sm uppercase tracking-widest text-slate-400">Rasm mavjud emas</span>
             </div>
           )}
         </div>
 
         <div className="flex-1 p-6 md:p-8 flex flex-col overflow-y-auto custom-scrollbar border-t md:border-t-0 md:border-l border-white/10 bg-slate-950/30">
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-3xl">
+            <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-3xl shadow-inner">
               {getBuildingIcon(building.type)}
             </div>
             <div>
               <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-wider leading-tight">{name}</h2>
-              <div className="flex items-center gap-2 mt-1.5 text-blue-300 font-bold bg-blue-900/50 px-3 py-1 rounded-full text-xs w-fit">
-                <FaLayerGroup /> {building.floors} {floorText}
-              </div>
+              {building.floors > 0 && (
+                <div className="flex items-center gap-2 mt-2 text-blue-300 font-bold bg-blue-900/40 border border-blue-500/30 px-3 py-1 rounded-full text-xs w-fit">
+                  <FaLayerGroup /> {building.floors} {floorText}
+                </div>
+              )}
             </div>
           </div>
 
           <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-6"></div>
 
-          <h3 className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-2">Bino haqida tavsif</h3>
+          <h3 className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-3">Bino haqida ma'lumot</h3>
           <p className="text-base text-gray-200 leading-relaxed font-medium">{desc}</p>
         </div>
       </div>
@@ -233,17 +250,15 @@ const Map = () => {
 
       <div className="relative z-0 flex-1 flex items-center justify-center p-4 md:p-8 overflow-hidden w-full">
         
-        {/* MUHIM: Quti har doim katta bo'lib turishi uchun 'w-full' berildi */}
-        <div className="relative w-full max-w-7xl aspect-[16/10] bg-slate-800 rounded-3xl border-4 border-white/10 shadow-2xl overflow-hidden">
+        <div className="relative w-full max-w-7xl aspect-[16/10] bg-slate-800 rounded-3xl border-4 border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden">
           
-          {/* XARITA RASMI - DIQQAT: .jpg QILINDI */}
           <img 
             src="/academy_map.jpg" 
             alt="Academy Map"
             className="absolute inset-0 w-full h-full object-cover" 
           />
           
-          <div className="absolute inset-0 bg-slate-950/30 backdrop-blur-[0.5px] pointer-events-none"></div>
+          <div className="absolute inset-0 bg-slate-950/20 backdrop-blur-[0px] pointer-events-none"></div>
 
           {academyBuildings.map(building => (
             <div
@@ -251,21 +266,28 @@ const Map = () => {
               className="absolute -translate-x-1/2 -translate-y-1/2 group z-20"
               style={{ top: building.top, left: building.left }}
             >
-              <div className="absolute inset-0 rounded-full bg-blue-500/60 animate-ping opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="absolute inset-0 rounded-full bg-blue-500/50 animate-ping opacity-0 group-hover:opacity-100 transition-opacity"></div>
               
               <button
                 onClick={() => setSelectedBuilding(building)}
-                className="relative w-12 h-12 md:w-16 md:h-16 rounded-full bg-slate-900/90 border-4 border-white/20 hover:border-blue-500 hover:bg-blue-600 transition-all duration-300 flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)] group-hover:scale-110 active:scale-95 cursor-pointer z-30"
+                className="relative w-10 h-10 md:w-14 md:h-14 rounded-full bg-slate-900/90 border-2 border-white/30 hover:border-blue-400 hover:bg-blue-600/90 transition-all duration-300 flex items-center justify-center shadow-[0_5px_15px_rgba(0,0,0,0.6)] group-hover:scale-110 active:scale-95 cursor-pointer z-30"
               >
-                <div className="text-xl md:text-3xl group-hover:text-white transition-colors group-hover:animate-pulse">
+                <div className="text-lg md:text-2xl group-hover:text-white transition-colors">
                   {getBuildingIcon(building.type)}
                 </div>
               </button>
 
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 px-4 py-2 bg-slate-800/90 backdrop-blur-sm border border-white/10 rounded-xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:-translate-y-1 shadow-xl pointer-events-none z-40">
-                <p className="text-sm font-black text-white uppercase tracking-wider">{building[`name_${language}`] || building.name_uz}</p>
-                <p className="text-xs text-blue-300 font-bold text-center mt-1">{building.floors} qavat</p>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-x-8 border-x-transparent border-t-8 border-t-slate-800/90"></div>
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-4 py-2.5 bg-slate-800/95 backdrop-blur-md border border-white/20 rounded-xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:-translate-y-2 shadow-2xl pointer-events-none z-40">
+                <p className="text-xs md:text-sm font-black text-white uppercase tracking-wider drop-shadow-md">
+                  {building[`name_${language}`] || building.name_uz}
+                </p>
+                {building.floors > 0 && (
+                  <p className="text-[10px] md:text-xs text-blue-300 font-bold text-center mt-1">
+                    {building.floors} qavat
+                  </p>
+                )}
+                <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px] border-x-6 border-x-transparent border-t-6 border-t-white/20"></div>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-x-6 border-x-transparent border-t-6 border-t-slate-800/95"></div>
               </div>
             </div>
           ))}

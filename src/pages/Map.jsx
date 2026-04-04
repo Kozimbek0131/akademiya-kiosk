@@ -12,7 +12,6 @@ import {
 // ─────────────────────────────────────────────
 // 1. KIOSK LOKATSIYASI VA BINOLAR BAZASI
 // ─────────────────────────────────────────────
-// SIZ KO'RSATGAN QIZIL AYLANAGA ASOSAN TO'G'RILANDI:
 const KIOSK_LOCATION = { top: '56%', left: '28%' }; 
 
 const sampleImages = [
@@ -223,7 +222,7 @@ const BuildingModal = ({ building, onClose, language, onDrawRoute }) => {
 };
 
 // ─────────────────────────────────────────────
-// 3. ASOSIY XARITA COMPONENTI (ZOOM & PAN FIX)
+// 3. ASOSIY XARITA COMPONENTI (ZOOM, PAN & LIMITS)
 // ─────────────────────────────────────────────
 const Map = () => {
   const navigate = useNavigate();
@@ -232,30 +231,59 @@ const Map = () => {
   const [selectedBuilding, setSelectedBuilding] = useState(null);
   const [destination, setDestination] = useState(null);
 
-  // Transform-based Pan & Zoom states
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const dragStart = useRef({ x: 0, y: 0 });
 
-  const mapTitle = language === 'ru' ? 'Интерактивная карта' : language === 'en' ? 'Interactive Map' : 'Interaktiv xarita';
+  // Xarita konteyneri ref-i va oynaning o'lchamlari (chegara hisoblash uchun)
+  const containerRef = useRef(null);
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
+    // Animatsiya chizig'i uslublari
     const style = document.createElement('style');
     style.innerHTML = `
       @keyframes dash { to { stroke-dashoffset: -20; } }
       .route-line { stroke-dasharray: 10; animation: dash 1s linear infinite; }
+      
+      @keyframes pulse-route {
+        0% { opacity: 0.6; filter: drop-shadow(0 0 5px rgba(59,130,246,0.5)); }
+        50% { opacity: 1; filter: drop-shadow(0 0 15px rgba(59,130,246,0.9)); }
+        100% { opacity: 0.6; filter: drop-shadow(0 0 5px rgba(59,130,246,0.5)); }
+      }
+      .animated-route { animation: pulse-route 2s ease-in-out infinite; }
     `;
     document.head.appendChild(style);
-    return () => document.head.removeChild(style);
+
+    // Oyna o'lchamini kuzatish
+    const updateSize = () => {
+      if (containerRef.current) {
+        setContainerSize({
+          width: containerRef.current.offsetWidth,
+          height: containerRef.current.offsetHeight
+        });
+      }
+    };
+    
+    updateSize();
+    window.addEventListener('resize', updateSize);
+
+    return () => {
+      document.head.removeChild(style);
+      window.removeEventListener('resize', updateSize);
+    };
   }, []);
 
   const handleZoomIn = () => setZoom(prev => Math.min(prev + 0.4, 3));
-  const handleZoomOut = () => setZoom(prev => {
-     const newZoom = Math.max(prev - 0.4, 0.8);
-     if (newZoom === 0.8) setPan({ x: 0, y: 0 }); // Eng uzoqlashganda markazga qaytarish
-     return newZoom;
-  });
+  const handleZoomOut = () => {
+    setZoom(prev => {
+      const newZoom = Math.max(prev - 0.4, 1);
+      // Agar zoom 1 bo'lsa, xarita markazga qaytishi kerak
+      if (newZoom === 1) setPan({ x: 0, y: 0 });
+      return newZoom;
+    });
+  };
   
   const handleReset = () => {
      setZoom(1);
@@ -267,30 +295,76 @@ const Map = () => {
     setSelectedBuilding(null); 
   };
 
-  // ──────── MUQOBIL VA SILLIQ SUDRASH MANTIQI ────────
+  // ──────── CHEGARALANGAN SUDRASH (PAN) MANTIQI ────────
+  const calculatePanLimits = (currentZoom) => {
+     if (!containerRef.current || currentZoom <= 1) return { xMax: 0, yMax: 0 };
+     
+     // Qutining o'lchamini zoomga qarab qancha kattalashganini hisoblash
+     const scaledWidth = containerSize.width * currentZoom;
+     const scaledHeight = containerSize.height * currentZoom;
+     
+     // Qancha masofaga surish mumkinligini (chegarani) hisoblash
+     const xMax = (scaledWidth - containerSize.width) / 2;
+     const yMax = (scaledHeight - containerSize.height) / 2;
+
+     return { xMax, yMax };
+  };
+
+  const constrainPan = (newX, newY, currentZoom) => {
+    const limits = calculatePanLimits(currentZoom);
+    
+    // Agar rasm asl o'lchamida bo'lsa (zoom=1), u umuman surilmaydi.
+    if (currentZoom === 1) return { x: 0, y: 0 };
+
+    // Chegaradan o'tib ketsa, shu joyda to'xtatib qolish
+    const constrainedX = Math.min(Math.max(newX, -limits.xMax), limits.xMax);
+    const constrainedY = Math.min(Math.max(newY, -limits.yMax), limits.yMax);
+
+    return { x: constrainedX, y: constrainedY };
+  };
+
+
   const onPointerDown = (e) => {
+    if (zoom === 1) return; // Agar zoom qilinmagan bo'lsa, drag qilishning keragi yo'q
     setIsDragging(true);
-    // Sichqoncha yoki barmoqning joriy pozitsiyasini saqlash
     dragStart.current = { x: e.clientX - pan.x, y: e.clientY - pan.y };
-    e.target.setPointerCapture(e.pointerId); // Sensor ekranda muammosiz ishlashi uchun
+    e.target.setPointerCapture(e.pointerId);
   };
 
   const onPointerMove = (e) => {
     if (!isDragging) return;
-    setPan({
-      x: e.clientX - dragStart.current.x,
-      y: e.clientY - dragStart.current.y
-    });
+    
+    const newX = e.clientX - dragStart.current.x;
+    const newY = e.clientY - dragStart.current.y;
+
+    // Yangi pozitsiyani chegaralar bilan tekshirish
+    const constrainedPan = constrainPan(newX, newY, zoom);
+    setPan(constrainedPan);
   };
 
   const onPointerUp = (e) => {
     setIsDragging(false);
-    e.target.releasePointerCapture(e.pointerId);
+    if(e.target.hasPointerCapture(e.pointerId)) {
+        e.target.releasePointerCapture(e.pointerId);
+    }
+  };
+
+  // Zoom o'zgarganda pan (surish) pozitsiyasini qayta hisoblash (xato zonaga chiqib ketmaslik uchun)
+  useEffect(() => {
+     setPan(prev => constrainPan(prev.x, prev.y, zoom));
+  }, [zoom]);
+
+  // SVG uchun koordinatalarni to'g'rilash yordamchi funksiyasi
+  const getCoordinate = (percentStr, isX) => {
+     const val = parseFloat(percentStr);
+     return isX ? val : val;
   };
 
   return (
     <div className="w-screen h-screen relative bg-[#0f172a] overflow-hidden select-none text-white font-sans touch-none">
       
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a] via-[#111827] to-[#010309] z-0 pointer-events-none" />
+
       <BuildingModal 
         building={selectedBuilding}
         onClose={() => setSelectedBuilding(null)}
@@ -311,7 +385,6 @@ const Map = () => {
         )}
       </div>
 
-      {/* Vidjetlar */}
       <div className="absolute top-5 md:top-8 right-5 md:right-8 z-50 pointer-events-auto bg-slate-900/80 backdrop-blur-md border border-white/20 px-5 py-3 rounded-2xl flex items-center gap-4 shadow-xl">
          <FaCloudSun className="text-amber-400 text-3xl md:text-4xl drop-shadow-md" />
          <div className="flex flex-col">
@@ -346,10 +419,11 @@ const Map = () => {
           HAQIQIY "PAN AND ZOOM" KANVASI
           ───────────────────────────────────────────── */}
       <div 
-        className="absolute inset-0 z-10 flex items-center justify-center"
+        ref={containerRef}
+        className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"
       >
         <div 
-          className={`relative w-[1200px] md:w-[1400px] xl:w-[1600px] max-w-none aspect-[16/10] shrink-0 transition-transform ${isDragging ? 'duration-0 cursor-grabbing' : 'duration-300 cursor-grab'}`}
+          className={`relative w-full h-full max-w-none transition-transform pointer-events-auto ${isDragging ? 'duration-0 cursor-grabbing' : 'duration-300 cursor-grab'}`}
           style={{ 
             transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
             transformOrigin: 'center'
@@ -357,14 +431,14 @@ const Map = () => {
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
-          onPointerLeave={onPointerUp} // Agar kursor chiqib ketsa to'xtatish
+          onPointerLeave={onPointerUp} 
         >
           {/* Asosiy Xarita Rasmi */}
           <img 
             src="/academy_map.jpg" 
             alt="Academy Map"
-            className="absolute inset-0 w-full h-full object-cover rounded-3xl border-4 border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] pointer-events-none" 
-            draggable="false" // Eng asosiysi: rasmning o'zini sudrashni taqiqlash
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none" 
+            draggable="false" 
           />
           
           <div className="absolute inset-0 bg-slate-950/10 pointer-events-none rounded-3xl"></div>
@@ -380,18 +454,32 @@ const Map = () => {
              </div>
           </div>
 
-          {/* 🚶‍♂️ YO'NALISH CHIZIG'I (Marshrut) */}
+          {/* 🚶‍♂️ YAXSHILANGAN YO'NALISH CHIZIG'I (Marshrut) */}
           {destination && (
-            <svg className="absolute inset-0 w-full h-full pointer-events-none z-30 opacity-80">
-              <line 
-                x1={KIOSK_LOCATION.left} 
-                y1={KIOSK_LOCATION.top} 
-                x2={destination.left} 
-                y2={destination.top} 
+            <svg className="absolute inset-0 w-full h-full pointer-events-none z-30">
+              {/* Asosiy chiziq */}
+              <path 
+                d={`M ${getCoordinate(KIOSK_LOCATION.left, true)}% ${getCoordinate(KIOSK_LOCATION.top, false)}% 
+                    Q ${(getCoordinate(KIOSK_LOCATION.left, true) + getCoordinate(destination.left, true)) / 2}% 
+                      ${Math.min(getCoordinate(KIOSK_LOCATION.top, false), getCoordinate(destination.top, false)) - 10}% 
+                    ${getCoordinate(destination.left, true)}% ${getCoordinate(destination.top, false)}%`}
+                fill="none"
                 stroke="#3b82f6" 
                 strokeWidth="6" 
                 strokeLinecap="round"
-                className="route-line drop-shadow-[0_0_10px_rgba(59,130,246,0.8)]" 
+                className="animated-route route-line" 
+              />
+              {/* Orqa fon chizig'i (chiroyliroq ko'rinishi uchun) */}
+              <path 
+                d={`M ${getCoordinate(KIOSK_LOCATION.left, true)}% ${getCoordinate(KIOSK_LOCATION.top, false)}% 
+                    Q ${(getCoordinate(KIOSK_LOCATION.left, true) + getCoordinate(destination.left, true)) / 2}% 
+                      ${Math.min(getCoordinate(KIOSK_LOCATION.top, false), getCoordinate(destination.top, false)) - 10}% 
+                    ${getCoordinate(destination.left, true)}% ${getCoordinate(destination.top, false)}%`}
+                fill="none"
+                stroke="#1e3a8a" 
+                strokeWidth="10" 
+                strokeLinecap="round"
+                className="opacity-50"
               />
             </svg>
           )}
@@ -406,7 +494,7 @@ const Map = () => {
               <div className="absolute inset-0 rounded-full bg-blue-500/50 animate-ping opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
               
               <button
-                onPointerDown={(e) => e.stopPropagation()} // Tugma bosilganda fon surilmasligi uchun
+                onPointerDown={(e) => e.stopPropagation()} 
                 onClick={() => setSelectedBuilding(building)}
                 className={`relative w-10 h-10 md:w-14 md:h-14 rounded-full bg-slate-900/90 border-2 hover:bg-blue-600/90 transition-all duration-300 flex items-center justify-center shadow-[0_5px_15px_rgba(0,0,0,0.6)] group-hover:scale-110 active:scale-95 cursor-pointer ${destination?.id === building.id ? 'border-blue-400 bg-blue-700 animate-pulse' : 'border-white/30 hover:border-blue-400'}`}
               >

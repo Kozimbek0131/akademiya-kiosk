@@ -68,10 +68,11 @@ const localT = (key, lang = 'uz') => {
 // ─────────────────────────────────────────────
 const KIOSK_LOCATION = { top: '56%', left: '28%' }; 
 
+// Vaqtincha buzilmaydigan rasmlar (Picsum xizmatidan)
 const sampleImages = [
-  "https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=600",
-  "https://images.unsplash.com/photo-1557426165-276709f4e2f3?q=80&w=600",
-  "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=600",
+  "https://picsum.photos/seed/bino1/800/500",
+  "https://picsum.photos/seed/yotoq/800/500",
+  "https://picsum.photos/seed/oshxona/800/500",
 ];
 
 const academyBuildings = [
@@ -83,6 +84,8 @@ const academyBuildings = [
     type: 'study',
     floors: 2,
     desc_uz: "Amaliy mashg'ulotlar va laboratoriya xonalari.",
+    desc_ru: "Помещения для практических занятий и лабораторий.",
+    desc_en: "Rooms for practical classes and laboratories.",
     images: [sampleImages[0]],
     top: '74%', left: '14%',
     route: "28,56 21,56 21,74 14,74" 
@@ -95,6 +98,8 @@ const academyBuildings = [
     type: 'study',
     floors: 4,
     desc_uz: "Asosiy ma'ruzalar zallari va kafedralar joylashgan bino.",
+    desc_ru: "Здание, где расположены основные лекционные залы и кафедры.",
+    desc_en: "Building housing main lecture halls and departments.",
     images: [sampleImages[0], sampleImages[1], sampleImages[2]], 
     top: '68%', left: '30%',
     route: "28,56 28,68 30,68"
@@ -107,6 +112,8 @@ const academyBuildings = [
     type: 'staff',
     floors: 5,
     desc_uz: "Ma'muriy xodimlar va o'qituvchilar uchun xizmat binosi.",
+    desc_ru: "Служебное здание для административного персонала и преподавателей.",
+    desc_en: "Service building for administrative staff and teachers.",
     images: [sampleImages[0]],
     top: '51%', left: '25%',
     route: "28,56 28,51 25,51"
@@ -119,6 +126,8 @@ const academyBuildings = [
     type: 'canteen',
     floors: 1,
     desc_uz: "Akademiya xodimlari va talabalari uchun markaziy oshxona.",
+    desc_ru: "Центральная столовая для сотрудников и студентов академии.",
+    desc_en: "Central canteen for academy staff and students.",
     images: [sampleImages[2], sampleImages[0]],
     top: '33%', left: '49%',
     route: "28,56 28,45 49,45 49,33"
@@ -131,6 +140,8 @@ const academyBuildings = [
     type: 'construction',
     floors: 0,
     desc_uz: "Ushbu hududda yangi o'quv va sport majmuasi qurilishi olib borilmoqda.",
+    desc_ru: "На этой территории ведется строительство нового учебного и спортивного комплекса.",
+    desc_en: "Construction of a new educational and sports complex is underway in this area.",
     images: [], 
     top: '50%', left: '57%',
     route: "28,56 28,45 57,45 57,50"
@@ -143,6 +154,8 @@ const academyBuildings = [
     type: 'dorm',
     floors: 4,
     desc_uz: "Tinglovchilar va talabalar uchun qo'shimcha yashash binosi.",
+    desc_ru: "Дополнительное жилое здание для слушателей и студентов.",
+    desc_en: "Additional residential building for trainees and students.",
     images: [sampleImages[1]],
     top: '37%', left: '71%',
     route: "28,56 28,45 71,45 71,37"
@@ -155,6 +168,8 @@ const academyBuildings = [
     type: 'dorm',
     floors: 4,
     desc_uz: "Tinglovchilar va talabalar uchun asosiy yashash binosi.",
+    desc_ru: "Основное жилое здание для слушателей и студентов.",
+    desc_en: "Main residential building for trainees and students.",
     images: [sampleImages[1], sampleImages[2]],
     top: '24%', left: '81%',
     route: "28,56 28,45 71,45 71,24 81,24"

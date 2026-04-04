@@ -9,7 +9,7 @@ import {
 } from 'react-icons/fa';
 
 // ─────────────────────────────────────────────
-// 1. STATIC MA'LUMOTLAR
+// 1. STATIC MA'LUMOTLAR VA KOORDINATALAR
 // ─────────────────────────────────────────────
 const sampleImages = [
   "https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=600",
@@ -29,8 +29,8 @@ const academyBuildings = [
     desc_ru: "Помещения для практических занятий и лабораторий.",
     desc_en: "Rooms for practical classes and laboratories.",
     images: [sampleImages[0]],
-    top: '67%', // B-block tepadan
-    left: '26%'  // B-block chapdan
+    top: '74%', 
+    left: '14%'  
   },
   {
     id: 'study_a',
@@ -43,8 +43,8 @@ const academyBuildings = [
     desc_ru: "Здание, где расположены основные лекционные залы и кафедры.",
     desc_en: "Building housing main lecture halls and departments.",
     images: [sampleImages[0], sampleImages[1], sampleImages[2], sampleImages[0], sampleImages[1]], 
-    top: '66%', // A-block tepadan
-    left: '38%'  // A-block chapdan
+    top: '68%', 
+    left: '30%'  
   },
   {
     id: 'staff',
@@ -57,8 +57,8 @@ const academyBuildings = [
     desc_ru: "Служебное здание для административного персонала и преподавателей.",
     desc_en: "Service building for administrative staff and teachers.",
     images: [sampleImages[0]],
-    top: '55%', // Xodimlar binosi tepadan
-    left: '35%'  // Xodimlar binosi chapdan
+    top: '51%', 
+    left: '25%'  
   },
   {
     id: 'canteen',
@@ -71,8 +71,8 @@ const academyBuildings = [
     desc_ru: "Центральная столовая для сотрудников и студентов академии.",
     desc_en: "Central canteen for academy staff and students.",
     images: [sampleImages[2], sampleImages[0]],
-    top: '43%', // Oshxona tepadan
-    left: '50%'  // Oshxona chapdan
+    top: '33%', 
+    left: '49%'  
   },
   {
     id: 'construction',
@@ -85,8 +85,8 @@ const academyBuildings = [
     desc_ru: "На этой территории ведется строительство нового учебного и спортивного комплекса.",
     desc_en: "Construction of a new educational and sports complex is underway in this area.",
     images: [], 
-    top: '56%', // Qurilish tepadan
-    left: '56%'  // Qurilish chapdan
+    top: '50%', 
+    left: '57%'  
   },
   {
     id: 'dorm_2',
@@ -99,8 +99,8 @@ const academyBuildings = [
     desc_ru: "Дополнительное жилое здание для слушателей и студентов.",
     desc_en: "Additional residential building for trainees and students.",
     images: [sampleImages[1]],
-    top: '44%', // 2-yotoqxona tepadan
-    left: '65%'  // 2-yotoqxona chapdan
+    top: '37%', 
+    left: '71%'  
   },
   {
     id: 'dorm_1',
@@ -113,8 +113,8 @@ const academyBuildings = [
     desc_ru: "Основное жилое здание для слушателей и студентов.",
     desc_en: "Main residential building for trainees and students.",
     images: [sampleImages[1], sampleImages[2]],
-    top: '36%', // 1-yotoqxona tepadan
-    left: '70%'  // 1-yotoqxona chapdan
+    top: '24%', 
+    left: '81%'  
   },
 ];
 
@@ -130,13 +130,12 @@ const getBuildingIcon = (type) => {
 };
 
 // ─────────────────────────────────────────────
-// 2. MODAL OYNASI (MUKAMMAL GALEREYA BILAN)
+// 2. MODAL OYNASI (Galereya)
 // ─────────────────────────────────────────────
 const BuildingModal = ({ building, onClose, language }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // Boshqa binoga o'tilganda rasm indeksini nolga tushirish
   useEffect(() => {
     setActiveIndex(0);
     setIsFullscreen(false);
@@ -149,7 +148,6 @@ const BuildingModal = ({ building, onClose, language }) => {
   const floorText = language === 'ru' ? 'этажей' : language === 'en' ? 'floors' : 'qavat';
   const images = building.images || [];
 
-  // Keyingi va oldingi rasmga o'tish funksiyalari
   const nextImage = () => setActiveIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   const prevImage = () => setActiveIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
 
@@ -160,13 +158,11 @@ const BuildingModal = ({ building, onClose, language }) => {
     >
       <div className="absolute inset-0 bg-black/80 backdrop-blur-md" />
 
-      {/* TO'LIQ EKRAN (FULLSCREEN) RASM REJIMI */}
       {isFullscreen ? (
         <div 
           className="fixed inset-0 z-[10001] bg-black flex items-center justify-center"
-          onClick={() => setIsFullscreen(false)} // Ekranni bosganda yopiladi
+          onClick={() => setIsFullscreen(false)}
         >
-          {/* Yopish tugmasi */}
           <button 
             className="absolute top-6 right-6 w-14 h-14 bg-white/10 hover:bg-red-500/50 rounded-2xl flex items-center justify-center transition-all text-white z-50 cursor-pointer"
             onClick={(e) => { e.stopPropagation(); setIsFullscreen(false); }}
@@ -174,7 +170,6 @@ const BuildingModal = ({ building, onClose, language }) => {
             <FaTimes className="text-2xl" />
           </button>
 
-          {/* Chapga o'tish */}
           {images.length > 1 && (
             <button 
               onClick={(e) => { e.stopPropagation(); prevImage(); }}
@@ -184,15 +179,13 @@ const BuildingModal = ({ building, onClose, language }) => {
             </button>
           )}
 
-          {/* Asosiy Rasm (Kesilmasligi uchun object-contain qilingan) */}
           <img 
             src={images[activeIndex]} 
             alt={name} 
             className="w-full h-full object-contain p-4 md:p-12 animate-fade-in"
-            onClick={(e) => e.stopPropagation()} // Rasmni o'zini bosganda yopilib ketmasligi uchun
+            onClick={(e) => e.stopPropagation()} 
           />
 
-          {/* O'ngga o'tish */}
           {images.length > 1 && (
             <button 
               onClick={(e) => { e.stopPropagation(); nextImage(); }}
@@ -202,14 +195,12 @@ const BuildingModal = ({ building, onClose, language }) => {
             </button>
           )}
           
-          {/* Rasm sanog'i */}
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/60 px-6 py-2 rounded-full text-white font-bold tracking-widest">
             {activeIndex + 1} / {images.length}
           </div>
         </div>
       ) : (
 
-      /* STANDART MODAL OYNASI */
       <div 
         className="relative w-full max-w-6xl bg-slate-900 border border-white/10 rounded-3xl shadow-2xl flex flex-col md:flex-row overflow-hidden max-h-[90vh]"
         onClick={e => e.stopPropagation()}
@@ -221,11 +212,9 @@ const BuildingModal = ({ building, onClose, language }) => {
           <FaTimes className="text-white text-xl" />
         </button>
 
-        {/* CHAP QISM: Rasmlar galereyasi */}
         <div className="w-full md:w-2/3 p-3 flex flex-col gap-3 h-[45vh] md:h-auto overflow-hidden">
           {images.length > 0 ? (
             <>
-              {/* Asosiy ko'rinib turgan rasm */}
               <div 
                 className="flex-1 rounded-2xl overflow-hidden relative bg-slate-800 cursor-pointer group"
                 onClick={() => setIsFullscreen(true)}
@@ -235,7 +224,6 @@ const BuildingModal = ({ building, onClose, language }) => {
                   alt={name}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                {/* Kattalashtirish effekti (Hover bo'lganda) */}
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
                   <div className="bg-blue-600/90 p-4 rounded-full shadow-2xl scale-75 group-hover:scale-100 transition-transform">
                     <FaExpand className="text-white text-3xl" />
@@ -243,7 +231,6 @@ const BuildingModal = ({ building, onClose, language }) => {
                 </div>
               </div>
 
-              {/* Gorizontal skroll bo'ladigan kichik rasmlar ro'yxati */}
               {images.length > 1 && (
                 <div className="flex gap-2.5 h-24 md:h-28 shrink-0 overflow-x-auto custom-scrollbar pb-2 px-1">
                   {images.map((img, idx) => (
@@ -274,7 +261,6 @@ const BuildingModal = ({ building, onClose, language }) => {
           )}
         </div>
 
-        {/* O'NG QISM: Ma'lumotlar */}
         <div className="flex-1 p-6 md:p-8 flex flex-col overflow-y-auto custom-scrollbar border-t md:border-t-0 md:border-l border-white/10 bg-slate-950/30">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-3xl shadow-inner">
@@ -303,7 +289,7 @@ const BuildingModal = ({ building, onClose, language }) => {
 };
 
 // ─────────────────────────────────────────────
-// 3. ASOSIY XARITA
+// 3. ASOSIY XARITA (TO'LIQ EKRAN 100%)
 // ─────────────────────────────────────────────
 const Map = () => {
   const navigate = useNavigate();
@@ -313,74 +299,71 @@ const Map = () => {
   const mapTitle = language === 'ru' ? 'Интерактивная карта' : language === 'en' ? 'Interactive Map' : 'Interaktiv xarita';
 
   return (
-    <div className="h-screen flex flex-col bg-slate-950 relative overflow-hidden select-none text-white font-sans">
+    <div className="w-screen h-screen relative bg-slate-950 overflow-hidden select-none text-white font-sans">
       
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a] via-[#111827] to-[#010309] z-0 pointer-events-none" />
-
       <BuildingModal 
         building={selectedBuilding}
         onClose={() => setSelectedBuilding(null)}
         language={language}
       />
 
-      <div className="relative z-10 flex items-center justify-between p-4 md:p-5 bg-slate-900/80 backdrop-blur-md border-b border-white/10 shadow-lg shrink-0">
+      {/* HAQIQIY TO'LIQ EKRAN (FULLSCREEN) RASM */}
+      <img 
+        src="/academy_map.jpg" 
+        alt="Academy Map"
+        className="absolute inset-0 w-full h-full object-cover" 
+      />
+      
+      {/* Rasm ustidan xiralashtiruvchi effekt */}
+      <div className="absolute inset-0 bg-slate-950/20 backdrop-blur-[0px] pointer-events-none z-10"></div>
+
+      {/* HEADER (Endi xarita ustida havoda turadi) */}
+      <div className="absolute top-0 left-0 right-0 p-5 md:p-8 flex justify-between items-start z-50 pointer-events-none">
         <button
           onClick={() => navigate('/')}
-          className="flex items-center gap-2.5 bg-white/10 border border-white/20 text-white px-5 py-3.5 rounded-2xl hover:bg-white/20 active:scale-95 transition-all font-bold uppercase text-sm cursor-pointer shadow-md"
+          className="pointer-events-auto flex items-center gap-2.5 bg-slate-900/80 backdrop-blur-md border border-white/20 text-white px-5 py-3.5 rounded-2xl hover:bg-white/20 active:scale-95 transition-all font-bold uppercase text-sm cursor-pointer shadow-xl"
         >
           <FaArrowLeft className="text-base" /> {t('back_btn')}
         </button>
 
-        <h1 className="text-xl md:text-3xl font-black text-white uppercase tracking-widest flex items-center gap-3 shrink-0 drop-shadow-md">
-          <FaMapMarkedAlt className="text-blue-400 text-3xl" /> {mapTitle}
+        <h1 className="pointer-events-auto bg-slate-900/80 backdrop-blur-md border border-white/20 px-6 py-3.5 rounded-2xl text-xl md:text-2xl font-black text-white uppercase tracking-widest flex items-center gap-3 shrink-0 shadow-xl">
+          <FaMapMarkedAlt className="text-blue-400 text-2xl md:text-3xl" /> {mapTitle}
         </h1>
       </div>
 
-      <div className="relative z-0 flex-1 flex items-center justify-center p-4 md:p-8 overflow-hidden w-full">
-        
-        <div className="relative w-full max-w-7xl aspect-[16/10] bg-slate-800 rounded-3xl border-4 border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden">
-          
-          <img 
-            src="/academy_map.jpg" 
-            alt="Academy Map"
-            className="absolute inset-0 w-full h-full object-cover" 
-          />
-          
-          <div className="absolute inset-0 bg-slate-950/20 backdrop-blur-[0px] pointer-events-none"></div>
-
-          {academyBuildings.map(building => (
-            <div
-              key={building.id}
-              className="absolute -translate-x-1/2 -translate-y-1/2 group z-20"
-              style={{ top: building.top, left: building.left }}
+      {/* BINOLAR ITONKALARI */}
+      <div className="absolute inset-0 z-20 pointer-events-none">
+        {academyBuildings.map(building => (
+          <div
+            key={building.id}
+            className="absolute -translate-x-1/2 -translate-y-1/2 group pointer-events-auto"
+            style={{ top: building.top, left: building.left }}
+          >
+            <div className="absolute inset-0 rounded-full bg-blue-500/50 animate-ping opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            
+            <button
+              onClick={() => setSelectedBuilding(building)}
+              className="relative w-12 h-12 md:w-16 md:h-16 rounded-full bg-slate-900/90 border-2 border-white/30 hover:border-blue-400 hover:bg-blue-600/90 transition-all duration-300 flex items-center justify-center shadow-[0_5px_15px_rgba(0,0,0,0.6)] group-hover:scale-110 active:scale-95 cursor-pointer"
             >
-              <div className="absolute inset-0 rounded-full bg-blue-500/50 animate-ping opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              
-              <button
-                onClick={() => setSelectedBuilding(building)}
-                className="relative w-10 h-10 md:w-14 md:h-14 rounded-full bg-slate-900/90 border-2 border-white/30 hover:border-blue-400 hover:bg-blue-600/90 transition-all duration-300 flex items-center justify-center shadow-[0_5px_15px_rgba(0,0,0,0.6)] group-hover:scale-110 active:scale-95 cursor-pointer z-30"
-              >
-                <div className="text-lg md:text-2xl group-hover:text-white transition-colors">
-                  {getBuildingIcon(building.type)}
-                </div>
-              </button>
-
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-4 py-2.5 bg-slate-800/95 backdrop-blur-md border border-white/20 rounded-xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:-translate-y-2 shadow-2xl pointer-events-none z-40">
-                <p className="text-xs md:text-sm font-black text-white uppercase tracking-wider drop-shadow-md">
-                  {building[`name_${language}`] || building.name_uz}
-                </p>
-                {building.floors > 0 && (
-                  <p className="text-[10px] md:text-xs text-blue-300 font-bold text-center mt-1">
-                    {building.floors} qavat
-                  </p>
-                )}
-                <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px] border-x-6 border-x-transparent border-t-6 border-t-white/20"></div>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-x-6 border-x-transparent border-t-6 border-t-slate-800/95"></div>
+              <div className="text-xl md:text-2xl group-hover:text-white transition-colors">
+                {getBuildingIcon(building.type)}
               </div>
-            </div>
-          ))}
+            </button>
 
-        </div>
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-4 py-2.5 bg-slate-800/95 backdrop-blur-md border border-white/20 rounded-xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:-translate-y-2 shadow-2xl pointer-events-none">
+              <p className="text-xs md:text-sm font-black text-white uppercase tracking-wider drop-shadow-md">
+                {building[`name_${language}`] || building.name_uz}
+              </p>
+              {building.floors > 0 && (
+                <p className="text-[10px] md:text-xs text-blue-300 font-bold text-center mt-1">
+                  {building.floors} qavat
+                </p>
+              )}
+              <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px] border-x-6 border-x-transparent border-t-6 border-t-white/20"></div>
+              <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-x-6 border-x-transparent border-t-6 border-t-slate-800/95"></div>
+            </div>
+          </div>
+        ))}
       </div>
 
     </div>

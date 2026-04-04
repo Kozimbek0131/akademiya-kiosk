@@ -25,7 +25,7 @@ const Screensaver = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-black"></div>
 
         {/* === VIDEO KODI YONILDI === */} 
-        <video 
+        {/* <video 
           src="/reklama.mp4" 
           autoPlay 
           loop 
@@ -36,7 +36,7 @@ const Screensaver = () => {
         {/* ========================== */}
         
         <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
-      </div>
+      </div> */}
 
       {/* MARKAZIY QISM (Logo va yozuv) */}
       <div className="relative z-10 flex flex-col items-center animate-fade-in px-4">

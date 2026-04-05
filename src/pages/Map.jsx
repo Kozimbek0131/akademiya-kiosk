@@ -10,7 +10,7 @@ import {
 } from 'react-icons/fa';
 
 // ─────────────────────────────────────────────
-// ICHKI TARJIMON (Xarita qismidagi matnlar uchun)
+// ICHKI TARJIMON
 // ─────────────────────────────────────────────
 const localT = (key, lang = 'uz') => {
   const dict = {
@@ -68,7 +68,6 @@ const localT = (key, lang = 'uz') => {
 // ─────────────────────────────────────────────
 const KIOSK_LOCATION = { top: '56%', left: '28%' }; 
 
-// Vaqtincha buzilmaydigan rasmlar (Picsum xizmatidan)
 const sampleImages = [
   "https://picsum.photos/seed/bino1/800/500",
   "https://picsum.photos/seed/yotoq/800/500",
@@ -176,14 +175,17 @@ const academyBuildings = [
   },
 ];
 
-const getBuildingIcon = (type) => {
+// ─────────────────────────────────────────────
+// YANGI: IKONKALAR UCHUN PREMIUM DIZAYN SOZLAMALARI
+// ─────────────────────────────────────────────
+const getIconConfig = (type) => {
   switch (type) {
-    case 'study': return <FaBuilding className="text-amber-400" />;
-    case 'dorm': return <FaBed className="text-blue-400" />;
-    case 'canteen': return <FaUtensils className="text-emerald-400" />;
-    case 'staff': return <FaUserTie className="text-purple-400" />;
-    case 'construction': return <FaTools className="text-slate-400" />;
-    default: return <FaBuilding className="text-gray-400" />;
+    case 'study': return { icon: <FaBuilding />, color: 'text-amber-400', bg: 'bg-amber-500', border: 'border-amber-400', glow: 'shadow-[0_0_25px_rgba(251,191,36,0.6)]' };
+    case 'dorm': return { icon: <FaBed />, color: 'text-blue-400', bg: 'bg-blue-500', border: 'border-blue-400', glow: 'shadow-[0_0_25px_rgba(96,165,250,0.6)]' };
+    case 'canteen': return { icon: <FaUtensils />, color: 'text-emerald-400', bg: 'bg-emerald-500', border: 'border-emerald-400', glow: 'shadow-[0_0_25px_rgba(52,211,153,0.6)]' };
+    case 'staff': return { icon: <FaUserTie />, color: 'text-purple-400', bg: 'bg-purple-500', border: 'border-purple-400', glow: 'shadow-[0_0_25px_rgba(167,139,250,0.6)]' };
+    case 'construction': return { icon: <FaTools />, color: 'text-slate-400', bg: 'bg-slate-500', border: 'border-slate-400', glow: 'shadow-[0_0_25px_rgba(148,163,184,0.6)]' };
+    default: return { icon: <FaBuilding />, color: 'text-gray-400', bg: 'bg-gray-500', border: 'border-gray-400', glow: 'shadow-[0_0_25px_rgba(156,163,175,0.6)]' };
   }
 };
 
@@ -205,6 +207,7 @@ const BuildingModal = ({ building, onClose, language, onDrawRoute }) => {
   const desc = building[`desc_${language}`] || building.desc_uz;
   const floorText = language === 'ru' ? 'этажей' : language === 'en' ? 'floors' : 'qavat';
   const images = building.images || [];
+  const conf = getIconConfig(building.type);
 
   const nextImage = () => setActiveIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   const prevImage = () => setActiveIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -257,7 +260,7 @@ const BuildingModal = ({ building, onClose, language, onDrawRoute }) => {
             </>
           ) : (
             <div className="flex-1 rounded-2xl bg-slate-800 flex items-center justify-center text-slate-500 flex-col gap-4 border border-white/5">
-              {getBuildingIcon(building.type)}
+              <div className={`text-6xl ${conf.color}`}>{conf.icon}</div>
               <span className="font-bold text-sm uppercase tracking-widest text-slate-400">{localT('no_image', language)}</span>
             </div>
           )}
@@ -265,13 +268,13 @@ const BuildingModal = ({ building, onClose, language, onDrawRoute }) => {
 
         <div className="flex-1 p-6 md:p-8 flex flex-col overflow-y-auto custom-scrollbar border-t md:border-t-0 md:border-l border-white/10 bg-slate-950/30">
           <div className="flex items-center gap-4 mb-6 pr-10">
-            <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-3xl shadow-inner">
-              {getBuildingIcon(building.type)}
+            <div className={`w-16 h-16 rounded-2xl bg-slate-900 border-2 ${conf.border} ${conf.glow} flex items-center justify-center shrink-0 text-3xl shadow-inner`}>
+              <div className={conf.color}>{conf.icon}</div>
             </div>
             <div>
               <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-wider leading-tight">{name}</h2>
               {building.floors > 0 && (
-                <div className="flex items-center gap-2 mt-2 text-blue-300 font-bold bg-blue-900/40 border border-blue-500/30 px-3 py-1 rounded-full text-xs w-fit">
+                <div className={`flex items-center gap-2 mt-2 font-bold bg-slate-900/80 border ${conf.border} ${conf.color} px-3 py-1 rounded-full text-xs w-fit shadow-md`}>
                   <FaLayerGroup /> {building.floors} {floorText}
                 </div>
               )}
@@ -284,7 +287,7 @@ const BuildingModal = ({ building, onClose, language, onDrawRoute }) => {
           <div className="mt-auto pt-4">
              <button 
                 onClick={() => onDrawRoute(building)}
-                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black uppercase tracking-widest py-4 rounded-2xl flex items-center justify-center gap-3 shadow-[0_10px_20px_rgba(37,99,235,0.3)] transition-all active:scale-95 cursor-pointer"
+                className={`w-full ${conf.bg} text-white font-black uppercase tracking-widest py-4 rounded-2xl flex items-center justify-center gap-3 ${conf.glow} transition-all active:scale-95 cursor-pointer`}
              >
                 <FaRoute className="text-2xl" /> {localT('show_route', language)}
              </button>
@@ -319,6 +322,12 @@ const Map = () => {
     style.innerHTML = `
       @keyframes march { to { stroke-dashoffset: -8; } }
       .route-line { stroke-dasharray: 2 2; animation: march 1s linear infinite; }
+      
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+      }
+      .animate-float { animation: float 3s ease-in-out infinite; }
     `;
     document.head.appendChild(style);
     return () => document.head.removeChild(style);
@@ -377,7 +386,7 @@ const Map = () => {
       {/* OVERLAYS */}
       <div className="absolute top-0 left-0 right-0 p-5 md:p-8 flex justify-between items-start z-50 pointer-events-none">
         <button onClick={() => navigate('/')} className="pointer-events-auto flex items-center gap-2.5 bg-slate-900/80 backdrop-blur-md border border-white/20 text-white px-5 py-3.5 rounded-2xl hover:bg-white/20 active:scale-95 transition-all font-bold uppercase text-sm cursor-pointer shadow-xl">
-          <FaArrowLeft className="text-base" /> {t('back_btn')}
+          <FaArrowLeft className="text-base" /> {t('back_btn') || "Asosiy menyu"}
         </button>
 
         {destination && (
@@ -405,10 +414,10 @@ const Map = () => {
 
       <div className="absolute bottom-5 md:bottom-8 left-5 md:left-8 z-50 pointer-events-auto bg-slate-900/80 backdrop-blur-md border border-white/20 p-4 md:p-5 rounded-2xl shadow-xl flex flex-col gap-3 w-48 md:w-56">
          <p className="text-[10px] md:text-xs text-slate-400 font-bold uppercase tracking-widest mb-1 border-b border-white/10 pb-2">{localT('legend', language)}</p>
-         <div className="flex items-center gap-3 text-xs md:text-sm font-bold text-gray-300"><FaBuilding className="text-amber-400 text-lg" /> {localT('study_bldg', language)}</div>
-         <div className="flex items-center gap-3 text-xs md:text-sm font-bold text-gray-300"><FaBed className="text-blue-400 text-lg" /> {localT('dorms', language)}</div>
-         <div className="flex items-center gap-3 text-xs md:text-sm font-bold text-gray-300"><FaUtensils className="text-emerald-400 text-lg" /> {localT('canteen', language)}</div>
-         <div className="flex items-center gap-3 text-xs md:text-sm font-bold text-gray-300"><FaUserTie className="text-purple-400 text-lg" /> {localT('staff', language)}</div>
+         <div className="flex items-center gap-3 text-xs md:text-sm font-bold text-gray-300"><FaBuilding className="text-amber-400 text-lg drop-shadow-md" /> {localT('study_bldg', language)}</div>
+         <div className="flex items-center gap-3 text-xs md:text-sm font-bold text-gray-300"><FaBed className="text-blue-400 text-lg drop-shadow-md" /> {localT('dorms', language)}</div>
+         <div className="flex items-center gap-3 text-xs md:text-sm font-bold text-gray-300"><FaUtensils className="text-emerald-400 text-lg drop-shadow-md" /> {localT('canteen', language)}</div>
+         <div className="flex items-center gap-3 text-xs md:text-sm font-bold text-gray-300"><FaUserTie className="text-purple-400 text-lg drop-shadow-md" /> {localT('staff', language)}</div>
       </div>
 
       {/* Zoom va Reset */}
@@ -488,39 +497,53 @@ const Map = () => {
             </svg>
           )}
 
-          {/* BINOLAR IKONKALARI (Hotspots) */}
-          {academyBuildings.map(building => (
-            <div
-              key={building.id}
-              className="absolute -translate-x-1/2 -translate-y-1/2 group z-50 pointer-events-auto"
-              style={{ top: building.top, left: building.left }}
-            >
-              <div className="absolute inset-0 rounded-full bg-blue-500/50 animate-ping opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-              
-              <button
-                onPointerDown={(e) => e.stopPropagation()} 
-                onClick={() => setSelectedBuilding(building)}
-                className={`relative w-10 h-10 md:w-14 md:h-14 rounded-full bg-slate-900/90 border-2 hover:bg-blue-600/90 transition-all duration-300 flex items-center justify-center shadow-[0_5px_15px_rgba(0,0,0,0.6)] group-hover:scale-110 active:scale-95 cursor-pointer ${destination?.id === building.id ? 'border-blue-400 bg-blue-700 animate-pulse' : 'border-white/30 hover:border-blue-400'}`}
-              >
-                <div className="text-lg md:text-2xl group-hover:text-white transition-colors">
-                  {getBuildingIcon(building.type)}
-                </div>
-              </button>
+          {/* 🌟 PREMIUM IKONKALAR (Hotspots) */}
+          {academyBuildings.map((building, index) => {
+            const conf = getIconConfig(building.type);
+            const isTarget = destination?.id === building.id;
 
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-4 py-2.5 bg-slate-800/95 backdrop-blur-md border border-white/20 rounded-xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:-translate-y-2 shadow-2xl pointer-events-none">
-                <p className="text-xs md:text-sm font-black text-white uppercase tracking-wider drop-shadow-md">
-                  {building[`name_${language}`] || building.name_uz}
-                </p>
-                {building.floors > 0 && (
-                  <p className="text-[10px] md:text-xs text-blue-300 font-bold text-center mt-1">
-                    {building.floors} {language === 'ru' ? 'этажей' : language === 'en' ? 'floors' : 'qavat'}
+            return (
+              <div
+                key={building.id}
+                className="absolute -translate-x-1/2 -translate-y-1/2 group z-50 pointer-events-auto animate-float"
+                style={{ top: building.top, left: building.left, animationDelay: `${index * 0.3}s` }}
+              >
+                {/* Obyekt tevaragidagi miltillovchi pulsatsiya */}
+                <div className={`absolute inset-0 rounded-full ${conf.bg} animate-ping opacity-20 group-hover:opacity-50 transition-opacity pointer-events-none`}></div>
+                
+                <button
+                  onPointerDown={(e) => e.stopPropagation()} 
+                  onClick={() => setSelectedBuilding(building)}
+                  className={`relative w-12 h-12 md:w-16 md:h-16 rounded-full bg-slate-900/80 backdrop-blur-xl border-[3px] transition-all duration-300 flex items-center justify-center ${conf.glow} group-hover:scale-110 active:scale-95 cursor-pointer 
+                  ${isTarget ? `${conf.border} ${conf.bg} text-white animate-pulse` : `${conf.border} hover:${conf.bg}`}`}
+                >
+                  {/* Markaziy ikonka */}
+                  <div className={`text-xl md:text-3xl transition-colors ${isTarget ? 'text-white' : conf.color} group-hover:text-white drop-shadow-lg relative z-10`}>
+                    {conf.icon}
+                  </div>
+
+                  {/* Pinning dumi (Quyruq qismi) */}
+                  <div className={`absolute -bottom-[7px] w-4 h-4 rotate-45 rounded-sm bg-slate-900 border-b-[3px] border-r-[3px] transition-all duration-300 z-0
+                    ${isTarget ? `${conf.bg} border-transparent` : `${conf.border} group-hover:${conf.bg} group-hover:border-transparent`}`}>
+                  </div>
+                </button>
+
+                {/* Ustiga borganda chiquvchi yozuv */}
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 px-4 py-2.5 bg-slate-800/95 backdrop-blur-md border border-white/20 rounded-xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:-translate-y-2 shadow-2xl pointer-events-none">
+                  <p className="text-xs md:text-sm font-black text-white uppercase tracking-wider drop-shadow-md">
+                    {building[`name_${language}`] || building.name_uz}
                   </p>
-                )}
-                <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px] border-x-6 border-x-transparent border-t-6 border-t-white/20"></div>
-                <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-x-6 border-x-transparent border-t-6 border-t-slate-800/95"></div>
+                  {building.floors > 0 && (
+                    <p className={`text-[10px] md:text-xs ${conf.color} font-bold text-center mt-1`}>
+                      {building.floors} {language === 'ru' ? 'этажей' : language === 'en' ? 'floors' : 'qavat'}
+                    </p>
+                  )}
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px] border-x-6 border-x-transparent border-t-6 border-t-white/20"></div>
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-x-6 border-x-transparent border-t-6 border-t-slate-800/95"></div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
 
         </div>
       </div>
@@ -528,4 +551,5 @@ const Map = () => {
     </div>
   );
 };
+
 export default Map;
